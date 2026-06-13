@@ -178,9 +178,15 @@ body {
 /* ===== Places screen ===== */
 .places-page {
   align-items: flex-start;
-  padding: 1.5rem 0;
-  overflow-y: auto;
+  padding: 1.5rem 0 3rem;
   min-height: 100vh;
+  height: auto;
+  overflow-y: visible;
+}
+
+body:has(.places-page) {
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .places-card {
