@@ -2,6 +2,39 @@ import { useState, useRef, useCallback } from "react";
 
 const CAT_IMG = "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/bucket/64c47ecb-0129-4cfd-b8b5-303bf6157694.png";
 
+const PLACES = [
+  {
+    id: 1,
+    name: "Парк Хуамин",
+    img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/76c9f59b-6ec3-459c-af85-a811bad22203.jpg",
+  },
+  {
+    id: 2,
+    name: "Филёвский парк, Береговой",
+    img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/a3bcc820-1262-48fd-8a9f-ee360ad96951.jpg",
+  },
+  {
+    id: 3,
+    name: "Ресторан Hedonist",
+    img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/c02170dd-a46f-4de5-9a72-aa0771444ee0.jpg",
+  },
+  {
+    id: 4,
+    name: "Музей Зиларт",
+    img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/e837e701-aa56-429a-bf8a-8d8416a50ecc.jpg",
+  },
+  {
+    id: 5,
+    name: "Крыша Останкинской Телебашни",
+    img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/4c1bb245-d7aa-4a0d-a3ef-b10fad97b818.jpg",
+  },
+  {
+    id: 6,
+    name: "Кинотеатр на Таганке",
+    img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/b60c496a-a27e-4901-b687-4935315ce948.jpg",
+  },
+];
+
 const PETALS = ["🌸", "🌸", "🌸", "💮", "🌸", "🌸", "💮", "🌸", "🌸", "🌸", "💮", "🌸", "🌸", "🌸", "💮", "🌸", "🌸", "🌸", "💮", "🌸", "🌸", "💮", "🌸", "🌸", "🌸", "💮", "🌸", "🌸"];
 
 const floatingPetals = PETALS.map((p, i) => ({
@@ -37,6 +70,7 @@ function ScatteredPetals() {
 
 export default function Index() {
   const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
+  const [chosenPlace, setChosenPlace] = useState<typeof PLACES[0] | null>(null);
   const [noPos, setNoPos] = useState({ x: 0, y: 0 });
   const noRef = useRef<HTMLButtonElement>(null);
 
@@ -55,16 +89,39 @@ export default function Index() {
     });
   }, []);
 
-  if (answered === "yes") {
+  // Финальный экран — место выбрано
+  if (chosenPlace) {
     return (
       <div className="meme-page">
         <ScatteredPetals />
         <div className="meme-card animate-in">
-          <img src={CAT_IMG} alt="котик" className="cat-img" />
-          <h1 className="meme-question yes-text">
-            🌸 Ура!! Ты лучшая! 🌸
-          </h1>
-          <p className="meme-sub">это будет лучшее свидание 💝</p>
+          <img src={chosenPlace.img} alt={chosenPlace.name} className="cat-img place-img-final" />
+          <h1 className="meme-question yes-text">🎉 Отлично!</h1>
+          <p className="meme-sub">Встречаемся в:<br /><strong>{chosenPlace.name}</strong> 💝</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Экран выбора места
+  if (answered === "yes") {
+    return (
+      <div className="meme-page places-page">
+        <ScatteredPetals />
+        <div className="places-card animate-in">
+          <h1 className="places-title">Здорово!) А теперь выбери место 🗺️</h1>
+          <div className="places-grid">
+            {PLACES.map(place => (
+              <button
+                key={place.id}
+                className="place-item"
+                onClick={() => setChosenPlace(place)}
+              >
+                <img src={place.img} alt={place.name} className="place-img" />
+                <span className="place-name">{place.name}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -75,7 +132,7 @@ export default function Index() {
       <div className="meme-page">
         <ScatteredPetals />
         <div className="meme-card animate-in">
-          <img src={CAT_IMG} alt="котик" className="cat-img" />
+          <img src={CAT_IMG} alt="пёс" className="cat-img" />
           <h1 className="meme-question" style={{ color: "#a07cc5" }}>
             🤔 Буду ждать... 🤔
           </h1>
@@ -89,7 +146,7 @@ export default function Index() {
     <div className="meme-page">
       <ScatteredPetals />
       <div className="meme-card animate-in">
-        <img src={CAT_IMG} alt="котик" className="cat-img" />
+        <img src={CAT_IMG} alt="пёс" className="cat-img" />
         <h1 className="meme-question">
           🌸 Пойдёшь со мной на свидание? 🌸
         </h1>
