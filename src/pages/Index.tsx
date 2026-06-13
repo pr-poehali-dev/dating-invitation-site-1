@@ -2,15 +2,15 @@ import { useState, useRef, useCallback } from "react";
 
 const CAT_IMG = "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/4b365dd2-e73c-45db-858b-95f8c7ab5215.jpg";
 
-const PETALS = ["🌸", "🌸", "💮", "🌸", "🌸", "🌸", "💮", "🌸", "🌸", "💮", "🌸", "🌸"];
+const PETALS = ["🌸", "🌸", "🌸", "💮", "🌸", "🌸", "💮", "🌸", "🌸", "🌸", "💮", "🌸", "🌸", "🌸", "💮", "🌸", "🌸", "🌸", "💮", "🌸", "🌸", "💮", "🌸", "🌸", "🌸", "💮", "🌸", "🌸"];
 
 const floatingPetals = PETALS.map((p, i) => ({
   emoji: p,
-  left: `${(i * 8.3 + 1) % 100}%`,
-  top: `${(i * 13 + 5) % 90}%`,
-  size: `${0.6 + (i * 0.11) % 0.7}rem`,
-  opacity: 0.3 + (i * 0.06) % 0.5,
-  rotate: `${(i * 37) % 360}deg`,
+  left: `${(i * 3.7 + 1.5) % 100}%`,
+  delay: `${(i * 0.38) % 7}s`,
+  duration: `${5 + (i * 0.29) % 5}s`,
+  size: `${1.3 + (i * 0.15) % 1.1}rem`,
+  opacity: 0.45 + (i * 0.04) % 0.4,
 }));
 
 function ScatteredPetals() {
@@ -19,13 +19,13 @@ function ScatteredPetals() {
       {floatingPetals.map((p, i) => (
         <span
           key={i}
-          className="scatter-petal"
+          className="falling-petal"
           style={{
             left: p.left,
-            top: p.top,
+            animationDelay: p.delay,
+            animationDuration: p.duration,
             fontSize: p.size,
             opacity: p.opacity,
-            transform: `rotate(${p.rotate})`,
           }}
         >
           {p.emoji}

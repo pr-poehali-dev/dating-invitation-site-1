@@ -38,7 +38,7 @@ body {
   overflow: hidden;
 }
 
-/* ===== Scattered petals ===== */
+/* ===== Falling petals ===== */
 .petals-scatter {
   position: fixed;
   inset: 0;
@@ -46,9 +46,30 @@ body {
   z-index: 0;
 }
 
-.scatter-petal {
+.falling-petal {
   position: absolute;
+  top: -60px;
   user-select: none;
+  animation: fallDown linear infinite;
+}
+
+@keyframes fallDown {
+  0% {
+    top: -60px;
+    transform: rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 0.7;
+  }
+  100% {
+    top: 110vh;
+    transform: rotate(360deg);
+    opacity: 0;
+  }
 }
 
 /* ===== Card ===== */
