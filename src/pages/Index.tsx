@@ -6,31 +6,37 @@ const PLACES = [
   {
     id: 1,
     name: "Парк Хуамин",
+    desc: "Сакура, пруды и японские беседки",
     img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/76c9f59b-6ec3-459c-af85-a811bad22203.jpg",
   },
   {
     id: 2,
     name: "Филёвский парк, Береговой",
+    desc: "Набережная Москвы-реки, закат и свежий воздух",
     img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/a3bcc820-1262-48fd-8a9f-ee360ad96951.jpg",
   },
   {
     id: 3,
     name: "Ресторан Hedonist",
+    desc: "Уютная атмосфера и вкусная еда",
     img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/c02170dd-a46f-4de5-9a72-aa0771444ee0.jpg",
   },
   {
     id: 4,
     name: "Музей Зиларт",
+    desc: "Современное искусство в самом сердце Москвы",
     img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/e837e701-aa56-429a-bf8a-8d8416a50ecc.jpg",
   },
   {
     id: 5,
     name: "Крыша Останкинской Телебашни",
+    desc: "Панорама всей Москвы с высоты 337 м",
     img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/4c1bb245-d7aa-4a0d-a3ef-b10fad97b818.jpg",
   },
   {
     id: 6,
     name: "Кинотеатр на Таганке",
+    desc: "Кино под открытым небом с огнями города",
     img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/b60c496a-a27e-4901-b687-4935315ce948.jpg",
   },
 ];
@@ -119,6 +125,7 @@ export default function Index() {
               >
                 <img src={place.img} alt={place.name} className="place-img" />
                 <span className="place-name">{place.name}</span>
+                <span className="place-desc">{place.desc}</span>
               </button>
             ))}
           </div>
