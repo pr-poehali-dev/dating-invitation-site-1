@@ -136,6 +136,17 @@ body {
   box-shadow: 0 6px 24px rgba(232, 99, 122, 0.4);
 }
 
+.bubble-maybe {
+  background: #f7d08a;
+  color: #7a5a1a;
+  box-shadow: 0 3px 12px rgba(200, 160, 60, 0.2);
+  transition: transform 0.18s ease;
+}
+
+.bubble-maybe:hover {
+  transform: scale(1.05);
+}
+
 .bubble-no {
   background: var(--purple-bubble);
   color: #fff;

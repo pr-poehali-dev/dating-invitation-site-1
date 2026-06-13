@@ -36,7 +36,7 @@ function ScatteredPetals() {
 }
 
 export default function Index() {
-  const [answered, setAnswered] = useState<"yes" | null>(null);
+  const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
   const [noPos, setNoPos] = useState({ x: 0, y: 0 });
   const noRef = useRef<HTMLButtonElement>(null);
 
@@ -70,6 +70,21 @@ export default function Index() {
     );
   }
 
+  if (answered === "maybe") {
+    return (
+      <div className="meme-page">
+        <ScatteredPetals />
+        <div className="meme-card animate-in">
+          <img src={CAT_IMG} alt="котик" className="cat-img" />
+          <h1 className="meme-question" style={{ color: "#a07cc5" }}>
+            🤔 Буду ждать... 🤔
+          </h1>
+          <p className="meme-sub">главное, что ты думаешь об этом 💜</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="meme-page">
       <ScatteredPetals />
@@ -82,6 +97,9 @@ export default function Index() {
           <button className="bubble-btn bubble-yes" onClick={() => setAnswered("yes")}>
             Да ✔️
           </button>
+          <button className="bubble-btn bubble-maybe" onClick={() => setAnswered("maybe")}>
+            я подумаю 🤔
+          </button>
           <button
             ref={noRef}
             className="bubble-btn bubble-no"
@@ -92,7 +110,7 @@ export default function Index() {
             onMouseEnter={handleNoHover}
             onTouchStart={handleNoHover}
           >
-            нет... 🙈
+            нет ❌
           </button>
         </div>
       </div>
