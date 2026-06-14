@@ -169,7 +169,7 @@ export default function Index() {
   const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
   const [chosenPlace, setChosenPlace] = useState<typeof PLACES[0] | null>(null);
   const [chosenDate, setChosenDate] = useState<Date | null>(null);
-  const [noPos, setNoPos] = useState({ x: 0, y: 0 });
+  const [noPos, setNoPos] = useState<{ x: number; y: number } | null>(null);
   const noRef = useRef<HTMLButtonElement>(null);
 
   const handleNoMove = useCallback((e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
@@ -189,29 +189,17 @@ export default function Index() {
       cy = e.clientY;
     }
 
-    // Вектор от курсора к кнопке
     const dx = btnCx - cx;
     const dy = btnCy - cy;
     const dist = Math.sqrt(dx * dx + dy * dy) || 1;
 
-    const JUMP = 130;
-    const originLeft = window.innerWidth / 2 - rect.width / 2;
-    const originTop = window.innerHeight / 2 - rect.height / 2;
-
-    let nx = (rect.left - originLeft) + (dx / dist) * JUMP;
-    let ny = (rect.top - originTop) + (dy / dist) * JUMP;
+    const JUMP = 140;
+    let nx = rect.left + (dx / dist) * JUMP;
+    let ny = rect.top + (dy / dist) * JUMP;
 
     const margin = 60;
-    // Абсолютные границы кнопки после смещения
-    const absLeft = originLeft + nx;
-    const absTop = originTop + ny;
-    const absRight = absLeft + rect.width;
-    const absBottom = absTop + rect.height;
-
-    if (absLeft < margin) nx += margin - absLeft;
-    if (absTop < margin) ny += margin - absTop;
-    if (absRight > window.innerWidth - margin) nx -= absRight - (window.innerWidth - margin);
-    if (absBottom > window.innerHeight - margin) ny -= absBottom - (window.innerHeight - margin);
+    nx = Math.max(margin, Math.min(window.innerWidth - rect.width - margin, nx));
+    ny = Math.max(margin, Math.min(window.innerHeight - rect.height - margin, ny));
 
     setNoPos({ x: nx, y: ny });
   }, []);
@@ -285,7 +273,13 @@ export default function Index() {
           <button
             ref={noRef}
             className="bubble-btn bubble-no"
-            style={{ transform: `translate(${noPos.x}px, ${noPos.y}px)`, transition: "transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)" }}
+            style={noPos ? {
+              position: "fixed",
+              left: noPos.x,
+              top: noPos.y,
+              transition: "left 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)",
+              zIndex: 999,
+            } : {}}
             onMouseMove={handleNoMove}
             onMouseEnter={handleNoMove}
             onTouchMove={handleNoMove}
