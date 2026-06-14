@@ -169,39 +169,22 @@ export default function Index() {
   const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
   const [chosenPlace, setChosenPlace] = useState<typeof PLACES[0] | null>(null);
   const [chosenDate, setChosenDate] = useState<Date | null>(null);
-  const [noPos, setNoPos] = useState<{ x: number; y: number } | null>(null);
+  const [noPos, setNoPos] = useState({ x: 0, y: 0 });
   const noRef = useRef<HTMLButtonElement>(null);
 
-  const handleNoMove = useCallback((e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
-    const btn = noRef.current;
-    if (!btn) return;
-
-    const rect = btn.getBoundingClientRect();
-    const btnCx = rect.left + rect.width / 2;
-    const btnCy = rect.top + rect.height / 2;
-
-    let cx: number, cy: number;
-    if ("touches" in e) {
-      cx = e.touches[0].clientX;
-      cy = e.touches[0].clientY;
-    } else {
-      cx = e.clientX;
-      cy = e.clientY;
-    }
-
-    const dx = btnCx - cx;
-    const dy = btnCy - cy;
-    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-
-    const JUMP = 140;
-    let nx = rect.left + (dx / dist) * JUMP;
-    let ny = rect.top + (dy / dist) * JUMP;
-
-    const margin = 60;
-    nx = Math.max(margin, Math.min(window.innerWidth - rect.width - margin, nx));
-    ny = Math.max(margin, Math.min(window.innerHeight - rect.height - margin, ny));
-
-    setNoPos({ x: nx, y: ny });
+  const handleNoHover = useCallback(() => {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const OFFSET = 100;
+    setNoPos(prev => {
+      let nx = prev.x + (Math.random() > 0.5 ? 1 : -1) * (OFFSET * (0.6 + Math.random() * 0.8));
+      let ny = prev.y + (Math.random() > 0.5 ? 1 : -1) * (OFFSET * (0.6 + Math.random() * 0.8));
+      const maxX = vw / 2 - 90;
+      const maxY = vh / 2 - 60;
+      nx = Math.max(-maxX, Math.min(maxX, nx));
+      ny = Math.max(-maxY, Math.min(maxY, ny));
+      return { x: nx, y: ny };
+    });
   }, []);
 
   // Финальный экран
@@ -273,17 +256,9 @@ export default function Index() {
           <button
             ref={noRef}
             className="bubble-btn bubble-no"
-            style={noPos ? {
-              position: "fixed",
-              left: noPos.x,
-              top: noPos.y,
-              transition: "left 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)",
-              zIndex: 999,
-            } : {}}
-            onMouseMove={handleNoMove}
-            onMouseEnter={handleNoMove}
-            onTouchMove={handleNoMove}
-            onTouchStart={handleNoMove}
+            style={{ transform: `translate(${noPos.x}px, ${noPos.y}px)`, transition: "transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)" }}
+            onMouseEnter={handleNoHover}
+            onTouchStart={handleNoHover}
           >
             нет ❌
           </button>
