@@ -195,16 +195,23 @@ export default function Index() {
     const dist = Math.sqrt(dx * dx + dy * dy) || 1;
 
     const JUMP = 130;
-    let nx = (rect.left - (window.innerWidth / 2 - rect.width / 2)) + (dx / dist) * JUMP;
-    let ny = (rect.top - (window.innerHeight / 2 - rect.height / 2)) + (dy / dist) * JUMP;
+    const originLeft = window.innerWidth / 2 - rect.width / 2;
+    const originTop = window.innerHeight / 2 - rect.height / 2;
 
-    const margin = 40;
-    const halfW = window.innerWidth / 2 - rect.width / 2;
-    const halfH = window.innerHeight / 2 - rect.height / 2;
+    let nx = (rect.left - originLeft) + (dx / dist) * JUMP;
+    let ny = (rect.top - originTop) + (dy / dist) * JUMP;
 
-    // Если у края — толкаем к центру
-    nx = Math.max(-halfW + margin, Math.min(halfW - margin, nx));
-    ny = Math.max(-halfH + margin, Math.min(halfH - margin, ny));
+    const margin = 60;
+    // Абсолютные границы кнопки после смещения
+    const absLeft = originLeft + nx;
+    const absTop = originTop + ny;
+    const absRight = absLeft + rect.width;
+    const absBottom = absTop + rect.height;
+
+    if (absLeft < margin) nx += margin - absLeft;
+    if (absTop < margin) ny += margin - absTop;
+    if (absRight > window.innerWidth - margin) nx -= absRight - (window.innerWidth - margin);
+    if (absBottom > window.innerHeight - margin) ny -= absBottom - (window.innerHeight - margin);
 
     setNoPos({ x: nx, y: ny });
   }, []);
