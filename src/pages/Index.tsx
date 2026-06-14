@@ -194,31 +194,34 @@ export default function Index() {
       const btnCx = rect.left + rect.width / 2;
       const btnCy = rect.top + rect.height / 2;
 
-      // Вектор от курсора к кнопке
+      // Базовый вектор от курсора к кнопке
       const dx = btnCx - cx;
       const dy = btnCy - cy;
       const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-      const vx = dx / dist;
-      const vy = dy / dist;
+      const baseAngle = Math.atan2(dy, dx);
 
-      let nx = prev.x + vx * OFFSET;
-      let ny = prev.y + vy * OFFSET;
+      // Случайное отклонение ±60° от направления "от курсора", но не >90° (не к курсору)
+      const spread = (Math.random() - 0.5) * (Math.PI * 2 / 3);
+      const angle = baseAngle + spread;
 
-      // Если упёрлись в край — скользим перпендикулярно (вдоль края), но не к курсору
-      if (nx < minX || nx > maxX) {
-        // Двигаемся только по Y, в сторону от курсора
-        nx = Math.max(minX, Math.min(maxX, nx));
-        const slideY = vy !== 0 ? vy : (cy > btnCy ? -1 : 1);
-        ny = prev.y + Math.sign(slideY) * OFFSET;
+      let nx = prev.x + Math.cos(angle) * OFFSET;
+      let ny = prev.y + Math.sin(angle) * OFFSET;
+
+      // Если упёрлись в край — отражаем угол от стены и добавляем случайность
+      let bounced = false;
+      if (nx < minX) { nx = minX; bounced = true; }
+      if (nx > maxX) { nx = maxX; bounced = true; }
+      if (ny < minY) { ny = minY; bounced = true; }
+      if (ny > maxY) { ny = maxY; bounced = true; }
+
+      if (bounced) {
+        // Уходим перпендикулярно стене в случайную сторону, гарантированно не к курсору
+        const awayX = btnCx > window.innerWidth / 2 ? -1 : 1;
+        const awayY = btnCy > window.innerHeight / 2 ? -1 : 1;
+        const rnd = Math.random() > 0.5;
+        nx = Math.max(minX, Math.min(maxX, prev.x + (rnd ? awayX : Math.sign(Math.cos(angle))) * OFFSET * (0.7 + Math.random() * 0.6)));
+        ny = Math.max(minY, Math.min(maxY, prev.y + (!rnd ? awayY : Math.sign(Math.sin(angle))) * OFFSET * (0.7 + Math.random() * 0.6)));
       }
-      if (ny < minY || ny > maxY) {
-        ny = Math.max(minY, Math.min(maxY, ny));
-        const slideX = vx !== 0 ? vx : (cx > btnCx ? -1 : 1);
-        nx = Math.max(minX, Math.min(maxX, prev.x + Math.sign(slideX) * OFFSET));
-      }
-
-      nx = Math.max(minX, Math.min(maxX, nx));
-      ny = Math.max(minY, Math.min(maxY, ny));
 
       return { x: nx, y: ny };
     });
