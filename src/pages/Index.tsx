@@ -172,26 +172,47 @@ export default function Index() {
   const [noPos, setNoPos] = useState({ x: 0, y: 0 });
   const noRef = useRef<HTMLButtonElement>(null);
 
-  const handleNoHover = useCallback(() => {
+  const handleNoHover = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     const OFFSET = 100;
+    const MARGIN = 24;
+    const BOUNCE = 80;
+
     setNoPos(prev => {
       const btn = noRef.current;
       if (!btn) return prev;
       const rect = btn.getBoundingClientRect();
 
-      let nx = prev.x + (Math.random() > 0.5 ? 1 : -1) * (OFFSET * (0.6 + Math.random() * 0.8));
-      let ny = prev.y + (Math.random() > 0.5 ? 1 : -1) * (OFFSET * (0.6 + Math.random() * 0.8));
-
-      // Исходное положение кнопки без смещения
       const originLeft = rect.left - prev.x;
       const originTop = rect.top - prev.y;
 
-      const margin = 24;
-      const minX = -originLeft + margin;
-      const maxX = window.innerWidth - originLeft - rect.width - margin;
-      const minY = -originTop + margin;
-      const maxY = window.innerHeight - originTop - rect.height - margin;
+      const minX = -originLeft + MARGIN;
+      const maxX = window.innerWidth - originLeft - rect.width - MARGIN;
+      const minY = -originTop + MARGIN;
+      const maxY = window.innerHeight - originTop - rect.height - MARGIN;
 
+      // Курсор относительно кнопки
+      const cx = e.clientX;
+      const cy = e.clientY;
+      const btnCx = rect.left + rect.width / 2;
+      const btnCy = rect.top + rect.height / 2;
+      const dx = btnCx - cx;
+      const dy = btnCy - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+
+      // Базовый прыжок от курсора
+      let nx = prev.x + (dx / dist) * OFFSET;
+      let ny = prev.y + (dy / dist) * OFFSET;
+
+      // Если у края — доп. толчок внутрь (но не в сторону курсора)
+      const projX = dx / dist; // направление от курсора по X
+      const projY = dy / dist;
+
+      if (nx < minX) nx = prev.x + Math.abs(projX) * BOUNCE * (projX < 0 ? -1 : 1) + BOUNCE;
+      if (nx > maxX) nx = prev.x - Math.abs(projX) * BOUNCE * (projX > 0 ? 1 : -1) - BOUNCE;
+      if (ny < minY) ny = prev.y + Math.abs(projY) * BOUNCE * (projY < 0 ? -1 : 1) + BOUNCE;
+      if (ny > maxY) ny = prev.y - Math.abs(projY) * BOUNCE * (projY > 0 ? 1 : -1) - BOUNCE;
+
+      // Жёсткие границы
       nx = Math.max(minX, Math.min(maxX, nx));
       ny = Math.max(minY, Math.min(maxY, ny));
 
@@ -270,7 +291,6 @@ export default function Index() {
             className="bubble-btn bubble-no"
             style={{ transform: `translate(${noPos.x}px, ${noPos.y}px)`, transition: "transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)" }}
             onMouseEnter={handleNoHover}
-            onTouchStart={handleNoHover}
           >
             нет ❌
           </button>
