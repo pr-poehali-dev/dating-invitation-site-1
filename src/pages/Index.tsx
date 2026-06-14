@@ -173,16 +173,28 @@ export default function Index() {
   const noRef = useRef<HTMLButtonElement>(null);
 
   const handleNoHover = useCallback(() => {
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
     const OFFSET = 100;
     setNoPos(prev => {
+      const btn = noRef.current;
+      if (!btn) return prev;
+      const rect = btn.getBoundingClientRect();
+
       let nx = prev.x + (Math.random() > 0.5 ? 1 : -1) * (OFFSET * (0.6 + Math.random() * 0.8));
       let ny = prev.y + (Math.random() > 0.5 ? 1 : -1) * (OFFSET * (0.6 + Math.random() * 0.8));
-      const maxX = vw / 2 - 90;
-      const maxY = vh / 2 - 60;
-      nx = Math.max(-maxX, Math.min(maxX, nx));
-      ny = Math.max(-maxY, Math.min(maxY, ny));
+
+      // Исходное положение кнопки без смещения
+      const originLeft = rect.left - prev.x;
+      const originTop = rect.top - prev.y;
+
+      const margin = 24;
+      const minX = -originLeft + margin;
+      const maxX = window.innerWidth - originLeft - rect.width - margin;
+      const minY = -originTop + margin;
+      const maxY = window.innerHeight - originTop - rect.height - margin;
+
+      nx = Math.max(minX, Math.min(maxX, nx));
+      ny = Math.max(minY, Math.min(maxY, ny));
+
       return { x: nx, y: ny };
     });
   }, []);
