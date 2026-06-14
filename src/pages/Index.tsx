@@ -173,9 +173,8 @@ export default function Index() {
   const noRef = useRef<HTMLButtonElement>(null);
 
   const handleNoHover = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    const OFFSET = 100;
+    const OFFSET = 110;
     const MARGIN = 24;
-    const BOUNCE = 80;
 
     setNoPos(prev => {
       const btn = noRef.current;
@@ -190,29 +189,34 @@ export default function Index() {
       const minY = -originTop + MARGIN;
       const maxY = window.innerHeight - originTop - rect.height - MARGIN;
 
-      // Курсор относительно кнопки
       const cx = e.clientX;
       const cy = e.clientY;
       const btnCx = rect.left + rect.width / 2;
       const btnCy = rect.top + rect.height / 2;
+
+      // Вектор от курсора к кнопке
       const dx = btnCx - cx;
       const dy = btnCy - cy;
       const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      const vx = dx / dist;
+      const vy = dy / dist;
 
-      // Базовый прыжок от курсора
-      let nx = prev.x + (dx / dist) * OFFSET;
-      let ny = prev.y + (dy / dist) * OFFSET;
+      let nx = prev.x + vx * OFFSET;
+      let ny = prev.y + vy * OFFSET;
 
-      // Если у края — доп. толчок внутрь (но не в сторону курсора)
-      const projX = dx / dist; // направление от курсора по X
-      const projY = dy / dist;
+      // Если упёрлись в край — скользим перпендикулярно (вдоль края), но не к курсору
+      if (nx < minX || nx > maxX) {
+        // Двигаемся только по Y, в сторону от курсора
+        nx = Math.max(minX, Math.min(maxX, nx));
+        const slideY = vy !== 0 ? vy : (cy > btnCy ? -1 : 1);
+        ny = prev.y + Math.sign(slideY) * OFFSET;
+      }
+      if (ny < minY || ny > maxY) {
+        ny = Math.max(minY, Math.min(maxY, ny));
+        const slideX = vx !== 0 ? vx : (cx > btnCx ? -1 : 1);
+        nx = Math.max(minX, Math.min(maxX, prev.x + Math.sign(slideX) * OFFSET));
+      }
 
-      if (nx < minX) nx = prev.x + Math.abs(projX) * BOUNCE * (projX < 0 ? -1 : 1) + BOUNCE;
-      if (nx > maxX) nx = prev.x - Math.abs(projX) * BOUNCE * (projX > 0 ? 1 : -1) - BOUNCE;
-      if (ny < minY) ny = prev.y + Math.abs(projY) * BOUNCE * (projY < 0 ? -1 : 1) + BOUNCE;
-      if (ny > maxY) ny = prev.y - Math.abs(projY) * BOUNCE * (projY > 0 ? 1 : -1) - BOUNCE;
-
-      // Жёсткие границы
       nx = Math.max(minX, Math.min(maxX, nx));
       ny = Math.max(minY, Math.min(maxY, ny));
 
