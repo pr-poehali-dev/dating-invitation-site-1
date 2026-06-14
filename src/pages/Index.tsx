@@ -184,7 +184,7 @@ export default function Index() {
       let nx = prev.x + (Math.random() > 0.5 ? 1 : -1) * (OFFSET * (0.6 + Math.random() * 0.8));
       let ny = prev.y + (Math.random() > 0.5 ? 1 : -1) * (OFFSET * (0.6 + Math.random() * 0.8));
 
-      const margin = 8;
+      const margin = 40;
       const curLeft = rect.left - prev.x;
       const curTop = rect.top - prev.y;
 
