@@ -172,32 +172,41 @@ export default function Index() {
   const [noPos, setNoPos] = useState({ x: 0, y: 0 });
   const noRef = useRef<HTMLButtonElement>(null);
 
-  const handleNoHover = useCallback(() => {
-    const OFFSET = 110;
-    setNoPos(prev => {
-      const btn = noRef.current;
-      if (!btn) return prev;
-      const rect = btn.getBoundingClientRect();
-      const btnW = rect.width;
-      const btnH = rect.height;
+  const handleNoMove = useCallback((e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
+    const btn = noRef.current;
+    if (!btn) return;
 
-      let nx = prev.x + (Math.random() > 0.5 ? 1 : -1) * (OFFSET * (0.6 + Math.random() * 0.8));
-      let ny = prev.y + (Math.random() > 0.5 ? 1 : -1) * (OFFSET * (0.6 + Math.random() * 0.8));
+    const rect = btn.getBoundingClientRect();
+    const btnCx = rect.left + rect.width / 2;
+    const btnCy = rect.top + rect.height / 2;
 
-      const margin = 40;
-      const curLeft = rect.left - prev.x;
-      const curTop = rect.top - prev.y;
+    let cx: number, cy: number;
+    if ("touches" in e) {
+      cx = e.touches[0].clientX;
+      cy = e.touches[0].clientY;
+    } else {
+      cx = e.clientX;
+      cy = e.clientY;
+    }
 
-      const minX = -curLeft + margin;
-      const maxX = window.innerWidth - curLeft - btnW - margin;
-      const minY = -curTop + margin;
-      const maxY = window.innerHeight - curTop - btnH - margin;
+    // Вектор от курсора к кнопке
+    const dx = btnCx - cx;
+    const dy = btnCy - cy;
+    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
 
-      nx = Math.max(minX, Math.min(maxX, nx));
-      ny = Math.max(minY, Math.min(maxY, ny));
+    const JUMP = 130;
+    let nx = (rect.left - (window.innerWidth / 2 - rect.width / 2)) + (dx / dist) * JUMP;
+    let ny = (rect.top - (window.innerHeight / 2 - rect.height / 2)) + (dy / dist) * JUMP;
 
-      return { x: nx, y: ny };
-    });
+    const margin = 40;
+    const halfW = window.innerWidth / 2 - rect.width / 2;
+    const halfH = window.innerHeight / 2 - rect.height / 2;
+
+    // Если у края — толкаем к центру
+    nx = Math.max(-halfW + margin, Math.min(halfW - margin, nx));
+    ny = Math.max(-halfH + margin, Math.min(halfH - margin, ny));
+
+    setNoPos({ x: nx, y: ny });
   }, []);
 
   // Финальный экран
@@ -270,8 +279,10 @@ export default function Index() {
             ref={noRef}
             className="bubble-btn bubble-no"
             style={{ transform: `translate(${noPos.x}px, ${noPos.y}px)`, transition: "transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)" }}
-            onMouseEnter={handleNoHover}
-            onTouchStart={handleNoHover}
+            onMouseMove={handleNoMove}
+            onMouseEnter={handleNoMove}
+            onTouchMove={handleNoMove}
+            onTouchStart={handleNoMove}
           >
             нет ❌
           </button>
