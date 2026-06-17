@@ -5,9 +5,10 @@ const CAT_IMG = "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad270
 const PLACES = [
   {
     id: 1,
-    name: "Парк Хуамин",
-    desc: "Сакура, пруды и японские беседки",
-    img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/76c9f59b-6ec3-459c-af85-a811bad22203.jpg",
+    name: "Поездка на катере вдвоём без капитана",
+    desc: "Поездка на катере вдвоём без капитана",
+    img: "",
+    videoId: "p0Bzuez32IU",
   },
   {
     id: 2,
@@ -260,9 +261,18 @@ export default function Index() {
           <div className="places-grid">
             {PLACES.map(place => (
               <button key={place.id} className="place-item" onClick={() => setChosenPlace(place)}>
-                <img src={place.img} alt={place.name} className="place-img" />
+                {"videoId" in place && place.videoId ? (
+                  <iframe
+                    className="place-img"
+                    src={`https://www.youtube.com/embed/${place.videoId}?autoplay=0&rel=0`}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    style={{ border: "none", pointerEvents: "none" }}
+                  />
+                ) : (
+                  <img src={place.img} alt={place.name} className="place-img" />
+                )}
                 <span className="place-name">{place.name}</span>
-                <span className="place-desc">{place.desc}</span>
               </button>
             ))}
           </div>

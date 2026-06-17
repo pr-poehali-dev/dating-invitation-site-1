@@ -246,6 +246,12 @@ body:has(.places-page) {
   border-radius: 1rem;
 }
 
+.place-img[src=""],
+iframe.place-img {
+  aspect-ratio: 9/16;
+  max-height: 320px;
+}
+
 .place-name {
   font-family: var(--font-hand);
   font-size: 1.15rem;
