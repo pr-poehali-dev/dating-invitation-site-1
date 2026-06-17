@@ -264,7 +264,7 @@ export default function Index() {
                 {"videoId" in place && place.videoId ? (
                   <iframe
                     className="place-img"
-                    src={`https://www.youtube.com/embed/${place.videoId}?autoplay=1&mute=1&rel=0&playsinline=1`}
+                    src={`https://www.youtube.com/embed/${place.videoId}?autoplay=1&mute=1&rel=0&playsinline=1&loop=1&playlist=${place.videoId}`}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                     style={{ border: "none", pointerEvents: "none" }}
