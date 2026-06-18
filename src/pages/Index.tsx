@@ -173,10 +173,12 @@ export default function Index() {
   const [noPos, setNoPos] = useState({ x: 0, y: 0 });
   const [noDodgeCount, setNoDodgeCount] = useState(0);
   const [showMaybeHint, setShowMaybeHint] = useState(false);
+  const [maybeFading, setMaybeFading] = useState(false);
   const noRef = useRef<HTMLButtonElement>(null);
 
   const handleMaybeClick = () => {
     setShowMaybeHint(true);
+    setMaybeFading(true);
     setTimeout(() => setAnswered("maybe"), 3500);
   };
 
@@ -309,8 +311,8 @@ export default function Index() {
       <ScatteredPetals />
       {showMaybeHint && (
         <div className="maybe-hint-bubble animate-in">
-          У меня на этой кнопке тоже постоянно выходила ошибка, так и не понял почему.<br />
-          Может быть с кнопкой «Да» всё в порядке?
+          У меня тоже эта кнопка постоянно исчезала при нажатии, так и не понял почему.<br />
+          Может с кнопкой «Да» всё в порядке?
         </div>
       )}
       <div className="meme-card animate-in">
@@ -322,7 +324,7 @@ export default function Index() {
         <h1 className="meme-question">🌸 Пойдёшь со мной на свидание? 🌸</h1>
         <div className="meme-buttons">
           <button className="bubble-btn bubble-yes" onClick={() => setAnswered("yes")}>Да ✔️</button>
-          <button className="bubble-btn bubble-maybe" onClick={handleMaybeClick}>я подумаю 🤔</button>
+          <button className="bubble-btn bubble-maybe" onClick={handleMaybeClick} style={maybeFading ? { opacity: 0, transition: "opacity 1.5s ease", pointerEvents: "none" } : {}}>я подумаю 🤔</button>
           <button
             ref={noRef}
             className="bubble-btn bubble-no"
