@@ -179,7 +179,6 @@ export default function Index() {
   const handleMaybeClick = () => {
     setShowMaybeHint(true);
     setMaybeFading(true);
-    setTimeout(() => setAnswered("maybe"), 3500);
   };
 
   const handleNoHover = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
@@ -309,14 +308,11 @@ export default function Index() {
   return (
     <div className="meme-page">
       <ScatteredPetals />
-      {showMaybeHint && (
-        <div className="maybe-hint-bubble animate-in">
-          У меня тоже эта кнопка постоянно исчезала при нажатии, так и не понял почему.<br />
-          Может с кнопкой «Да» всё в порядке?
-        </div>
-      )}
       <div className="meme-card animate-in">
         <img src={CAT_IMG} alt="пёс" className="cat-img" />
+        {showMaybeHint && (
+          <p className="no-hint">У меня тоже эта кнопка постоянно исчезала при нажатии, так и не понял почему. Может с кнопкой «Да» всё в порядке?</p>
+        )}
         {noDodgeCount >= 3 && (
           <p className="no-hint text-3xl">Я пытался исправить, чтобы кнопка "Нет" не бегала, но не получилось
 Возможно, "Я подумаю" работет?</p>
