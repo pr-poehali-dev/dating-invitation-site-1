@@ -304,7 +304,8 @@ export default function Index() {
       <div className="meme-card animate-in">
         <img src={CAT_IMG} alt="пёс" className="cat-img" />
         {noDodgeCount >= 3 && (
-          <p className="no-hint text-3xl">Может кнопка «Да» работает правильно? </p>
+          <p className="no-hint text-3xl">Я пытался исправить, чтобы кнопка "Нет" не бегала, но не получилось
+Возможно, "Я подумаю" работет?</p>
         )}
         <h1 className="meme-question">🌸 Пойдёшь со мной на свидание? 🌸</h1>
         <div className="meme-buttons">
