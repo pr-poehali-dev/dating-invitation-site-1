@@ -310,13 +310,11 @@ export default function Index() {
       <ScatteredPetals />
       <div className="meme-card animate-in">
         <img src={CAT_IMG} alt="пёс" className="cat-img" />
-        {showMaybeHint && (
+        {showMaybeHint ? (
           <p className="no-hint">У меня тоже эта кнопка постоянно исчезала при нажатии, так и не понял почему. Может с кнопкой «Да» всё в порядке?</p>
-        )}
-        {noDodgeCount >= 3 && (
-          <p className="no-hint text-3xl">Я пытался исправить, чтобы кнопка "Нет" не бегала, но не получилось
-Возможно, "Я подумаю" работет?</p>
-        )}
+        ) : noDodgeCount >= 3 ? (
+          <p className="no-hint">Я пытался исправить, чтобы кнопка «Нет» не бегала, но не получилось. Возможно, «Я подумаю» работает?</p>
+        ) : null}
         <h1 className="meme-question">🌸 Пойдёшь со мной на свидание? 🌸</h1>
         <div className="meme-buttons">
           <button className="bubble-btn bubble-yes" onClick={() => setAnswered("yes")}>Да ✔️</button>
