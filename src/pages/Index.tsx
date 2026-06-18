@@ -171,6 +171,7 @@ export default function Index() {
   const [chosenPlace, setChosenPlace] = useState<typeof PLACES[0] | null>(null);
   const [chosenDate, setChosenDate] = useState<Date | null>(null);
   const [noPos, setNoPos] = useState({ x: 0, y: 0 });
+  const [noDodgeCount, setNoDodgeCount] = useState(0);
   const noRef = useRef<HTMLButtonElement>(null);
 
   const handleNoHover = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
@@ -226,6 +227,7 @@ export default function Index() {
 
       return { x: nx, y: ny };
     });
+    setNoDodgeCount(prev => prev + 1);
   }, []);
 
   // Финальный экран
@@ -301,6 +303,9 @@ export default function Index() {
       <ScatteredPetals />
       <div className="meme-card animate-in">
         <img src={CAT_IMG} alt="пёс" className="cat-img" />
+        {noDodgeCount >= 3 && (
+          <p className="no-hint">Может кнопка «Да» работает правильно? 🐾</p>
+        )}
         <h1 className="meme-question">🌸 Пойдёшь со мной на свидание? 🌸</h1>
         <div className="meme-buttons">
           <button className="bubble-btn bubble-yes" onClick={() => setAnswered("yes")}>Да ✔️</button>
