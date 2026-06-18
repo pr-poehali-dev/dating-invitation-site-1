@@ -8,7 +8,7 @@ const PLACES = [
     name: "Поездка на катере вдвоём без капитана",
     desc: "Поездка на катере вдвоём без капитана",
     img: "",
-    videoId: "p0Bzuez32IU",
+    videoUrl: "https://videovssylku.ru/v/VID-20260617-222514.zBho",
   },
   {
     id: 2,
@@ -261,13 +261,15 @@ export default function Index() {
           <div className="places-grid">
             {PLACES.map(place => (
               <button key={place.id} className="place-item" onClick={() => setChosenPlace(place)}>
-                {"videoId" in place && place.videoId ? (
-                  <iframe
+                {"videoUrl" in place && place.videoUrl ? (
+                  <video
                     className="place-img"
-                    src={`https://www.youtube.com/embed/${place.videoId}?autoplay=1&mute=1&rel=0&playsinline=1&loop=1&playlist=${place.videoId}`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    style={{ border: "none", pointerEvents: "none" }}
+                    src={place.videoUrl}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    style={{ objectFit: "cover", pointerEvents: "none" }}
                   />
                 ) : (
                   <img src={place.img} alt={place.name} className="place-img" />
