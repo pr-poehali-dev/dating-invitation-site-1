@@ -172,7 +172,13 @@ export default function Index() {
   const [chosenDate, setChosenDate] = useState<Date | null>(null);
   const [noPos, setNoPos] = useState({ x: 0, y: 0 });
   const [noDodgeCount, setNoDodgeCount] = useState(0);
+  const [showMaybeHint, setShowMaybeHint] = useState(false);
   const noRef = useRef<HTMLButtonElement>(null);
+
+  const handleMaybeClick = () => {
+    setShowMaybeHint(true);
+    setTimeout(() => setAnswered("maybe"), 3500);
+  };
 
   const handleNoHover = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     const OFFSET = 110;
@@ -301,6 +307,12 @@ export default function Index() {
   return (
     <div className="meme-page">
       <ScatteredPetals />
+      {showMaybeHint && (
+        <div className="maybe-hint-bubble animate-in">
+          У меня на этой кнопке тоже постоянно выходила ошибка, так и не понял почему.<br />
+          Может быть с кнопкой «Да» всё в порядке?
+        </div>
+      )}
       <div className="meme-card animate-in">
         <img src={CAT_IMG} alt="пёс" className="cat-img" />
         {noDodgeCount >= 3 && (
@@ -310,7 +322,7 @@ export default function Index() {
         <h1 className="meme-question">🌸 Пойдёшь со мной на свидание? 🌸</h1>
         <div className="meme-buttons">
           <button className="bubble-btn bubble-yes" onClick={() => setAnswered("yes")}>Да ✔️</button>
-          <button className="bubble-btn bubble-maybe" onClick={() => setAnswered("maybe")}>я подумаю 🤔</button>
+          <button className="bubble-btn bubble-maybe" onClick={handleMaybeClick}>я подумаю 🤔</button>
           <button
             ref={noRef}
             className="bubble-btn bubble-no"
