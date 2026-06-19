@@ -16,15 +16,24 @@ export const SEARCH_STEPS = [
 
 export default function SearchingScreen() {
   const [stepIdx, setStepIdx] = useState(0);
-  // Сразу показываем to текущего шага, чтобы полоска начала двигаться
-  const [pct, setPct] = useState(SEARCH_STEPS[0].to);
+  // Стартуем с 0 — полоска поедет до to[0] благодаря CSS transition
+  const [pct, setPct] = useState(0);
 
+  // Через один кадр после монтирования/смены шага запускаем анимацию до to
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => {
+      setPct(SEARCH_STEPS[stepIdx].to);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [stepIdx]);
+
+  // Через 4с переходим к следующему шагу (сбрасываем pct на from, потом raf двигает до to)
   useEffect(() => {
     if (stepIdx >= SEARCH_STEPS.length - 1) return;
     const t = setTimeout(() => {
       const next = stepIdx + 1;
-      setStepIdx(next);
-      setPct(SEARCH_STEPS[next].to);
+      setPct(SEARCH_STEPS[next].from); // мгновенно ставим начало следующего отрезка
+      setStepIdx(next);                // useEffect выше через raf поедет до to
     }, 4000);
     return () => clearTimeout(t);
   }, [stepIdx]);
