@@ -174,87 +174,74 @@ export default function Index() {
   const [noDodgeCount, setNoDodgeCount] = useState(0);
   const [showMaybeHint, setShowMaybeHint] = useState(false);
   const [maybeFading, setMaybeFading] = useState(false);
-  const [noDisabled, setNoDisabled] = useState(false);
   const noRef = useRef<HTMLButtonElement>(null);
   const noPosRef = useRef({ x: 0, y: 0 });
-  // Исходная позиция кнопки без transform — запоминаем один раз
-  const noOriginRef = useRef<{ left: number; top: number; w: number; h: number } | null>(null);
 
   const handleMaybeClick = () => {
     setShowMaybeHint(true);
     setMaybeFading(true);
   };
 
-  const dodgeNo = useCallback((cx: number, cy: number) => {
-    const OFFSET = 200;
-    const MARGIN = 80;
-
+  useEffect(() => {
     const btn = noRef.current;
     if (!btn) return;
-    const rect = btn.getBoundingClientRect();
 
-    if (!noOriginRef.current) {
-      noOriginRef.current = { left: rect.left, top: rect.top, w: rect.width, h: rect.height };
-    }
-    const origin = noOriginRef.current;
-    const prev = noPosRef.current;
+    const OFFSET = 110;
+    const MARGIN = 24;
 
-    const minX = -origin.left + MARGIN;
-    const maxX = window.innerWidth - origin.left - origin.w - MARGIN;
-    const minY = -origin.top + MARGIN;
-    const maxY = window.innerHeight - origin.top - origin.h - MARGIN;
+    function moveAway(e: MouseEvent | TouchEvent) {
+      const rect = btn!.getBoundingClientRect();
+      const pos = noPosRef.current;
 
-    const btnCx = rect.left + origin.w / 2;
-    const btnCy = rect.top + origin.h / 2;
+      const clientX = 'touches' in e ? e.touches[0].clientX : (e as MouseEvent).clientX;
+      const clientY = 'touches' in e ? e.touches[0].clientY : (e as MouseEvent).clientY;
 
-    const dx = btnCx - cx;
-    const dy = btnCy - cy;
-    const angle = Math.atan2(dy, dx) + (Math.random() > 0.5 ? 1 : -1) * (Math.PI / 6);
+      const originLeft = rect.left - pos.x;
+      const originTop = rect.top - pos.y;
 
-    let nx = prev.x + Math.cos(angle) * OFFSET;
-    let ny = prev.y + Math.sin(angle) * OFFSET;
+      const minX = -originLeft + MARGIN;
+      const maxX = window.innerWidth - originLeft - rect.width - MARGIN;
+      const minY = -originTop + MARGIN;
+      const maxY = window.innerHeight - originTop - rect.height - MARGIN;
 
-    nx = Math.max(minX, Math.min(maxX, nx));
-    ny = Math.max(minY, Math.min(maxY, ny));
+      const btnCx = rect.left + rect.width / 2;
+      const btnCy = rect.top + rect.height / 2;
 
-    const newLeft = origin.left + nx;
-    const newTop = origin.top + ny;
-    if (cx >= newLeft && cx <= newLeft + origin.w && cy >= newTop && cy <= newTop + origin.h) {
-      const opp = Math.atan2(dy, dx) + Math.PI;
-      nx = Math.max(minX, Math.min(maxX, prev.x + Math.cos(opp) * OFFSET));
-      ny = Math.max(minY, Math.min(maxY, prev.y + Math.sin(opp) * OFFSET));
-    }
+      const dx = btnCx - clientX;
+      const dy = btnCy - clientY;
+      const baseAngle = Math.atan2(dy, dx);
+      const spread = (Math.random() - 0.5) * (Math.PI * 2 / 3);
+      const angle = baseAngle + spread;
 
-    noPosRef.current = { x: nx, y: ny };
-    setNoPos({ x: nx, y: ny });
-    setNoDodgeCount(prev => prev + 1);
-  }, []);
+      let nx = pos.x + Math.cos(angle) * OFFSET;
+      let ny = pos.y + Math.sin(angle) * OFFSET;
 
-  const handleNoHover = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    if (noDisabled) return;
-    dodgeNo(e.clientX, e.clientY);
-    setNoDisabled(true);
-    setTimeout(() => setNoDisabled(false), 220);
-  }, [noDisabled, dodgeNo]);
+      let bounced = false;
+      if (nx < minX) { nx = minX; bounced = true; }
+      else if (nx > maxX) { nx = maxX; bounced = true; }
+      if (ny < minY) { ny = minY; bounced = true; }
+      else if (ny > maxY) { ny = maxY; bounced = true; }
 
-  // Глобальный mousemove — ловим курсор даже когда кнопка под ним и не генерирует события
-  useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      const btn = noRef.current;
-      if (!btn) return;
-      const rect = btn.getBoundingClientRect();
-      const inside =
-        e.clientX >= rect.left && e.clientX <= rect.right &&
-        e.clientY >= rect.top && e.clientY <= rect.bottom;
-      if (inside && !noDisabled) {
-        dodgeNo(e.clientX, e.clientY);
-        setNoDisabled(true);
-        setTimeout(() => setNoDisabled(false), 220);
+      if (bounced) {
+        const awayX = btnCx > window.innerWidth / 2 ? -1 : 1;
+        const awayY = btnCy > window.innerHeight / 2 ? -1 : 1;
+        const rnd = Math.random() > 0.5;
+        nx = Math.max(minX, Math.min(maxX, pos.x + (rnd ? awayX : Math.sign(Math.cos(angle))) * OFFSET * (0.7 + Math.random() * 0.6)));
+        ny = Math.max(minY, Math.min(maxY, pos.y + (!rnd ? awayY : Math.sign(Math.sin(angle))) * OFFSET * (0.7 + Math.random() * 0.6)));
       }
+
+      noPosRef.current = { x: nx, y: ny };
+      setNoPos({ x: nx, y: ny });
+      setNoDodgeCount(prev => prev + 1);
+    }
+
+    btn.addEventListener('mousemove', moveAway as EventListener);
+    btn.addEventListener('touchmove', moveAway as EventListener);
+    return () => {
+      btn.removeEventListener('mousemove', moveAway as EventListener);
+      btn.removeEventListener('touchmove', moveAway as EventListener);
     };
-    document.addEventListener("mousemove", onMove);
-    return () => document.removeEventListener("mousemove", onMove);
-  }, [noDisabled, dodgeNo]);
+  }, []);
 
   // Финальный экран
   if (chosenPlace && chosenDate) {
@@ -341,9 +328,7 @@ export default function Index() {
           <button
             ref={noRef}
             className="bubble-btn bubble-no"
-            style={{ transform: `translate(${noPos.x}px, ${noPos.y}px)`, transition: "transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)", pointerEvents: noDisabled ? "none" : "auto" }}
-            onMouseEnter={handleNoHover}
-            onMouseMove={handleNoHover}
+            style={{ transform: `translate(${noPos.x}px, ${noPos.y}px)`, transition: "transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)" }}
           >
             нет ❌
           </button>
