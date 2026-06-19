@@ -173,7 +173,7 @@ body {
 
 .search-progress-label {
   font-family: var(--font-hand);
-  font-size: 1.2rem;
+  font-size: 4rem;
   color: var(--text-muted);
   text-align: center;
   min-height: 1.8rem;
@@ -357,7 +357,7 @@ iframe.place-img {
 }
 
 .date-field-placeholder {
-  font-size: 4rem;
+  font-size: 1.2rem;
   color: var(--text-muted);
 }
 
