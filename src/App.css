@@ -201,6 +201,8 @@ body {
   color: #fff;
   box-shadow: 0 3px 12px rgba(150, 120, 210, 0.25);
   position: relative;
+  padding-left: 4rem;
+  padding-right: 4rem;
 }
 
 /* ===== Places screen ===== */
