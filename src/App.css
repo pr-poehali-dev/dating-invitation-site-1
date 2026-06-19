@@ -181,12 +181,30 @@ body {
 }
 
 /* ===== Статичный лепесток для погружения ===== */
+@keyframes flowerSway {
+  0% {
+    transform: rotate(-8deg) scale(1);
+  }
+  50% {
+    transform: rotate(8deg) scale(1.07);
+  }
+  100% {
+    transform: rotate(-8deg) scale(1);
+  }
+}
+
 .dive-flower {
   font-size: 3.5rem;
   display: block;
   text-align: center;
   line-height: 1;
   filter: drop-shadow(0 2px 8px rgba(232, 99, 122, 0.35));
+  animation: flowerSway 2.4s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+.petals-frozen .dive-flower {
+  animation-play-state: paused;
 }
 
 /* ===== Freeze petals on transition ===== */
