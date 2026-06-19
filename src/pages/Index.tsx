@@ -52,7 +52,9 @@ const PLACES = [
 export default function Index() {
   const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
   const [searching, setSearching] = useState(false);
-  const [chosenPlace, setChosenPlace] = useState<(typeof PLACES)[0] | null>(null);
+  const [chosenPlace, setChosenPlace] = useState<(typeof PLACES)[0] | null>(
+    null,
+  );
   const [chosenDate, setChosenDate] = useState<Date | null>(null);
   const [noPos, setNoPos] = useState({ x: 0, y: 0 });
   const [noDodgeCount, setNoDodgeCount] = useState(0);
@@ -80,7 +82,9 @@ export default function Index() {
     function jump(clientX: number, clientY: number) {
       if (jumping) return;
       jumping = true;
-      setTimeout(() => { jumping = false; }, 320);
+      setTimeout(() => {
+        jumping = false;
+      }, 320);
 
       const rect = btn!.getBoundingClientRect();
       const pos = noPosRef.current;
@@ -106,17 +110,45 @@ export default function Index() {
       let ny = pos.y + Math.sin(angle) * OFFSET;
 
       let bounced = false;
-      if (nx < minX) { nx = minX; bounced = true; }
-      else if (nx > maxX) { nx = maxX; bounced = true; }
-      if (ny < minY) { ny = minY; bounced = true; }
-      else if (ny > maxY) { ny = maxY; bounced = true; }
+      if (nx < minX) {
+        nx = minX;
+        bounced = true;
+      } else if (nx > maxX) {
+        nx = maxX;
+        bounced = true;
+      }
+      if (ny < minY) {
+        ny = minY;
+        bounced = true;
+      } else if (ny > maxY) {
+        ny = maxY;
+        bounced = true;
+      }
 
       if (bounced) {
         const awayX = btnCx > window.innerWidth / 2 ? -1 : 1;
         const awayY = btnCy > window.innerHeight / 2 ? -1 : 1;
         const rnd = Math.random() > 0.5;
-        nx = Math.max(minX, Math.min(maxX, pos.x + (rnd ? awayX : Math.sign(Math.cos(angle))) * OFFSET * (0.7 + Math.random() * 0.6)));
-        ny = Math.max(minY, Math.min(maxY, pos.y + (!rnd ? awayY : Math.sign(Math.sin(angle))) * OFFSET * (0.7 + Math.random() * 0.6)));
+        nx = Math.max(
+          minX,
+          Math.min(
+            maxX,
+            pos.x +
+              (rnd ? awayX : Math.sign(Math.cos(angle))) *
+                OFFSET *
+                (0.7 + Math.random() * 0.6),
+          ),
+        );
+        ny = Math.max(
+          minY,
+          Math.min(
+            maxY,
+            pos.y +
+              (!rnd ? awayY : Math.sign(Math.sin(angle))) *
+                OFFSET *
+                (0.7 + Math.random() * 0.6),
+          ),
+        );
       }
 
       noPosRef.current = { x: nx, y: ny };
@@ -180,7 +212,14 @@ export default function Index() {
 
   // Экран "ищу места"
   if (searching) {
-    return <SearchingScreen onDone={() => { setSearching(false); setAnswered("yes"); }} />;
+    return (
+      <SearchingScreen
+        onDone={() => {
+          setSearching(false);
+          setAnswered("yes");
+        }}
+      />
+    );
   }
 
   // Экран выбора места
@@ -189,7 +228,7 @@ export default function Index() {
       <div className="meme-page places-page">
         <ScatteredPetals />
         <div className="places-card animate-in">
-          <h1 className="places-title">Здорово!) А теперь выбери место 🗺️</h1>
+          <h1 className="places-title">Выбери место 🗺️</h1>
           <div className="places-grid">
             {PLACES.map((place) => (
               <button
@@ -263,7 +302,11 @@ export default function Index() {
             onClick={handleMaybeClick}
             style={
               maybeFading
-                ? { opacity: 0, transition: "opacity 1.5s ease", pointerEvents: "none" }
+                ? {
+                    opacity: 0,
+                    transition: "opacity 1.5s ease",
+                    pointerEvents: "none",
+                  }
                 : {}
             }
           >
