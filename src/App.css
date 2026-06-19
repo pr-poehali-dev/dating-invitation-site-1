@@ -278,7 +278,7 @@ body:has(.places-page) {
 .place-img[src=""],
 iframe.place-img {
   aspect-ratio: 9/16;
-  max-height: 320px;
+  max-height: 500px;
 }
 
 .place-name {
