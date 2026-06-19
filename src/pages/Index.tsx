@@ -177,6 +177,8 @@ export default function Index() {
   const [noDisabled, setNoDisabled] = useState(false);
   const noRef = useRef<HTMLButtonElement>(null);
   const noPosRef = useRef({ x: 0, y: 0 });
+  // Исходная позиция кнопки без transform — запоминаем один раз
+  const noOriginRef = useRef<{ left: number; top: number; w: number; h: number } | null>(null);
 
   const handleMaybeClick = () => {
     setShowMaybeHint(true);
@@ -191,20 +193,24 @@ export default function Index() {
     const btn = noRef.current;
     if (!btn) return;
     const rect = btn.getBoundingClientRect();
+
+    // Запоминаем origin один раз — до первого прыжка (когда transform ещё 0)
+    if (!noOriginRef.current) {
+      noOriginRef.current = { left: rect.left, top: rect.top, w: rect.width, h: rect.height };
+    }
+    const origin = noOriginRef.current;
     const prev = noPosRef.current;
 
-    const originLeft = rect.left - prev.x;
-    const originTop = rect.top - prev.y;
-
-    const minX = -originLeft + MARGIN;
-    const maxX = window.innerWidth - originLeft - rect.width - MARGIN;
-    const minY = -originTop + MARGIN;
-    const maxY = window.innerHeight - originTop - rect.height - MARGIN;
+    // Границы transform чтобы кнопка не вышла за MARGIN от края
+    const minX = -origin.left + MARGIN;
+    const maxX = window.innerWidth - origin.left - origin.w - MARGIN;
+    const minY = -origin.top + MARGIN;
+    const maxY = window.innerHeight - origin.top - origin.h - MARGIN;
 
     const cx = e.clientX;
     const cy = e.clientY;
-    const btnCx = rect.left + rect.width / 2;
-    const btnCy = rect.top + rect.height / 2;
+    const btnCx = rect.left + origin.w / 2;
+    const btnCy = rect.top + origin.h / 2;
 
     const dx = btnCx - cx;
     const dy = btnCy - cy;
@@ -216,8 +222,10 @@ export default function Index() {
     nx = Math.max(minX, Math.min(maxX, nx));
     ny = Math.max(minY, Math.min(maxY, ny));
 
-    if (Math.abs((originLeft + nx + rect.width / 2) - cx) < rect.width / 2 &&
-        Math.abs((originTop + ny + rect.height / 2) - cy) < rect.height / 2) {
+    // Если кнопка всё равно под курсором — противоположная сторона
+    const newLeft = origin.left + nx;
+    const newTop = origin.top + ny;
+    if (cx >= newLeft && cx <= newLeft + origin.w && cy >= newTop && cy <= newTop + origin.h) {
       const opp = Math.atan2(dy, dx) + Math.PI;
       nx = Math.max(minX, Math.min(maxX, prev.x + Math.cos(opp) * OFFSET));
       ny = Math.max(minY, Math.min(maxY, prev.y + Math.sin(opp) * OFFSET));
@@ -229,10 +237,6 @@ export default function Index() {
     setNoDisabled(true);
     setTimeout(() => setNoDisabled(false), 220);
   }, [noDisabled]);
-
-  useEffect(() => {
-    noPosRef.current = noPos;
-  }, [noPos]);
 
   // Финальный экран
   if (chosenPlace && chosenDate) {
