@@ -16,7 +16,7 @@ const PLACES = [
     name: "Частный кинотеатр CinemaSecret",
     desc: "Частный кинотеатр CinemaSecretПоездка на катере",
     img: "",
-    videoUrl: "https://videovssylku.ru/v/VID-20260619-153155.mp4",
+    videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_153155.mp4",
   },
   {
     id: 3,
