@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import ScatteredPetals from "@/components/ScatteredPetals";
 import DatePickerScreen from "@/components/DatePickerScreen";
 import SearchingScreen from "@/components/SearchingScreen";
+import FlowerZoomOverlay from "@/components/FlowerZoomOverlay";
 
 const CAT_IMG =
   "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/bucket/64c47ecb-0129-4cfd-b8b5-303bf6157694.png";
@@ -53,6 +54,7 @@ export default function Index() {
   const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
   const [searching, setSearching] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
+  const [flowerPos, setFlowerPos] = useState<{ x: number; y: number } | null>(null);
   const [chosenPlace, setChosenPlace] = useState<(typeof PLACES)[0] | null>(
     null,
   );
@@ -214,17 +216,22 @@ export default function Index() {
   // Экран "ищу места"
   if (searching) {
     return (
-      <SearchingScreen
-        onDone={() => {
-          setTransitioning(true);
-          setTimeout(() => {
-            setSearching(false);
-            setTransitioning(false);
-            setAnswered("yes");
-          }, 1400);
-        }}
-        transitioning={transitioning}
-      />
+      <>
+        <SearchingScreen
+          onDone={(pos) => {
+            setFlowerPos(pos);
+            setTransitioning(true);
+            setTimeout(() => {
+              setSearching(false);
+              setTransitioning(false);
+              setFlowerPos(null);
+              setAnswered("yes");
+            }, 2400);
+          }}
+          transitioning={transitioning}
+        />
+        <FlowerZoomOverlay active={transitioning} flowerPos={flowerPos} />
+      </>
     );
   }
 
