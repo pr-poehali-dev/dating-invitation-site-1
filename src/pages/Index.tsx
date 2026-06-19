@@ -14,15 +14,15 @@ const PLACES = [
   {
     id: 2,
     name: "Частный кинотеатр CinemaSecret",
-    desc: "Поездка на катере",
+    desc: "Частный кинотеатр CinemaSecretПоездка на катере",
     img: "",
-    videoUrl: "https://videovssylku.ru/v/VID-20260619-153155.cUlZ",
+    videoUrl: "https://videovssylku.ru/v/VID-20260619-153155.mp4",
   },
   {
     id: 3,
-    name: "Ресторан Hedonist",
-    desc: "Уютная атмосфера и вкусная еда",
-    img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/c02170dd-a46f-4de5-9a72-aa0771444ee0.jpg",
+    name: "asdsadt",
+    desc: "Уasdasdasd",
+    img: "",
   },
   {
     id: 4,
