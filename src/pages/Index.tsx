@@ -55,6 +55,7 @@ export default function Index() {
   const [searching, setSearching] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
   const [flowerPos, setFlowerPos] = useState<{ x: number; y: number } | null>(null);
+  const searchPageRef = useRef<HTMLDivElement>(null);
   const [chosenPlace, setChosenPlace] = useState<(typeof PLACES)[0] | null>(
     null,
   );
@@ -218,6 +219,7 @@ export default function Index() {
     return (
       <>
         <SearchingScreen
+          ref={searchPageRef}
           onDone={(pos) => {
             setFlowerPos(pos);
             setTransitioning(true);
@@ -226,11 +228,11 @@ export default function Index() {
               setTransitioning(false);
               setFlowerPos(null);
               setAnswered("yes");
-            }, 2400);
+            }, 2200);
           }}
           transitioning={transitioning}
         />
-        <FlowerZoomOverlay active={transitioning} flowerPos={flowerPos} />
+        <FlowerZoomOverlay active={transitioning} flowerPos={flowerPos} pageRef={searchPageRef} />
       </>
     );
   }

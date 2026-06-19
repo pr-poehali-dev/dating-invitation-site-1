@@ -180,20 +180,7 @@ body {
   transition: opacity 0.3s ease;
 }
 
-/* ===== Freeze petals + card on transition ===== */
-.petals-frozen .falling-petal {
-  animation-play-state: paused;
-}
-
-.card-soft-freeze {
-  transition:
-    opacity 0.5s ease,
-    filter 0.5s ease;
-  opacity: 0.35;
-  filter: blur(3px);
-  pointer-events: none;
-}
-
+/* ===== Transition: label fade ===== */
 @keyframes labelFadeOut {
   0% {
     opacity: 1;
@@ -205,50 +192,6 @@ body {
 
 .label-fade-out {
   animation: labelFadeOut 0.4s ease forwards;
-}
-
-/* ===== Flower zoom overlay ===== */
-.flower-zoom-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.flower-zoom-circle {
-  position: absolute;
-  left: var(--cx);
-  top: var(--cy);
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--core-color);
-  transform: translate(-50%, -50%) scale(0.5);
-  transform-origin: center center;
-  opacity: 0;
-}
-
-@keyframes flowerGrow {
-  0% {
-    transform: translate(-50%, -50%) scale(0.5);
-    opacity: 0;
-  }
-  12% {
-    opacity: 1;
-  }
-  85% {
-    transform: translate(-50%, -50%) scale(240);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(240);
-    opacity: 1;
-  }
-}
-
-.flower-zoom-grow {
-  animation: flowerGrow 2s cubic-bezier(0.32, 0, 0.1, 1) forwards;
 }
 
 /* ===== fade-in для страницы с местами ===== */

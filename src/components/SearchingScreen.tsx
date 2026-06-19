@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, forwardRef } from "react";
 import ScatteredPetals from "@/components/ScatteredPetals";
 
 export const SEARCH_STEPS = [
@@ -17,7 +17,7 @@ interface Props {
   transitioning?: boolean;
 }
 
-export default function SearchingScreen({ onDone, transitioning }: Props) {
+const SearchingScreen = forwardRef<HTMLDivElement, Props>(({ onDone, transitioning }, ref) => {
   const [stepIdx, setStepIdx] = useState(0);
   const [pct, setPct] = useState(0);
   const petalsRef = useRef<HTMLDivElement>(null);
@@ -33,14 +33,12 @@ export default function SearchingScreen({ onDone, transitioning }: Props) {
     const isLast = stepIdx >= SEARCH_STEPS.length - 1;
     const t = setTimeout(() => {
       if (isLast) {
-        // Ищем позицию случайного лепестка на экране
         const petals = petalsRef.current?.querySelectorAll<HTMLElement>(".falling-petal");
         let pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
         if (petals && petals.length > 0) {
-          // Берём лепесток, который сейчас видно (в пределах экрана)
           const visible = Array.from(petals).filter(el => {
             const r = el.getBoundingClientRect();
-            return r.top > 0 && r.top < window.innerHeight && r.left > 0 && r.left < window.innerWidth;
+            return r.top > 20 && r.top < window.innerHeight - 20 && r.left > 20 && r.left < window.innerWidth - 20;
           });
           const target = visible[Math.floor(Math.random() * visible.length)] ?? petals[0];
           const r = target.getBoundingClientRect();
@@ -59,11 +57,11 @@ export default function SearchingScreen({ onDone, transitioning }: Props) {
   const current = SEARCH_STEPS[stepIdx];
 
   return (
-    <div className={`meme-page${transitioning ? " petals-frozen" : ""}`}>
+    <div ref={ref} className="meme-page">
       <div ref={petalsRef}>
         <ScatteredPetals />
       </div>
-      <div className={`meme-card animate-in${transitioning ? " card-soft-freeze" : ""}`}>
+      <div className="meme-card animate-in">
         <h1 className="meme-question" style={{ color: "var(--rose-dark)" }}>
           Минутку, нужно найти места для свидания, не ожидал, что ты скажешь да
         </h1>
@@ -79,4 +77,7 @@ export default function SearchingScreen({ onDone, transitioning }: Props) {
       </div>
     </div>
   );
-}
+});
+
+SearchingScreen.displayName = "SearchingScreen";
+export default SearchingScreen;
