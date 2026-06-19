@@ -11,32 +11,40 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
     if (!root) return;
 
     if (!active) {
+      root.style.transition = "none";
       root.style.transform = "";
-      root.style.transformOrigin = "";
-      root.style.transition = "";
       return;
     }
 
-    const cx = flowerPos?.x ?? window.innerWidth / 2;
-    const cy = flowerPos?.y ?? window.innerHeight / 2;
+    const S = 22; // финальный масштаб
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
 
-    // Сначала фиксируем origin без transition
+    // Точка цветочка в координатах экрана
+    const fx = flowerPos?.x ?? vw / 2;
+    const fy = flowerPos?.y ?? vh / 2;
+
+    // При scale(S) с transform-origin: 0 0, точка (fx, fy) уедет в (fx*S, fy*S).
+    // Чтобы она оказалась в центре экрана, нужно сдвинуть на:
+    const tx = vw / 2 - fx * S;
+    const ty = vh / 2 - fy * S;
+
+    // Сбрасываем без анимации
     root.style.transition = "none";
-    root.style.transformOrigin = `${cx}px ${cy}px`;
-    root.style.transform = "scale(1)";
+    root.style.transformOrigin = "0 0";
+    root.style.transform = "scale(1) translate(0, 0)";
 
-    // Через два кадра запускаем плавный zoom
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        root.style.transition = "transform 3s cubic-bezier(0.1, 0, 0.05, 1)";
-        root.style.transform = "scale(20)";
+        root.style.transition = "transform 3.5s cubic-bezier(0.12, 0, 0.06, 1)";
+        root.style.transform = `scale(${S}) translate(${tx / S}px, ${ty / S}px)`;
       });
     });
 
     return () => {
+      root.style.transition = "none";
       root.style.transform = "";
       root.style.transformOrigin = "";
-      root.style.transition = "";
     };
   }, [active, flowerPos]);
 
