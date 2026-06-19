@@ -14,12 +14,10 @@ export const SEARCH_STEPS = [
   { from: 95, to: 100, label: "Готово",                                   duration: 4000 },
 ];
 
-export default function SearchingScreen() {
+export default function SearchingScreen({ onDone }: { onDone: () => void }) {
   const [stepIdx, setStepIdx] = useState(0);
-  // Стартуем с 0 — полоска поедет до to[0] благодаря CSS transition
   const [pct, setPct] = useState(0);
 
-  // Через один кадр после монтирования/смены шага запускаем анимацию до to
   useEffect(() => {
     const raf = requestAnimationFrame(() => {
       setPct(SEARCH_STEPS[stepIdx].to);
@@ -27,16 +25,19 @@ export default function SearchingScreen() {
     return () => cancelAnimationFrame(raf);
   }, [stepIdx]);
 
-  // Через 4с переходим к следующему шагу (сбрасываем pct на from, потом raf двигает до to)
   useEffect(() => {
-    if (stepIdx >= SEARCH_STEPS.length - 1) return;
+    const isLast = stepIdx >= SEARCH_STEPS.length - 1;
     const t = setTimeout(() => {
-      const next = stepIdx + 1;
-      setPct(SEARCH_STEPS[next].from);
-      setStepIdx(next);
-    }, SEARCH_STEPS[stepIdx].duration);
+      if (isLast) {
+        onDone();
+      } else {
+        const next = stepIdx + 1;
+        setPct(SEARCH_STEPS[next].from);
+        setStepIdx(next);
+      }
+    }, isLast ? 2500 : SEARCH_STEPS[stepIdx].duration);
     return () => clearTimeout(t);
-  }, [stepIdx]);
+  }, [stepIdx, onDone]);
 
   const current = SEARCH_STEPS[stepIdx];
 

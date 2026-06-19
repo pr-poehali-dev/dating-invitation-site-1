@@ -180,7 +180,7 @@ export default function Index() {
 
   // Экран "ищу места"
   if (searching) {
-    return <SearchingScreen />;
+    return <SearchingScreen onDone={() => { setSearching(false); setAnswered("yes"); }} />;
   }
 
   // Экран выбора места
@@ -254,13 +254,7 @@ export default function Index() {
         <div className="meme-buttons">
           <button
             className="bubble-btn bubble-yes"
-            onClick={() => {
-              setSearching(true);
-              setTimeout(() => {
-                setSearching(false);
-                setAnswered("yes");
-              }, 35000);
-            }}
+            onClick={() => setSearching(true)}
           >
             Да ✔️
           </button>
