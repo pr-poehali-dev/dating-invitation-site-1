@@ -33,8 +33,15 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        root.style.transition = "transform 4s cubic-bezier(0.1, 0, 0.05, 1)";
-        root.style.transform = "scale(80)";
+        // Фаза 1: отталкиваемся назад
+        root.style.transition = "transform 0.7s cubic-bezier(0.25, 0, 0.5, 1)";
+        root.style.transform = "scale(0.78)";
+
+        // Фаза 2: погружаемся вперёд — медленно и плавно
+        setTimeout(() => {
+          root.style.transition = "transform 5.5s cubic-bezier(0.4, 0, 0.08, 1)";
+          root.style.transform = "scale(80)";
+        }, 750);
       });
     });
   }, [active, flowerPos]);
