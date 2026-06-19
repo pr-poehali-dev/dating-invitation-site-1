@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import ScatteredPetals from "@/components/ScatteredPetals";
 
 export const SEARCH_STEPS = [
-  { pct: 0, label: "Ищу..." },
-  { pct: 10, label: "Убираю Фобо из списка" },
-  { pct: 30, label: "Исключаю странные рестораны в подвале" },
-  { pct: 50, label: "Выбираю что-то поинтереснее" },
-  { pct: 75, label: "Почти нашёл...." },
-  { pct: 90, label: "Быстренько делаю следующую страницу" },
-  { pct: 100, label: "Готово!)" },
+  { pct: 0,   label: "Ищу..." },
+  { pct: 10,  label: "Исключаю странные рестораны в подвале" },
+  { pct: 30,  label: "Выбираю что-то поинтереснее" },
+  { pct: 50,  label: "Почти нашёл...." },
+  { pct: 75,  label: "Быстренько делаю следующую страницу" },
+  { pct: 90,  label: "Ещё чуть-чуть" },
+  { pct: 97,  label: "Готово" },
+  { pct: 100, label: "Готово" },
 ];
 
 export default function SearchingScreen() {
