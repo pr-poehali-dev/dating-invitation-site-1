@@ -1,42 +1,44 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 interface Props {
   active: boolean;
   flowerPos: { x: number; y: number } | null;
-  pageRef: React.RefObject<HTMLDivElement>;
 }
 
-export default function FlowerZoomOverlay({ active, flowerPos, pageRef }: Props) {
-  const animRef = useRef<Animation | null>(null);
-
+export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
   useEffect(() => {
-    const el = pageRef.current;
-    if (!el) return;
+    const root = document.getElementById("root");
+    if (!root) return;
 
     if (!active) {
-      // Сброс после перехода
-      el.style.transform = "";
-      el.style.transformOrigin = "";
-      el.style.transition = "";
-      el.style.filter = "";
+      root.style.transform = "";
+      root.style.transformOrigin = "";
+      root.style.transition = "";
       return;
     }
 
     const cx = flowerPos?.x ?? window.innerWidth / 2;
     const cy = flowerPos?.y ?? window.innerHeight / 2;
 
-    el.style.transformOrigin = `${cx}px ${cy}px`;
-    el.style.transition = "transform 2s cubic-bezier(0.25, 0, 0.1, 1), filter 1.8s ease";
-    el.style.filter = "blur(0px)";
+    // Сначала фиксируем origin без transition
+    root.style.transition = "none";
+    root.style.transformOrigin = `${cx}px ${cy}px`;
+    root.style.transform = "scale(1)";
 
-    // Запускаем через один кадр чтобы transition подхватил
-    const raf = requestAnimationFrame(() => {
-      el.style.transform = "scale(18)";
-      el.style.filter = "blur(8px)";
+    // Через два кадра запускаем плавный zoom
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        root.style.transition = "transform 3s cubic-bezier(0.1, 0, 0.05, 1)";
+        root.style.transform = "scale(20)";
+      });
     });
 
-    return () => cancelAnimationFrame(raf);
-  }, [active, flowerPos, pageRef]);
+    return () => {
+      root.style.transform = "";
+      root.style.transformOrigin = "";
+      root.style.transition = "";
+    };
+  }, [active, flowerPos]);
 
   return null;
 }

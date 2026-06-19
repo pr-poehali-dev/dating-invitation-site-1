@@ -228,11 +228,11 @@ export default function Index() {
               setTransitioning(false);
               setFlowerPos(null);
               setAnswered("yes");
-            }, 2200);
+            }, 3200);
           }}
           transitioning={transitioning}
         />
-        <FlowerZoomOverlay active={transitioning} flowerPos={flowerPos} pageRef={searchPageRef} />
+        <FlowerZoomOverlay active={transitioning} flowerPos={flowerPos} />
       </>
     );
   }

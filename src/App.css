@@ -180,6 +180,11 @@ body {
   transition: opacity 0.3s ease;
 }
 
+/* ===== Freeze petals on transition ===== */
+.petals-frozen .falling-petal {
+  animation-play-state: paused;
+}
+
 /* ===== Transition: label fade ===== */
 @keyframes labelFadeOut {
   0% {

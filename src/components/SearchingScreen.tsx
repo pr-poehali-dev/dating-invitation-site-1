@@ -34,15 +34,29 @@ const SearchingScreen = forwardRef<HTMLDivElement, Props>(({ onDone, transitioni
     const t = setTimeout(() => {
       if (isLast) {
         const petals = petalsRef.current?.querySelectorAll<HTMLElement>(".falling-petal");
-        let pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+        const cx = window.innerWidth / 2;
+        const cy = window.innerHeight / 2;
+        let pos = { x: cx, y: cy };
+
         if (petals && petals.length > 0) {
           const visible = Array.from(petals).filter(el => {
             const r = el.getBoundingClientRect();
-            return r.top > 20 && r.top < window.innerHeight - 20 && r.left > 20 && r.left < window.innerWidth - 20;
+            return r.top > 0 && r.bottom < window.innerHeight && r.left > 0 && r.right < window.innerWidth;
           });
-          const target = visible[Math.floor(Math.random() * visible.length)] ?? petals[0];
-          const r = target.getBoundingClientRect();
-          pos = { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+          if (visible.length > 0) {
+            // Берём лепесток, ближайший к центру экрана
+            const closest = visible.reduce((best, el) => {
+              const r = el.getBoundingClientRect();
+              const ex = r.left + r.width / 2;
+              const ey = r.top + r.height / 2;
+              const dist = Math.hypot(ex - cx, ey - cy);
+              const br = best.getBoundingClientRect();
+              const bdist = Math.hypot(br.left + br.width / 2 - cx, br.top + br.height / 2 - cy);
+              return dist < bdist ? el : best;
+            });
+            const r = closest.getBoundingClientRect();
+            pos = { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+          }
         }
         onDone(pos);
       } else {
@@ -57,7 +71,7 @@ const SearchingScreen = forwardRef<HTMLDivElement, Props>(({ onDone, transitioni
   const current = SEARCH_STEPS[stepIdx];
 
   return (
-    <div ref={ref} className="meme-page">
+    <div ref={ref} className={`meme-page${transitioning ? " petals-frozen" : ""}`}>
       <div ref={petalsRef}>
         <ScatteredPetals />
       </div>
