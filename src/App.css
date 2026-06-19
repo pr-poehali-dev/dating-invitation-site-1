@@ -223,9 +223,9 @@ body:has(.places-page) {
   z-index: 10;
   width: min(92vw, 700px);
   background: #fff;
-  border-radius: 2.5rem;
+  border-radius: 2.9rem;
   box-shadow: 0 4px 40px rgba(200, 100, 130, 0.13);
-  padding: 2rem 1.8rem 2.5rem;
+  padding: 2rem 2rem 2.5rem;
   margin: auto;
 }
 
