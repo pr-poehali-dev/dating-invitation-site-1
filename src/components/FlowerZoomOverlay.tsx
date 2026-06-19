@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface Props {
   active: boolean;
@@ -6,36 +6,37 @@ interface Props {
 }
 
 export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
+  const startedRef = useRef(false);
+
   useEffect(() => {
     const root = document.getElementById("root");
     if (!root) return;
 
-    if (!active || !flowerPos) {
+    // Сброс когда переход завершён
+    if (!active) {
+      startedRef.current = false;
       root.style.transition = "none";
       root.style.transform = "";
       root.style.transformOrigin = "";
       return;
     }
 
+    // Запускаем zoom только один раз — когда появились координаты
+    if (!flowerPos || startedRef.current) return;
+    startedRef.current = true;
+
     const { x, y } = flowerPos;
 
-    // transform-origin в точке лепестка — тогда scale увеличивает именно из неё
     root.style.transition = "none";
     root.style.transformOrigin = `${x}px ${y}px`;
     root.style.transform = "scale(1)";
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        root.style.transition = "transform 3.5s cubic-bezier(0.12, 0, 0.06, 1)";
-        root.style.transform = "scale(25)";
+        root.style.transition = "transform 4s cubic-bezier(0.1, 0, 0.05, 1)";
+        root.style.transform = "scale(80)";
       });
     });
-
-    return () => {
-      root.style.transition = "none";
-      root.style.transform = "";
-      root.style.transformOrigin = "";
-    };
   }, [active, flowerPos]);
 
   return null;

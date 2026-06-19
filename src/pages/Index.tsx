@@ -230,7 +230,7 @@ export default function Index() {
               setTransitioning(false);
               setFlowerPos(null);
               setAnswered("yes");
-            }, 3800);
+            }, 4300);
           }}
           transitioning={transitioning}
         />
