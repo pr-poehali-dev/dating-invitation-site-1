@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 
 const CAT_IMG = "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/bucket/64c47ecb-0129-4cfd-b8b5-303bf6157694.png";
 
@@ -174,7 +174,9 @@ export default function Index() {
   const [noDodgeCount, setNoDodgeCount] = useState(0);
   const [showMaybeHint, setShowMaybeHint] = useState(false);
   const [maybeFading, setMaybeFading] = useState(false);
+  const [noDisabled, setNoDisabled] = useState(false);
   const noRef = useRef<HTMLButtonElement>(null);
+  const noPosRef = useRef({ x: 0, y: 0 });
 
   const handleMaybeClick = () => {
     setShowMaybeHint(true);
@@ -182,60 +184,67 @@ export default function Index() {
   };
 
   const handleNoHover = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    const OFFSET = 110;
-    const MARGIN = 24;
+    if (noDisabled) return;
+    const OFFSET = 140;
+    const MARGIN = 32;
 
-    setNoPos(prev => {
-      const btn = noRef.current;
-      if (!btn) return prev;
-      const rect = btn.getBoundingClientRect();
+    const btn = noRef.current;
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const prev = noPosRef.current;
 
-      const originLeft = rect.left - prev.x;
-      const originTop = rect.top - prev.y;
+    const originLeft = rect.left - prev.x;
+    const originTop = rect.top - prev.y;
 
-      const minX = -originLeft + MARGIN;
-      const maxX = window.innerWidth - originLeft - rect.width - MARGIN;
-      const minY = -originTop + MARGIN;
-      const maxY = window.innerHeight - originTop - rect.height - MARGIN;
+    const minX = -originLeft + MARGIN;
+    const maxX = window.innerWidth - originLeft - rect.width - MARGIN;
+    const minY = -originTop + MARGIN;
+    const maxY = window.innerHeight - originTop - rect.height - MARGIN;
 
-      const cx = e.clientX;
-      const cy = e.clientY;
-      const btnCx = rect.left + rect.width / 2;
-      const btnCy = rect.top + rect.height / 2;
+    const cx = e.clientX;
+    const cy = e.clientY;
+    const btnCx = rect.left + rect.width / 2;
+    const btnCy = rect.top + rect.height / 2;
 
-      // Базовый вектор от курсора к кнопке
-      const dx = btnCx - cx;
-      const dy = btnCy - cy;
-      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-      const baseAngle = Math.atan2(dy, dx);
+    const dx = btnCx - cx;
+    const dy = btnCy - cy;
+    const baseAngle = Math.atan2(dy, dx);
 
-      // Случайное отклонение ±60° от направления "от курсора", но не >90° (не к курсору)
-      const spread = (Math.random() - 0.5) * (Math.PI * 2 / 3);
-      const angle = baseAngle + spread;
+    const spread = (Math.random() - 0.5) * (Math.PI * 2 / 3);
+    const angle = baseAngle + spread;
 
-      let nx = prev.x + Math.cos(angle) * OFFSET;
-      let ny = prev.y + Math.sin(angle) * OFFSET;
+    let nx = prev.x + Math.cos(angle) * OFFSET;
+    let ny = prev.y + Math.sin(angle) * OFFSET;
 
-      // Если упёрлись в край — отражаем угол от стены и добавляем случайность
-      let bounced = false;
-      if (nx < minX) { nx = minX; bounced = true; }
-      if (nx > maxX) { nx = maxX; bounced = true; }
-      if (ny < minY) { ny = minY; bounced = true; }
-      if (ny > maxY) { ny = maxY; bounced = true; }
+    nx = Math.max(minX, Math.min(maxX, nx));
+    ny = Math.max(minY, Math.min(maxY, ny));
 
-      if (bounced) {
-        // Уходим перпендикулярно стене в случайную сторону, гарантированно не к курсору
-        const awayX = btnCx > window.innerWidth / 2 ? -1 : 1;
-        const awayY = btnCy > window.innerHeight / 2 ? -1 : 1;
-        const rnd = Math.random() > 0.5;
-        nx = Math.max(minX, Math.min(maxX, prev.x + (rnd ? awayX : Math.sign(Math.cos(angle))) * OFFSET * (0.7 + Math.random() * 0.6)));
-        ny = Math.max(minY, Math.min(maxY, prev.y + (!rnd ? awayY : Math.sign(Math.sin(angle))) * OFFSET * (0.7 + Math.random() * 0.6)));
-      }
+    // Проверяем, что новая позиция кнопки не перекрывает курсор
+    const newBtnLeft = originLeft + nx;
+    const newBtnTop = originTop + ny;
+    const cursorOnBtn =
+      cx >= newBtnLeft && cx <= newBtnLeft + rect.width &&
+      cy >= newBtnTop && cy <= newBtnTop + rect.height;
 
-      return { x: nx, y: ny };
-    });
+    if (cursorOnBtn) {
+      // Уходим в противоположную сторону от курсора
+      const oppAngle = baseAngle + Math.PI + (Math.random() - 0.5) * (Math.PI / 4);
+      nx = Math.max(minX, Math.min(maxX, prev.x + Math.cos(oppAngle) * OFFSET));
+      ny = Math.max(minY, Math.min(maxY, prev.y + Math.sin(oppAngle) * OFFSET));
+    }
+
+    noPosRef.current = { x: nx, y: ny };
+    setNoPos({ x: nx, y: ny });
     setNoDodgeCount(prev => prev + 1);
-  }, []);
+
+    // Блокируем на время анимации, чтобы курсор не поймал кнопку в движении
+    setNoDisabled(true);
+    setTimeout(() => setNoDisabled(false), 220);
+  }, [noDisabled]);
+
+  useEffect(() => {
+    noPosRef.current = noPos;
+  }, [noPos]);
 
   // Финальный экран
   if (chosenPlace && chosenDate) {
@@ -322,8 +331,9 @@ export default function Index() {
           <button
             ref={noRef}
             className="bubble-btn bubble-no"
-            style={{ transform: `translate(${noPos.x}px, ${noPos.y}px)`, transition: "transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)" }}
+            style={{ transform: `translate(${noPos.x}px, ${noPos.y}px)`, transition: "transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)", pointerEvents: noDisabled ? "none" : "auto" }}
             onMouseEnter={handleNoHover}
+            onMouseMove={handleNoHover}
           >
             нет ❌
           </button>
