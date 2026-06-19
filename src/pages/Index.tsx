@@ -170,13 +170,13 @@ export default function Index() {
   const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
   const [chosenPlace, setChosenPlace] = useState<typeof PLACES[0] | null>(null);
   const [chosenDate, setChosenDate] = useState<Date | null>(null);
-  // Абсолютные координаты left/top для кнопки "нет" (position: fixed)
-  const [noFixed, setNoFixed] = useState<{ left: number; top: number } | null>(null);
+  const [noPos, setNoPos] = useState({ x: 0, y: 0 });
   const [noDodgeCount, setNoDodgeCount] = useState(0);
   const [showMaybeHint, setShowMaybeHint] = useState(false);
   const [maybeFading, setMaybeFading] = useState(false);
   const [noDisabled, setNoDisabled] = useState(false);
   const noRef = useRef<HTMLButtonElement>(null);
+  const noPosRef = useRef({ x: 0, y: 0 });
 
   const handleMaybeClick = () => {
     setShowMaybeHint(true);
@@ -186,43 +186,53 @@ export default function Index() {
   const handleNoHover = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     if (noDisabled) return;
     const OFFSET = 200;
-    const MARGIN = 90;
+    const MARGIN = 80;
 
     const btn = noRef.current;
     if (!btn) return;
     const rect = btn.getBoundingClientRect();
-    const W = rect.width;
-    const H = rect.height;
+    const prev = noPosRef.current;
+
+    const originLeft = rect.left - prev.x;
+    const originTop = rect.top - prev.y;
+
+    const minX = -originLeft + MARGIN;
+    const maxX = window.innerWidth - originLeft - rect.width - MARGIN;
+    const minY = -originTop + MARGIN;
+    const maxY = window.innerHeight - originTop - rect.height - MARGIN;
 
     const cx = e.clientX;
     const cy = e.clientY;
-    // Текущий центр кнопки в абсолютных координатах экрана
-    const btnCx = rect.left + W / 2;
-    const btnCy = rect.top + H / 2;
+    const btnCx = rect.left + rect.width / 2;
+    const btnCy = rect.top + rect.height / 2;
 
     const dx = btnCx - cx;
     const dy = btnCy - cy;
     const angle = Math.atan2(dy, dx) + (Math.random() > 0.5 ? 1 : -1) * (Math.PI / 6);
 
-    let newCx = btnCx + Math.cos(angle) * OFFSET;
-    let newCy = btnCy + Math.sin(angle) * OFFSET;
+    let nx = prev.x + Math.cos(angle) * OFFSET;
+    let ny = prev.y + Math.sin(angle) * OFFSET;
 
-    // Жёсткие стены по абсолютным координатам
-    newCx = Math.max(MARGIN + W / 2, Math.min(window.innerWidth - MARGIN - W / 2, newCx));
-    newCy = Math.max(MARGIN + H / 2, Math.min(window.innerHeight - MARGIN - H / 2, newCy));
+    nx = Math.max(minX, Math.min(maxX, nx));
+    ny = Math.max(minY, Math.min(maxY, ny));
 
-    // Если всё равно под курсором — в противоположную сторону
-    if (Math.abs(newCx - cx) < W / 2 && Math.abs(newCy - cy) < H / 2) {
+    if (Math.abs((originLeft + nx + rect.width / 2) - cx) < rect.width / 2 &&
+        Math.abs((originTop + ny + rect.height / 2) - cy) < rect.height / 2) {
       const opp = Math.atan2(dy, dx) + Math.PI;
-      newCx = Math.max(MARGIN + W / 2, Math.min(window.innerWidth - MARGIN - W / 2, btnCx + Math.cos(opp) * OFFSET));
-      newCy = Math.max(MARGIN + H / 2, Math.min(window.innerHeight - MARGIN - H / 2, btnCy + Math.sin(opp) * OFFSET));
+      nx = Math.max(minX, Math.min(maxX, prev.x + Math.cos(opp) * OFFSET));
+      ny = Math.max(minY, Math.min(maxY, prev.y + Math.sin(opp) * OFFSET));
     }
 
-    setNoFixed({ left: newCx - W / 2, top: newCy - H / 2 });
+    noPosRef.current = { x: nx, y: ny };
+    setNoPos({ x: nx, y: ny });
     setNoDodgeCount(prev => prev + 1);
     setNoDisabled(true);
     setTimeout(() => setNoDisabled(false), 220);
   }, [noDisabled]);
+
+  useEffect(() => {
+    noPosRef.current = noPos;
+  }, [noPos]);
 
   // Финальный экран
   if (chosenPlace && chosenDate) {
@@ -309,10 +319,7 @@ export default function Index() {
           <button
             ref={noRef}
             className="bubble-btn bubble-no"
-            style={noFixed
-              ? { position: "fixed", left: noFixed.left, top: noFixed.top, transition: "left 0.18s cubic-bezier(0.34,1.56,0.64,1), top 0.18s cubic-bezier(0.34,1.56,0.64,1)", pointerEvents: noDisabled ? "none" : "auto", zIndex: 100 }
-              : { pointerEvents: noDisabled ? "none" : "auto" }
-            }
+            style={{ transform: `translate(${noPos.x}px, ${noPos.y}px)`, transition: "transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)", pointerEvents: noDisabled ? "none" : "auto" }}
             onMouseEnter={handleNoHover}
             onMouseMove={handleNoHover}
           >
