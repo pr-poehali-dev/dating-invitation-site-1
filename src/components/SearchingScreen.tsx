@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, forwardRef } from "react";
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import ScatteredPetals from "@/components/ScatteredPetals";
 
 export const SEARCH_STEPS = [
@@ -12,15 +12,29 @@ export const SEARCH_STEPS = [
   { from: 95, to: 100, label: "Готово",                                 duration: 4000 },
 ];
 
+export interface SearchingScreenHandle {
+  getFlowerPos: () => { x: number; y: number };
+}
+
 interface Props {
-  onDone: (flowerPos: { x: number; y: number }) => void;
+  onDone: () => void;
   transitioning?: boolean;
 }
 
-const SearchingScreen = forwardRef<HTMLDivElement, Props>(({ onDone, transitioning }, ref) => {
+const SearchingScreen = forwardRef<SearchingScreenHandle, Props>(({ onDone, transitioning }, ref) => {
   const [stepIdx, setStepIdx] = useState(0);
   const [pct, setPct] = useState(0);
   const flowerRef = useRef<HTMLSpanElement>(null);
+
+  // Позволяем родителю запросить координаты лепестка
+  useImperativeHandle(ref, () => ({
+    getFlowerPos: () => {
+      const r = flowerRef.current?.getBoundingClientRect();
+      return r
+        ? { x: r.left + r.width / 2, y: r.top + r.height / 2 }
+        : { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    },
+  }));
 
   useEffect(() => {
     const raf = requestAnimationFrame(() => {
@@ -33,12 +47,7 @@ const SearchingScreen = forwardRef<HTMLDivElement, Props>(({ onDone, transitioni
     const isLast = stepIdx >= SEARCH_STEPS.length - 1;
     const t = setTimeout(() => {
       if (isLast) {
-        // Берём точные координаты статичного лепестка
-        const r = flowerRef.current?.getBoundingClientRect();
-        const pos = r
-          ? { x: r.left + r.width / 2, y: r.top + r.height / 2 }
-          : { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-        onDone(pos);
+        onDone();
       } else {
         const next = stepIdx + 1;
         setPct(SEARCH_STEPS[next].from);
@@ -51,21 +60,16 @@ const SearchingScreen = forwardRef<HTMLDivElement, Props>(({ onDone, transitioni
   const current = SEARCH_STEPS[stepIdx];
 
   return (
-    <div ref={ref} className={`meme-page${transitioning ? " petals-frozen" : ""}`}>
+    <div className={`meme-page${transitioning ? " petals-frozen" : ""}`}>
       <ScatteredPetals />
       <div className="meme-card animate-in">
-        {/* Статичный лепесток — цель для погружения */}
         <span ref={flowerRef} className="dive-flower">🌸</span>
-
         <h1 className="meme-question" style={{ color: "var(--rose-dark)" }}>
           Минутку, нужно найти места для свидания, не ожидал, что ты скажешь да
         </h1>
         <div className="search-progress-wrap">
           <div className="search-progress-bar">
-            <div
-              className="search-progress-fill"
-              style={{ width: `${pct}%` }}
-            />
+            <div className="search-progress-fill" style={{ width: `${pct}%` }} />
           </div>
           <p className={`search-progress-label${transitioning ? " label-fade-out" : ""}`}>{current.label}</p>
         </div>

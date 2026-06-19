@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import ScatteredPetals from "@/components/ScatteredPetals";
 import DatePickerScreen from "@/components/DatePickerScreen";
-import SearchingScreen from "@/components/SearchingScreen";
+import SearchingScreen, { SearchingScreenHandle } from "@/components/SearchingScreen";
 import FlowerZoomOverlay from "@/components/FlowerZoomOverlay";
 
 const CAT_IMG =
@@ -55,7 +55,7 @@ export default function Index() {
   const [searching, setSearching] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
   const [flowerPos, setFlowerPos] = useState<{ x: number; y: number } | null>(null);
-  const searchPageRef = useRef<HTMLDivElement>(null);
+  const searchPageRef = useRef<SearchingScreenHandle>(null);
   const [chosenPlace, setChosenPlace] = useState<(typeof PLACES)[0] | null>(
     null,
   );
@@ -220,19 +220,27 @@ export default function Index() {
       <>
         <SearchingScreen
           ref={searchPageRef}
-          onDone={(pos) => {
-            setFlowerPos(pos);
+          onDone={() => {
+            // 1. Замораживаем лепестки
             setTransitioning(true);
+            // 2. После заморозки (следующий кадр) — снимаем точные координаты
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                const pos = searchPageRef.current?.getFlowerPos() ?? null;
+                setFlowerPos(pos);
+              });
+            });
+            // 3. Через 3.5с переходим на следующую страницу
             setTimeout(() => {
               setSearching(false);
               setTransitioning(false);
               setFlowerPos(null);
               setAnswered("yes");
-            }, 3200);
+            }, 3500);
           }}
           transitioning={transitioning}
         />
-        <FlowerZoomOverlay active={transitioning} flowerPos={flowerPos} />
+        <FlowerZoomOverlay active={!!flowerPos} flowerPos={flowerPos} />
       </>
     );
   }
