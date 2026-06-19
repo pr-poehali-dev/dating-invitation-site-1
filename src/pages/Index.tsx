@@ -226,6 +226,13 @@ export default function Index() {
             setFlowerPos(pos);
             setTransitioning(true);
             setTimeout(() => {
+              // Сначала сбрасываем transform на #root, потом меняем страницу
+              const root = document.getElementById("root");
+              if (root) {
+                root.style.transition = "none";
+                root.style.transform = "";
+                root.style.transformOrigin = "";
+              }
               setSearching(false);
               setTransitioning(false);
               setFlowerPos(null);
