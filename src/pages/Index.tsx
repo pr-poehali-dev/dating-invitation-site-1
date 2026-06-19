@@ -13,8 +13,8 @@ const PLACES = [
   },
   {
     id: 2,
-    name: "Филёвский парк, Береговой",
-    desc: "Набережная Москвы-реки, закат и свежий воздух",
+    name: "Частный кинотеатр CinemaSecret",
+    desc: "Поездка на катере",
     img: "",
     videoUrl: "https://videovssylku.ru/v/VID-20260619-153155.cUlZ",
   },
