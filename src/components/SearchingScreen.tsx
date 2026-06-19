@@ -4,14 +4,14 @@ import ScatteredPetals from "@/components/ScatteredPetals";
 // from — начало отрезка, to — конец, label — фраза на этом отрезке
 // Каждый шаг длится 4 секунды
 export const SEARCH_STEPS = [
-  { from: 0,  to: 10,  label: "Ищу..." },
-  { from: 10, to: 25,  label: "Убираю Фобо из списка" },
-  { from: 25, to: 40,  label: "Исключаю странные рестораны в подвале" },
-  { from: 40, to: 65,  label: "Выбираю что-то поинтереснее" },
-  { from: 65, to: 75,  label: "Почти нашёл...." },
-  { from: 75, to: 88,  label: "Быстренько делаю следующую страницу" },
-  { from: 88, to: 95,  label: "Ещё чуть-чуть" },
-  { from: 95, to: 100, label: "Готово" },
+  { from: 0,  to: 10,  label: "Ищу...",                                  duration: 5000 },
+  { from: 10, to: 25,  label: "Убираю Фобо из списка",                   duration: 4000 },
+  { from: 25, to: 40,  label: "Исключаю странные рестораны в подвале",   duration: 4000 },
+  { from: 40, to: 65,  label: "Выбираю что-то поинтереснее",             duration: 4000 },
+  { from: 65, to: 75,  label: "Почти нашёл....",                         duration: 4000 },
+  { from: 75, to: 88,  label: "Быстренько делаю следующую страницу",     duration: 4000 },
+  { from: 88, to: 95,  label: "Ещё чуть-чуть",                          duration: 4000 },
+  { from: 95, to: 100, label: "Готово",                                   duration: 4000 },
 ];
 
 export default function SearchingScreen() {
@@ -32,9 +32,9 @@ export default function SearchingScreen() {
     if (stepIdx >= SEARCH_STEPS.length - 1) return;
     const t = setTimeout(() => {
       const next = stepIdx + 1;
-      setPct(SEARCH_STEPS[next].from); // мгновенно ставим начало следующего отрезка
-      setStepIdx(next);                // useEffect выше через raf поедет до to
-    }, 4000);
+      setPct(SEARCH_STEPS[next].from);
+      setStepIdx(next);
+    }, SEARCH_STEPS[stepIdx].duration);
     return () => clearTimeout(t);
   }, [stepIdx]);
 
