@@ -9,7 +9,7 @@ const PLACES = [
     name: "Поездка на катере вдвоём без капитана",
     desc: "Поездка на катере вдвоём без капитана",
     img: "",
-    videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_155106.mp4",
+    videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_155351.mp4",
   },
   {
     id: 2,
