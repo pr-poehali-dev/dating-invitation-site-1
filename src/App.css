@@ -38,6 +38,35 @@ body {
   overflow: hidden;
 }
 
+/* ===== Petal avalanche ===== */
+.petal-avalanche {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+@keyframes avalancheFall {
+  0% {
+    top: -120px;
+    transform: rotate(var(--rotate));
+    opacity: 1;
+  }
+  100% {
+    top: 110vh;
+    transform: rotate(calc(var(--rotate) + 540deg));
+    opacity: 1;
+  }
+}
+
+.avalanche-petal {
+  position: absolute;
+  top: -120px;
+  user-select: none;
+  animation: avalancheFall linear forwards;
+}
+
 /* ===== Falling petals ===== */
 .petals-scatter {
   position: fixed;

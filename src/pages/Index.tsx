@@ -3,6 +3,7 @@ import ScatteredPetals from "@/components/ScatteredPetals";
 import DatePickerScreen from "@/components/DatePickerScreen";
 import SearchingScreen, { SearchingScreenHandle } from "@/components/SearchingScreen";
 import FlowerZoomOverlay from "@/components/FlowerZoomOverlay";
+import PetalAvalanche from "@/components/PetalAvalanche";
 
 const CAT_IMG =
   "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/bucket/64c47ecb-0129-4cfd-b8b5-303bf6157694.png";
@@ -53,6 +54,7 @@ const PLACES = [
 export default function Index() {
   const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
   const [searching, setSearching] = useState(false);
+  const [petalStorm, setPetalStorm] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
   const [flowerPos, setFlowerPos] = useState<{ x: number; y: number } | null>(null);
   const searchPageRef = useRef<SearchingScreenHandle>(null);
@@ -300,6 +302,13 @@ export default function Index() {
   return (
     <div className="meme-page">
       <ScatteredPetals />
+      <PetalAvalanche
+        active={petalStorm}
+        onCovered={() => {
+          setSearching(true);
+          setPetalStorm(false);
+        }}
+      />
       <div className="meme-card animate-in">
         <img src={CAT_IMG} alt="пёс" className="cat-img" />
         {showMaybeHint ? (
@@ -317,7 +326,7 @@ export default function Index() {
         <div className="meme-buttons">
           <button
             className="bubble-btn bubble-yes"
-            onClick={() => setSearching(true)}
+            onClick={() => setPetalStorm(true)}
           >
             Да ✔️
           </button>
