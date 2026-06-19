@@ -221,7 +221,7 @@ export default function Index() {
             setSearching(false);
             setTransitioning(false);
             setAnswered("yes");
-          }, 900);
+          }, 1400);
         }}
         transitioning={transitioning}
       />
