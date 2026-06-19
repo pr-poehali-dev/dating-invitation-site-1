@@ -186,7 +186,7 @@ export default function Index() {
     const btn = noRef.current;
     if (!btn) return;
 
-    const OFFSET = 110;
+    const OFFSET = 220;
     const MARGIN = 24;
     let jumping = false;
     let wasInside = false;
