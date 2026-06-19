@@ -221,22 +221,16 @@ export default function Index() {
         <SearchingScreen
           ref={searchPageRef}
           onDone={() => {
-            // 1. Замораживаем лепестки
+            // Читаем координаты ДО заморозки — лепесток статичный, качание не мешает центру
+            const pos = searchPageRef.current?.getFlowerPos() ?? null;
+            setFlowerPos(pos);
             setTransitioning(true);
-            // 2. После заморозки (следующий кадр) — снимаем точные координаты
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                const pos = searchPageRef.current?.getFlowerPos() ?? null;
-                setFlowerPos(pos);
-              });
-            });
-            // 3. Через 3.5с переходим на следующую страницу
             setTimeout(() => {
               setSearching(false);
               setTransitioning(false);
               setFlowerPos(null);
               setAnswered("yes");
-            }, 3500);
+            }, 3800);
           }}
           transitioning={transitioning}
         />

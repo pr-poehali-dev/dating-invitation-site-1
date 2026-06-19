@@ -10,34 +10,24 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
     const root = document.getElementById("root");
     if (!root) return;
 
-    if (!active) {
+    if (!active || !flowerPos) {
       root.style.transition = "none";
       root.style.transform = "";
+      root.style.transformOrigin = "";
       return;
     }
 
-    const S = 22; // финальный масштаб
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
+    const { x, y } = flowerPos;
 
-    // Точка цветочка в координатах экрана
-    const fx = flowerPos?.x ?? vw / 2;
-    const fy = flowerPos?.y ?? vh / 2;
-
-    // При scale(S) с transform-origin: 0 0, точка (fx, fy) уедет в (fx*S, fy*S).
-    // Чтобы она оказалась в центре экрана, нужно сдвинуть на:
-    const tx = vw / 2 - fx * S;
-    const ty = vh / 2 - fy * S;
-
-    // Сбрасываем без анимации
+    // transform-origin в точке лепестка — тогда scale увеличивает именно из неё
     root.style.transition = "none";
-    root.style.transformOrigin = "0 0";
-    root.style.transform = "scale(1) translate(0, 0)";
+    root.style.transformOrigin = `${x}px ${y}px`;
+    root.style.transform = "scale(1)";
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         root.style.transition = "transform 3.5s cubic-bezier(0.12, 0, 0.06, 1)";
-        root.style.transform = `scale(${S}) translate(${tx / S}px, ${ty / S}px)`;
+        root.style.transform = "scale(25)";
       });
     });
 

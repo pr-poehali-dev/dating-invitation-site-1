@@ -200,7 +200,7 @@ body {
   line-height: 1;
   filter: drop-shadow(0 2px 8px rgba(232, 99, 122, 0.35));
   animation: flowerSway 2.4s ease-in-out infinite;
-  transform-origin: center bottom;
+  transform-origin: center center;
 }
 
 .petals-frozen .dive-flower {
