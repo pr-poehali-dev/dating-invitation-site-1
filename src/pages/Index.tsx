@@ -428,7 +428,8 @@ export default function Index() {
         <ScatteredPetals />
         <div className="meme-card animate-in">
           <h1 className="meme-question" style={{ color: "var(--rose-dark)" }}>
-            Минутку, нужно найти места для свиданий, не ожидал, что ты скажешь да 😅
+            Минутку, нужно найти места для свиданий, не ожидал, что ты скажешь
+            да 😅
           </h1>
           <p className="meme-sub">Ищу....</p>
         </div>
@@ -512,7 +513,7 @@ export default function Index() {
               setTimeout(() => {
                 setSearching(false);
                 setAnswered("yes");
-              }, 2500);
+              }, 15000);
             }}
           >
             Да ✔️
