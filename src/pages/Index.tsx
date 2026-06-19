@@ -261,6 +261,7 @@ function DatePickerScreen({
 
 export default function Index() {
   const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
+  const [searching, setSearching] = useState(false);
   const [chosenPlace, setChosenPlace] = useState<(typeof PLACES)[0] | null>(
     null,
   );
@@ -420,6 +421,21 @@ export default function Index() {
     return <DatePickerScreen place={chosenPlace} onDone={setChosenDate} />;
   }
 
+  // Экран "ищу места"
+  if (searching) {
+    return (
+      <div className="meme-page">
+        <ScatteredPetals />
+        <div className="meme-card animate-in">
+          <h1 className="meme-question" style={{ color: "var(--rose-dark)" }}>
+            Минутку, нужно найти места для свиданий, не ожидал, что ты скажешь да 😅
+          </h1>
+          <p className="meme-sub">Ищу....</p>
+        </div>
+      </div>
+    );
+  }
+
   // Экран выбора места
   if (answered === "yes") {
     return (
@@ -491,7 +507,13 @@ export default function Index() {
         <div className="meme-buttons">
           <button
             className="bubble-btn bubble-yes"
-            onClick={() => setAnswered("yes")}
+            onClick={() => {
+              setSearching(true);
+              setTimeout(() => {
+                setSearching(false);
+                setAnswered("yes");
+              }, 2500);
+            }}
           >
             Да ✔️
           </button>
