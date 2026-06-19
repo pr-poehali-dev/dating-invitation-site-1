@@ -180,6 +180,15 @@ body {
   transition: opacity 0.3s ease;
 }
 
+/* ===== Статичный лепесток для погружения ===== */
+.dive-flower {
+  font-size: 3.5rem;
+  display: block;
+  text-align: center;
+  line-height: 1;
+  filter: drop-shadow(0 2px 8px rgba(232, 99, 122, 0.35));
+}
+
 /* ===== Freeze petals on transition ===== */
 .petals-frozen .falling-petal {
   animation-play-state: paused;

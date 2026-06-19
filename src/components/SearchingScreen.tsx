@@ -20,7 +20,7 @@ interface Props {
 const SearchingScreen = forwardRef<HTMLDivElement, Props>(({ onDone, transitioning }, ref) => {
   const [stepIdx, setStepIdx] = useState(0);
   const [pct, setPct] = useState(0);
-  const petalsRef = useRef<HTMLDivElement>(null);
+  const flowerRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const raf = requestAnimationFrame(() => {
@@ -33,31 +33,11 @@ const SearchingScreen = forwardRef<HTMLDivElement, Props>(({ onDone, transitioni
     const isLast = stepIdx >= SEARCH_STEPS.length - 1;
     const t = setTimeout(() => {
       if (isLast) {
-        const petals = petalsRef.current?.querySelectorAll<HTMLElement>(".falling-petal");
-        const cx = window.innerWidth / 2;
-        const cy = window.innerHeight / 2;
-        let pos = { x: cx, y: cy };
-
-        if (petals && petals.length > 0) {
-          const visible = Array.from(petals).filter(el => {
-            const r = el.getBoundingClientRect();
-            return r.top > 0 && r.bottom < window.innerHeight && r.left > 0 && r.right < window.innerWidth;
-          });
-          if (visible.length > 0) {
-            // Берём лепесток, ближайший к центру экрана
-            const closest = visible.reduce((best, el) => {
-              const r = el.getBoundingClientRect();
-              const ex = r.left + r.width / 2;
-              const ey = r.top + r.height / 2;
-              const dist = Math.hypot(ex - cx, ey - cy);
-              const br = best.getBoundingClientRect();
-              const bdist = Math.hypot(br.left + br.width / 2 - cx, br.top + br.height / 2 - cy);
-              return dist < bdist ? el : best;
-            });
-            const r = closest.getBoundingClientRect();
-            pos = { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-          }
-        }
+        // Берём точные координаты статичного лепестка
+        const r = flowerRef.current?.getBoundingClientRect();
+        const pos = r
+          ? { x: r.left + r.width / 2, y: r.top + r.height / 2 }
+          : { x: window.innerWidth / 2, y: window.innerHeight / 2 };
         onDone(pos);
       } else {
         const next = stepIdx + 1;
@@ -72,10 +52,11 @@ const SearchingScreen = forwardRef<HTMLDivElement, Props>(({ onDone, transitioni
 
   return (
     <div ref={ref} className={`meme-page${transitioning ? " petals-frozen" : ""}`}>
-      <div ref={petalsRef}>
-        <ScatteredPetals />
-      </div>
+      <ScatteredPetals />
       <div className="meme-card animate-in">
+        {/* Статичный лепесток — цель для погружения */}
+        <span ref={flowerRef} className="dive-flower">🌸</span>
+
         <h1 className="meme-question" style={{ color: "var(--rose-dark)" }}>
           Минутку, нужно найти места для свидания, не ожидал, что ты скажешь да
         </h1>
