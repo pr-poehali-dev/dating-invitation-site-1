@@ -283,10 +283,10 @@ iframe.place-img {
 
 .place-name {
   font-family: var(--font-hand);
-  font-size: 4rem;
+  font-size: 2.5rem;
   font-weight: 600;
   color: var(--text-dark);
-  line-height: 4;
+  line-height: 2.5;
 }
 
 .place-desc {
