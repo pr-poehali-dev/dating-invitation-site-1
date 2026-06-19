@@ -40,12 +40,18 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
         root.style.transition = "transform 0.7s cubic-bezier(0.25, 0, 0.5, 1)";
         root.style.transform = "scale(0.78)";
 
-        // Фаза 2: погружаемся вперёд — zoom бесконечен, оверлей перекроет в нужный момент
+        // Фаза 2а: медленно начинаем (до scale 3)
         setTimeout(() => {
-          root.style.transition = "transform 5s cubic-bezier(0.4, 0, 1, 1)";
-          root.style.transform = "scale(300)";
+          root.style.transition = "transform 2.5s ease-in";
+          root.style.transform = "scale(3)";
 
-          // Фаза 3: через 3.8с оверлей цвета сердцевины плавно накрывает экран
+          // Фаза 2б: резко ускоряемся до конца
+          setTimeout(() => {
+            root.style.transition = "transform 1.8s ease-in";
+            root.style.transform = "scale(300)";
+          }, 2500);
+
+          // Фаза 3: оверлей появляется когда уже летим
           setTimeout(() => {
             setCoverVisible(true);
             requestAnimationFrame(() => {
@@ -62,7 +68,7 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
                 setTimeout(() => setCoverVisible(false), 1200);
               }, 80);
             }, 500);
-          }, 3800);
+          }, 4000);
         }, 750);
       });
     });
