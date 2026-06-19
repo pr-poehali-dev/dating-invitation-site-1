@@ -188,13 +188,19 @@ export default function Index() {
 
     const OFFSET = 110;
     const MARGIN = 24;
+    let jumping = false;
+    let wasInside = false;
 
-    function moveAway(e: MouseEvent | TouchEvent) {
+    // Всегда pointer-events: none — попадание считаем вручную
+    btn.style.pointerEvents = 'none';
+
+    function jump(clientX: number, clientY: number) {
+      if (jumping) return;
+      jumping = true;
+      setTimeout(() => { jumping = false; }, 320);
+
       const rect = btn!.getBoundingClientRect();
       const pos = noPosRef.current;
-
-      const clientX = 'touches' in e ? e.touches[0].clientX : (e as MouseEvent).clientX;
-      const clientY = 'touches' in e ? e.touches[0].clientY : (e as MouseEvent).clientY;
 
       const originLeft = rect.left - pos.x;
       const originTop = rect.top - pos.y;
@@ -232,23 +238,25 @@ export default function Index() {
 
       noPosRef.current = { x: nx, y: ny };
       setNoPos({ x: nx, y: ny });
-
-      // Отключаем pointer-events на время анимации — курсор "проваливается сквозь"
-      btn!.style.pointerEvents = 'none';
-      setTimeout(() => { btn!.style.pointerEvents = ''; }, 300);
     }
 
-    function onEnter() {
-      setNoDodgeCount(prev => prev + 1);
+    function onDocMouseMove(e: MouseEvent) {
+      const rect = btn!.getBoundingClientRect();
+      const inside = e.clientX >= rect.left && e.clientX <= rect.right &&
+                     e.clientY >= rect.top  && e.clientY <= rect.bottom;
+
+      if (inside && !wasInside) {
+        setNoDodgeCount(prev => prev + 1);
+      }
+      wasInside = inside;
+
+      if (inside) jump(e.clientX, e.clientY);
     }
 
-    btn.addEventListener('mousemove', moveAway as EventListener);
-    btn.addEventListener('touchmove', moveAway as EventListener);
-    btn.addEventListener('mouseenter', onEnter);
+    document.addEventListener('mousemove', onDocMouseMove);
     return () => {
-      btn.removeEventListener('mousemove', moveAway as EventListener);
-      btn.removeEventListener('touchmove', moveAway as EventListener);
-      btn.removeEventListener('mouseenter', onEnter);
+      document.removeEventListener('mousemove', onDocMouseMove);
+      btn.style.pointerEvents = '';
     };
   }, []);
 
