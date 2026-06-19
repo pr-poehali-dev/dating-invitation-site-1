@@ -52,6 +52,7 @@ const PLACES = [
 export default function Index() {
   const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
   const [searching, setSearching] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
   const [chosenPlace, setChosenPlace] = useState<(typeof PLACES)[0] | null>(
     null,
   );
@@ -215,9 +216,14 @@ export default function Index() {
     return (
       <SearchingScreen
         onDone={() => {
-          setSearching(false);
-          setAnswered("yes");
+          setTransitioning(true);
+          setTimeout(() => {
+            setSearching(false);
+            setTransitioning(false);
+            setAnswered("yes");
+          }, 900);
         }}
+        transitioning={transitioning}
       />
     );
   }

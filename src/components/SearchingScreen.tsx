@@ -24,7 +24,7 @@ export const SEARCH_STEPS = [
   { from: 95, to: 100, label: "Готово", duration: 4000 },
 ];
 
-export default function SearchingScreen({ onDone }: { onDone: () => void }) {
+export default function SearchingScreen({ onDone, transitioning }: { onDone: () => void; transitioning?: boolean }) {
   const [stepIdx, setStepIdx] = useState(0);
   const [pct, setPct] = useState(0);
 
@@ -55,20 +55,20 @@ export default function SearchingScreen({ onDone }: { onDone: () => void }) {
   const current = SEARCH_STEPS[stepIdx];
 
   return (
-    <div className="meme-page">
+    <div className={`meme-page${transitioning ? " searching-exit" : ""}`}>
       <ScatteredPetals />
-      <div className="meme-card animate-in">
+      <div className={`meme-card animate-in${transitioning ? " card-zoom-out" : ""}`}>
         <h1 className="meme-question" style={{ color: "var(--rose-dark)" }}>
           Минутку, нужно найти места для свидания, не ожидал, что ты скажешь да
         </h1>
         <div className="search-progress-wrap">
-          <div className="search-progress-bar">
+          <div className={`search-progress-bar${transitioning ? " bar-zoom-in" : ""}`}>
             <div
               className="search-progress-fill"
               style={{ width: `${pct}%` }}
             />
           </div>
-          <p className="search-progress-label">{current.label}</p>
+          <p className={`search-progress-label${transitioning ? " label-fade-out" : ""}`}>{current.label}</p>
         </div>
       </div>
     </div>

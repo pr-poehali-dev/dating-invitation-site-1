@@ -180,6 +180,95 @@ body {
   transition: opacity 0.3s ease;
 }
 
+/* ===== Transition: zoom into progress bar ===== */
+@keyframes barZoomIn {
+  0% {
+    transform: scale(1);
+    border-radius: 100px;
+    opacity: 1;
+  }
+  60% {
+    transform: scale(6);
+    border-radius: 40px;
+    opacity: 1;
+  }
+  100% {
+    transform: scale(40);
+    border-radius: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes cardZoomOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes labelFadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pageExitFade {
+  0% {
+    background: #fff;
+  }
+  100% {
+    background: linear-gradient(
+      135deg,
+      var(--pink-bubble) 0%,
+      var(--rose) 100%
+    );
+  }
+}
+
+.searching-exit {
+  animation: pageExitFade 0.9s ease forwards;
+}
+
+.card-zoom-out {
+  animation: cardZoomOut 0.5s ease forwards;
+  pointer-events: none;
+}
+
+.bar-zoom-in {
+  animation: barZoomIn 0.85s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transform-origin: center center;
+  overflow: visible;
+  position: relative;
+  z-index: 20;
+}
+
+.label-fade-out {
+  animation: labelFadeOut 0.3s ease forwards;
+}
+
+/* fade-in для страницы с местами */
+@keyframes placesPageIn {
+  0% {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.places-card.animate-in {
+  animation: placesPageIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
 /* ===== Buttons ===== */
 .meme-buttons {
   display: grid;
