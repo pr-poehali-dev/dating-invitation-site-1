@@ -162,7 +162,7 @@ body {
 
 .bubble-btn {
   font-family: var(--font-hand);
-  font-size: 1.9rem;
+  font-size: 1.6rem;
   font-weight: 600;
   border: none;
   border-radius: 100px;
@@ -278,12 +278,12 @@ body:has(.places-page) {
 .place-img[src=""],
 iframe.place-img {
   aspect-ratio: 9/16;
-  max-height: 1000px;
+  max-height: 320px;
 }
 
 .place-name {
   font-family: var(--font-hand);
-  font-size: 1.35rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: var(--text-dark);
   line-height: 1.25;
