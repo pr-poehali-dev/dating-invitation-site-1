@@ -185,8 +185,7 @@ export default function Index() {
     setMaybeFading(true);
   };
 
-  const handleNoHover = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    if (noDisabled) return;
+  const dodgeNo = useCallback((cx: number, cy: number) => {
     const OFFSET = 200;
     const MARGIN = 80;
 
@@ -194,21 +193,17 @@ export default function Index() {
     if (!btn) return;
     const rect = btn.getBoundingClientRect();
 
-    // Запоминаем origin один раз — до первого прыжка (когда transform ещё 0)
     if (!noOriginRef.current) {
       noOriginRef.current = { left: rect.left, top: rect.top, w: rect.width, h: rect.height };
     }
     const origin = noOriginRef.current;
     const prev = noPosRef.current;
 
-    // Границы transform чтобы кнопка не вышла за MARGIN от края
     const minX = -origin.left + MARGIN;
     const maxX = window.innerWidth - origin.left - origin.w - MARGIN;
     const minY = -origin.top + MARGIN;
     const maxY = window.innerHeight - origin.top - origin.h - MARGIN;
 
-    const cx = e.clientX;
-    const cy = e.clientY;
     const btnCx = rect.left + origin.w / 2;
     const btnCy = rect.top + origin.h / 2;
 
@@ -222,7 +217,6 @@ export default function Index() {
     nx = Math.max(minX, Math.min(maxX, nx));
     ny = Math.max(minY, Math.min(maxY, ny));
 
-    // Если кнопка всё равно под курсором — противоположная сторона
     const newLeft = origin.left + nx;
     const newTop = origin.top + ny;
     if (cx >= newLeft && cx <= newLeft + origin.w && cy >= newTop && cy <= newTop + origin.h) {
@@ -234,9 +228,33 @@ export default function Index() {
     noPosRef.current = { x: nx, y: ny };
     setNoPos({ x: nx, y: ny });
     setNoDodgeCount(prev => prev + 1);
+  }, []);
+
+  const handleNoHover = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    if (noDisabled) return;
+    dodgeNo(e.clientX, e.clientY);
     setNoDisabled(true);
     setTimeout(() => setNoDisabled(false), 220);
-  }, [noDisabled]);
+  }, [noDisabled, dodgeNo]);
+
+  // Глобальный mousemove — ловим курсор даже когда кнопка под ним и не генерирует события
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      const btn = noRef.current;
+      if (!btn) return;
+      const rect = btn.getBoundingClientRect();
+      const inside =
+        e.clientX >= rect.left && e.clientX <= rect.right &&
+        e.clientY >= rect.top && e.clientY <= rect.bottom;
+      if (inside && !noDisabled) {
+        dodgeNo(e.clientX, e.clientY);
+        setNoDisabled(true);
+        setTimeout(() => setNoDisabled(false), 220);
+      }
+    };
+    document.addEventListener("mousemove", onMove);
+    return () => document.removeEventListener("mousemove", onMove);
+  }, [noDisabled, dodgeNo]);
 
   // Финальный экран
   if (chosenPlace && chosenDate) {
