@@ -232,6 +232,10 @@ export default function Index() {
 
       noPosRef.current = { x: nx, y: ny };
       setNoPos({ x: nx, y: ny });
+
+      // Отключаем pointer-events на время анимации — курсор "проваливается сквозь"
+      btn!.style.pointerEvents = 'none';
+      setTimeout(() => { btn!.style.pointerEvents = ''; }, 300);
     }
 
     function onEnter() {
