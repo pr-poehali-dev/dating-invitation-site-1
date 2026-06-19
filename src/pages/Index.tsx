@@ -186,7 +186,7 @@ export default function Index() {
   const handleNoHover = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     if (noDisabled) return;
     const OFFSET = 140;
-    const MARGIN = 32;
+    const MARGIN = 80; // ~3 см от края экрана
 
     const btn = noRef.current;
     if (!btn) return;
@@ -232,6 +232,14 @@ export default function Index() {
       nx = Math.max(minX, Math.min(maxX, prev.x + Math.cos(oppAngle) * OFFSET));
       ny = Math.max(minY, Math.min(maxY, prev.y + Math.sin(oppAngle) * OFFSET));
     }
+
+    // Финальный жёсткий зажим по абсолютным координатам экрана
+    const absBtnLeft = originLeft + nx;
+    const absBtnTop = originTop + ny;
+    if (absBtnLeft < MARGIN) nx += MARGIN - absBtnLeft;
+    if (absBtnLeft + rect.width > window.innerWidth - MARGIN) nx -= (absBtnLeft + rect.width) - (window.innerWidth - MARGIN);
+    if (absBtnTop < MARGIN) ny += MARGIN - absBtnTop;
+    if (absBtnTop + rect.height > window.innerHeight - MARGIN) ny -= (absBtnTop + rect.height) - (window.innerHeight - MARGIN);
 
     noPosRef.current = { x: nx, y: ny };
     setNoPos({ x: nx, y: ny });
