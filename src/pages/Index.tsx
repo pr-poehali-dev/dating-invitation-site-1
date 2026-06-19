@@ -185,7 +185,7 @@ export default function Index() {
 
   const handleNoHover = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     if (noDisabled) return;
-    const OFFSET = 140;
+    const OFFSET = 200;
     const MARGIN = 80; // ~3 см от края экрана
 
     const btn = noRef.current;
@@ -208,18 +208,20 @@ export default function Index() {
 
     const dx = btnCx - cx;
     const dy = btnCy - cy;
-    const baseAngle = Math.atan2(dy, dx);
+    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
 
-    const spread = (Math.random() - 0.5) * (Math.PI * 2 / 3);
-    const angle = baseAngle + spread;
+    // Строго от курсора на фиксированное расстояние + лёгкое случайное боковое смещение
+    const perpAngle = Math.atan2(dy, dx) + (Math.random() > 0.5 ? 1 : -1) * (Math.PI / 6);
+    const ux = Math.cos(perpAngle);
+    const uy = Math.sin(perpAngle);
 
-    let nx = prev.x + Math.cos(angle) * OFFSET;
-    let ny = prev.y + Math.sin(angle) * OFFSET;
+    let nx = prev.x + ux * OFFSET;
+    let ny = prev.y + uy * OFFSET;
 
     nx = Math.max(minX, Math.min(maxX, nx));
     ny = Math.max(minY, Math.min(maxY, ny));
 
-    // Проверяем, что новая позиция кнопки не перекрывает курсор
+    // Проверяем, что кнопка не оказалась под курсором
     const newBtnLeft = originLeft + nx;
     const newBtnTop = originTop + ny;
     const cursorOnBtn =
@@ -227,8 +229,7 @@ export default function Index() {
       cy >= newBtnTop && cy <= newBtnTop + rect.height;
 
     if (cursorOnBtn) {
-      // Уходим в противоположную сторону от курсора
-      const oppAngle = baseAngle + Math.PI + (Math.random() - 0.5) * (Math.PI / 4);
+      const oppAngle = Math.atan2(dy, dx) + Math.PI;
       nx = Math.max(minX, Math.min(maxX, prev.x + Math.cos(oppAngle) * OFFSET));
       ny = Math.max(minY, Math.min(maxY, prev.y + Math.sin(oppAngle) * OFFSET));
     }
