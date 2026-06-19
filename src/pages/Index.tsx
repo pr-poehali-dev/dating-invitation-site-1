@@ -232,14 +232,19 @@ export default function Index() {
 
       noPosRef.current = { x: nx, y: ny };
       setNoPos({ x: nx, y: ny });
+    }
+
+    function onEnter() {
       setNoDodgeCount(prev => prev + 1);
     }
 
     btn.addEventListener('mousemove', moveAway as EventListener);
     btn.addEventListener('touchmove', moveAway as EventListener);
+    btn.addEventListener('mouseenter', onEnter);
     return () => {
       btn.removeEventListener('mousemove', moveAway as EventListener);
       btn.removeEventListener('touchmove', moveAway as EventListener);
+      btn.removeEventListener('mouseenter', onEnter);
     };
   }, []);
 
