@@ -259,7 +259,7 @@ export default function Index() {
               setTimeout(() => {
                 setSearching(false);
                 setAnswered("yes");
-              }, 30000);
+              }, 34000);
             }}
           >
             Да ✔️

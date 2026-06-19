@@ -1,23 +1,31 @@
 import { useState, useEffect } from "react";
 import ScatteredPetals from "@/components/ScatteredPetals";
 
+// from — начало отрезка, to — конец, label — фраза на этом отрезке
+// Каждый шаг длится 4 секунды
 export const SEARCH_STEPS = [
-  { pct: 0,   label: "Ищу..." },
-  { pct: 10,  label: "Исключаю странные рестораны в подвале" },
-  { pct: 30,  label: "Выбираю что-то поинтереснее" },
-  { pct: 50,  label: "Почти нашёл...." },
-  { pct: 75,  label: "Быстренько делаю следующую страницу" },
-  { pct: 90,  label: "Ещё чуть-чуть" },
-  { pct: 97,  label: "Готово" },
-  { pct: 100, label: "Готово" },
+  { from: 0,  to: 10,  label: "Ищу..." },
+  { from: 10, to: 25,  label: "Убираю Фобо из списка" },
+  { from: 25, to: 40,  label: "Исключаю странные рестораны в подвале" },
+  { from: 40, to: 65,  label: "Выбираю что-то поинтереснее" },
+  { from: 65, to: 75,  label: "Почти нашёл...." },
+  { from: 75, to: 88,  label: "Быстренько делаю следующую страницу" },
+  { from: 88, to: 95,  label: "Ещё чуть-чуть" },
+  { from: 95, to: 100, label: "Готово" },
 ];
 
 export default function SearchingScreen() {
   const [stepIdx, setStepIdx] = useState(0);
+  // Сразу показываем to текущего шага, чтобы полоска начала двигаться
+  const [pct, setPct] = useState(SEARCH_STEPS[0].to);
 
   useEffect(() => {
     if (stepIdx >= SEARCH_STEPS.length - 1) return;
-    const t = setTimeout(() => setStepIdx((i) => i + 1), 4000);
+    const t = setTimeout(() => {
+      const next = stepIdx + 1;
+      setStepIdx(next);
+      setPct(SEARCH_STEPS[next].to);
+    }, 4000);
     return () => clearTimeout(t);
   }, [stepIdx]);
 
@@ -34,7 +42,7 @@ export default function SearchingScreen() {
           <div className="search-progress-bar">
             <div
               className="search-progress-fill"
-              style={{ width: `${current.pct}%` }}
+              style={{ width: `${pct}%` }}
             />
           </div>
           <p className="search-progress-label">{current.label}</p>
