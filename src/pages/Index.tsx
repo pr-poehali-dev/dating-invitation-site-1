@@ -20,9 +20,10 @@ const PLACES = [
   },
   {
     id: 3,
-    name: "asdsadt",
-    desc: "Уasdasdasd",
+    name: "Китайский парк Хуамин",
+    desc: "Китайский парк Хуамин",
     img: "",
+    videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_155516.mp4",
   },
   {
     id: 4,
