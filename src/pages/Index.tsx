@@ -14,7 +14,7 @@ const PLACES = [
   {
     id: 2,
     name: "Частный кинотеатр CinemaSecret",
-    desc: "Частный кинотеатр CinemaSecretПоездка на катере",
+    desc: "Частный кинотеатр CinemaSecret",
     img: "",
     videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_153155.mp4",
   },
