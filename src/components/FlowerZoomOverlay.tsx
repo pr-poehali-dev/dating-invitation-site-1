@@ -42,12 +42,12 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
 
         // Фаза 2а: медленно начинаем (до scale 3)
         setTimeout(() => {
-          root.style.transition = "transform 2.5s ease-in";
+          root.style.transition = "transform 1.5s ease-in";
           root.style.transform = "scale(3)";
 
           // Фаза 2б: резко ускоряемся до конца
           setTimeout(() => {
-            root.style.transition = "transform 1.8s ease-in";
+            root.style.transition = "transform 2s ease-in";
             root.style.transform = "scale(300)";
           }, 2500);
 
@@ -84,7 +84,8 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
         zIndex: 99999,
         background: CORE_COLOR,
         opacity: coverOpacity,
-        transition: coverOpacity === 0 ? "opacity 1.2s ease" : "opacity 0.15s ease",
+        transition:
+          coverOpacity === 0 ? "opacity 1.2s ease" : "opacity 0.15s ease",
         pointerEvents: "none",
       }}
     />
