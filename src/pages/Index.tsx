@@ -27,9 +27,10 @@ const PLACES = [
   },
   {
     id: 4,
-    name: "Музей Зиларт",
-    desc: "Современное искусство в самом сердце Москвы",
-    img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/e837e701-aa56-429a-bf8a-8d8416a50ecc.jpg",
+    name: "Концерт при свете 3000 свечей",
+    desc: "Концерт при свете 3000 свечей",
+    img: "",
+    videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_164140.mp4",
   },
   {
     id: 5,
