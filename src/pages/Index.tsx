@@ -188,12 +188,8 @@ export default function Index() {
 
     const OFFSET = 110;
     const MARGIN = 24;
-    let cooldown = false;
 
     function moveAway(e: MouseEvent | TouchEvent) {
-      if (cooldown) return;
-      cooldown = true;
-      setTimeout(() => { cooldown = false; }, 250);
       const rect = btn!.getBoundingClientRect();
       const pos = noPosRef.current;
 
