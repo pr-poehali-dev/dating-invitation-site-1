@@ -40,30 +40,29 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
         root.style.transition = "transform 0.7s cubic-bezier(0.25, 0, 0.5, 1)";
         root.style.transform = "scale(0.78)";
 
-        // Фаза 2: погружаемся вперёд
+        // Фаза 2: погружаемся вперёд — zoom бесконечен, оверлей перекроет в нужный момент
         setTimeout(() => {
-          root.style.transition = "transform 4.5s cubic-bezier(0.4, 0, 0.08, 1)";
-          root.style.transform = "scale(80)";
+          root.style.transition = "transform 5s cubic-bezier(0.4, 0, 0.08, 1)";
+          root.style.transform = "scale(300)";
 
-          // Фаза 3: когда экран заполнен — показываем цветной оверлей
+          // Фаза 3: через 3.8с оверлей цвета сердцевины плавно накрывает экран
           setTimeout(() => {
             setCoverVisible(true);
             requestAnimationFrame(() => {
               requestAnimationFrame(() => setCoverOpacity(1));
             });
 
-            // Фаза 4: сбрасываем root и плавно убираем оверлей
+            // Фаза 4: страница сменилась — убираем оверлей
             setTimeout(() => {
               root.style.transition = "none";
               root.style.transform = "";
               root.style.transformOrigin = "";
-              // Небольшая пауза чтобы страница успела смениться
               setTimeout(() => {
                 setCoverOpacity(0);
-                setTimeout(() => setCoverVisible(false), 1000);
+                setTimeout(() => setCoverVisible(false), 1200);
               }, 80);
-            }, 300);
-          }, 4200);
+            }, 500);
+          }, 3800);
         }, 750);
       });
     });
