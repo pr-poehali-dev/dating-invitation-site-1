@@ -182,13 +182,12 @@ body {
 
 /* ===== Buttons ===== */
 .meme-buttons {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  overflow: visible;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 0.8rem;
   width: 100%;
+  overflow: visible;
   position: relative;
 }
 
@@ -232,8 +231,8 @@ body {
   background: var(--purple-bubble);
   color: #fff;
   box-shadow: 0 3px 12px rgba(150, 120, 210, 0.25);
-  position: absolute;
-  pointer-events: auto;
+  grid-column: 1 / -1;
+  position: relative;
 }
 
 /* ===== Places screen ===== */
