@@ -259,6 +259,48 @@ function DatePickerScreen({
   );
 }
 
+const SEARCH_STEPS = [
+  { pct: 0,   label: "Ищу" },
+  { pct: 10,  label: "Убираю Фобо из списка" },
+  { pct: 30,  label: "Выбираю что-то поинтереснее" },
+  { pct: 50,  label: "Выбираю самое лучшее" },
+  { pct: 75,  label: "Почти нашёл...." },
+  { pct: 90,  label: "Ещё чуть чуть" },
+  { pct: 100, label: "Нашёл!" },
+];
+
+function SearchingScreen() {
+  const [stepIdx, setStepIdx] = useState(0);
+
+  useEffect(() => {
+    if (stepIdx >= SEARCH_STEPS.length - 1) return;
+    const t = setTimeout(() => setStepIdx((i) => i + 1), 4000);
+    return () => clearTimeout(t);
+  }, [stepIdx]);
+
+  const current = SEARCH_STEPS[stepIdx];
+
+  return (
+    <div className="meme-page">
+      <ScatteredPetals />
+      <div className="meme-card animate-in">
+        <h1 className="meme-question" style={{ color: "var(--rose-dark)" }}>
+          Минутку, нужно найти места для свиданий, не ожидал, что ты скажешь да 😅
+        </h1>
+        <div className="search-progress-wrap">
+          <div className="search-progress-bar">
+            <div
+              className="search-progress-fill"
+              style={{ width: `${current.pct}%` }}
+            />
+          </div>
+          <p className="search-progress-label">{current.label}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Index() {
   const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
   const [searching, setSearching] = useState(false);
@@ -423,18 +465,7 @@ export default function Index() {
 
   // Экран "ищу места"
   if (searching) {
-    return (
-      <div className="meme-page">
-        <ScatteredPetals />
-        <div className="meme-card animate-in">
-          <h1 className="meme-question" style={{ color: "var(--rose-dark)" }}>
-            Минутку, нужно найти места для свиданий, не ожидал, что ты скажешь
-            да 😅
-          </h1>
-          <p className="meme-sub">Ищу....</p>
-        </div>
-      </div>
-    );
+    return <SearchingScreen />;
   }
 
   // Экран выбора места
@@ -513,7 +544,7 @@ export default function Index() {
               setTimeout(() => {
                 setSearching(false);
                 setAnswered("yes");
-              }, 15000);
+              }, 27000);
             }}
           >
             Да ✔️

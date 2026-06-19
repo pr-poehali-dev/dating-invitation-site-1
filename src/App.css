@@ -148,6 +148,38 @@ body {
   text-align: center;
 }
 
+/* ===== Search progress bar ===== */
+.search-progress-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.search-progress-bar {
+  width: 100%;
+  height: 18px;
+  background: #fce8ec;
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.search-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--pink-bubble), var(--rose));
+  border-radius: 100px;
+  transition: width 3.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-progress-label {
+  font-family: var(--font-hand);
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  text-align: center;
+  min-height: 1.8rem;
+  transition: opacity 0.3s ease;
+}
+
 /* ===== Buttons ===== */
 .meme-buttons {
   display: flex;
