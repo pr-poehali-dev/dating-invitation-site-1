@@ -5,7 +5,7 @@ interface Props {
   flowerPos: { x: number; y: number } | null;
 }
 
-// Цвет сердцевины лепестка ❤️
+// Цвет сердцевины лепестка ♥️
 const CORE_COLOR = "#c0435a";
 
 export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
