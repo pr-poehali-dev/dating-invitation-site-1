@@ -29,34 +29,6 @@
     <meta name="pp-name" value="dating-invitation-site-1">
       <script src="https://cdn.poehali.dev/intertnal/js/inspector-min.js"></script>
   </head>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const container = document.querySelector('.petals-scatter');
-    if (!container) return; // Проверка, есть ли элемент на странице
-
-    const petalCount = 50; // <-- ЗДЕСЬ УКАЖИТЕ КОЛИЧЕСТВО ЛЕПЕСТКОВ
-    const viewportWidth = window.innerWidth;
-
-    for (let i = 0; i < petalCount; i++) {
-        const petal = document.createElement('div');
-        petal.classList.add('falling-petal');
-
-        // Устанавливаем случайную начальную позицию слева
-        let randomLeft = Math.random() * viewportWidth;
-        petal.style.left = `${randomLeft}px`;
-
-        // Устанавливаем случайную длительность анимации для более естественного эффекта
-        let duration = 8 + Math.random() * 12; // от 8 до 20 секунд
-        petal.style.animationDuration = `${duration}s`;
-
-        // Устанавливаем случайную задержку начала анимации
-        let delay = Math.random() * 2; // от 0 до 2 секунд
-        petal.style.animationDelay = `${delay}s`;
-
-        container.appendChild(petal);
-    }
-});
-</script>
 <body>
 <div id="root"></div>
 <script type="module" src="/src/main.tsx"></script>
