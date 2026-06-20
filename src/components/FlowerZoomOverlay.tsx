@@ -42,7 +42,7 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
 
         // Фаза 2б: резко ускоряемся до конца
           setTimeout(() => {
-            root.style.transition = "transform 4s ease-in";
+            root.style.transition = "transform 2.5s ease-in";
             root.style.transform = "scale(300)";
           }, 2500);
 
