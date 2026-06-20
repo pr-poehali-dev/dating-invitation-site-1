@@ -42,8 +42,8 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
 
         // Фаза 2а: медленно начинаем (до scale 3)
         setTimeout(() => {
-          root.style.transition = "transform 4s ease-in";
-          root.style.transform = "scale(250))";
+          root.style.transition = "transform 1.5s ease-in";
+          root.style.transform = "scale(3)";
 
           // Фаза 3: оверлей появляется когда уже летим
           setTimeout(() => {
