@@ -5,7 +5,7 @@ interface Props {
   flowerPos: { x: number; y: number } | null;
 }
 
-// Цвет сердцевины лепестка ♥️
+// Цвет сердцевины лепестка 🌸
 const CORE_COLOR = "#c0435a";
 
 export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
@@ -40,9 +40,14 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
         root.style.transition = "transform 0.7s cubic-bezier(0.25, 0, 0.5, 1)";
         root.style.transform = "scale(0.78)";
 
-        // Фаза 2б: резко ускоряемся до конца
+        // Фаза 2а: медленно начинаем (до scale 3)
+        setTimeout(() => {
+          root.style.transition = "transform 1.5s ease-in";
+          root.style.transform = "scale(3)";
+
+          // Фаза 2б: резко ускоряемся до конца
           setTimeout(() => {
-            root.style.transition = "transform 4s ease-in";
+            root.style.transition = "transform 2s ease-in";
             root.style.transform = "scale(300)";
           }, 2500);
 
