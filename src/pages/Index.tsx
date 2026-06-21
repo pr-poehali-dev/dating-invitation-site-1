@@ -1,9 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import ScatteredPetals from "@/components/ScatteredPetals";
 import DatePickerScreen from "@/components/DatePickerScreen";
-import SearchingScreen, {
-  SearchingScreenHandle,
-} from "@/components/SearchingScreen";
+import SearchingScreen, { SearchingScreenHandle } from "@/components/SearchingScreen";
 import FlowerZoomOverlay from "@/components/FlowerZoomOverlay";
 import PetalAvalanche from "@/components/PetalAvalanche";
 
@@ -58,9 +56,7 @@ export default function Index() {
   const [searching, setSearching] = useState(false);
   const [petalStorm, setPetalStorm] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
-  const [flowerPos, setFlowerPos] = useState<{ x: number; y: number } | null>(
-    null,
-  );
+  const [flowerPos, setFlowerPos] = useState<{ x: number; y: number } | null>(null);
   const searchPageRef = useRef<SearchingScreenHandle>(null);
   const [chosenPlace, setChosenPlace] = useState<(typeof PLACES)[0] | null>(
     null,
@@ -326,9 +322,7 @@ export default function Index() {
             Возможно, «Я подумаю» работает?
           </p>
         ) : null}
-        <h1 className="meme-question">
-          🌸 Лиза, пойдёшь со мной на свидание? 🌸
-        </h1>
+        <h1 className="meme-question">🌸 Пойдёшь со мной на свидание? 🌸</h1>
         <div className="meme-buttons">
           <button
             className="bubble-btn bubble-yes"
