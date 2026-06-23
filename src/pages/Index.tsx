@@ -13,22 +13,22 @@ const CAT_IMG =
 const PLACES = [
   {
     id: 1,
-    name: "Поездка на катере вдвоём",
-    desc: "Поездка на катере вдвоём",
+    name: "🚤Поездка на катере вдвоём🌊",
+    desc: "🚤Поездка на катере вдвоём🌊",
     img: "",
     videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_162720.mp4",
   },
   {
     id: 2,
-    name: "Частный кинотеатр SecretCinema",
-    desc: "Частный кинотеатр SecretCinema",
+    name: "🎥Частный кинотеатр SecretCinema🎬",
+    desc: "🎥Частный кинотеатр SecretCinema🎬",
     img: "",
     videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_162443.mp4",
   },
   {
     id: 3,
-    name: "Китайский парк Хуамин",
-    desc: "Китайский парк Хуамин",
+    name: "🐉Китайский парк Хуамин⛩️",
+    desc: "🐉Китайский парк Хуамин⛩️",
     img: "",
     videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_162439.mp4",
   },
