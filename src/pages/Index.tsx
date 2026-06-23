@@ -41,9 +41,11 @@ const PLACES = [
   },
   {
     id: 5,
-    name: "Крыша Останкинской Телебашни",
-    desc: "Панорама всей Москвы с высоты 337 м",
-    img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/4c1bb245-d7aa-4a0d-a3ef-b10fad97b818.jpg",
+    name: "🍽️Ресторан Osterio Mario🛎️",
+    desc: "🍽️Ресторан Osterio Mario🛎️",
+    img: "",
+    videoUrl:
+      "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/23/VID_20260619_153156252b734add41c5f3.mp4",
   },
   {
     id: 6,
