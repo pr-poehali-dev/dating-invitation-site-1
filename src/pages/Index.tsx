@@ -34,18 +34,18 @@ const PLACES = [
   },
   {
     id: 4,
-    name: "Концерт при свете 3000 свечей",
-    desc: "Концерт при свете 3000 свечей",
-    img: "",
-    videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_164140.mp4",
-  },
-  {
-    id: 5,
     name: "🍽️Ресторан Osterio Mario🛎️",
     desc: "🍽️Ресторан Osterio Mario🛎️",
     img: "",
     videoUrl:
       "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/23/VID_20260619_153156252b734add41c5f3.mp4",
+  },
+  {
+    id: 5,
+    name: "Концерт при свете 3000 свечей",
+    desc: "Концерт при свете 3000 свечей",
+    img: "",
+    videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_164140.mp4",
   },
   {
     id: 6,
