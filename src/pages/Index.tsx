@@ -27,11 +27,10 @@ const PLACES = [
   },
   {
     id: 3,
-    name: "💕Свидание на 67 этаже                                                      Москва Сити🌇",
-    desc: "💕Свидание на 67 этаже                                                      Москва Сити🌇",
+    name: "🐉Китайский парк Хуамин⛩️",
+    desc: "🐉Китайский парк Хуамин⛩️",
     img: "",
-    videoUrl:
-      "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/24/video_09910850-d8e6-44d8-8695-a1fa61d49c78.mp4",
+    videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_162439.mp4",
   },
   {
     id: 4,
@@ -50,10 +49,11 @@ const PLACES = [
   },
   {
     id: 6,
-    name: "🐉Китайский парк Хуамин⛩️",
-    desc: "🐉Китайский парк Хуамин⛩️",
+    name: "💕Свидание на 67 этаже Москва Сити🌇",
+    desc: "💕Свидание на 67 этаже Москва Сити🌇",
     img: "",
-    videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_162439.mp4",
+    videoUrl:
+      "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/24/video_09910850-d8e6-44d8-8695-a1fa61d49c78.mp4",
   },
 ];
 
