@@ -10,8 +10,7 @@ import NotFound from "./pages/NotFound";
 import PetalAvalanche from "@/components/PetalAvalanche";
 
 const queryClient = new QueryClient();
-const AUDIO_URL =
-  "https://www.image2url.com/r2/default/audio/1782330962431-a3aa2ab1-7c4a-4877-a714-0a5753d70882.mp3";
+const AUDIO_URL = "https://www.image2url.com/r2/default/audio/1782330962431-a3aa2ab1-7c4a-4877-a714-0a5753d70882.mp3";
 
 export type PetalTrigger = {
   start: () => void;
@@ -44,60 +43,12 @@ function AppInner() {
   // Регистрируем глобальный триггер
   window.__petalStart = () => {
     setPetalActive(true);
-
-    // Параметры громкости
-    const startVolume = 0.1; // 5%
-    const endVolume = 0.5; // 10%
-    const duration = 5000; // 8 секунд
-
-    // Проверяем наличие аудиоплеера
+    // Запускаем музыку при нажатии "Да"
     if (!audioRef.current) {
       audioRef.current = new Audio(AUDIO_URL);
       audioRef.current.loop = true;
     }
-
-    const audio = audioRef.current;
-
-    // Если музыка уже играет, просто выходим (или перезапускаем при необходимости)
-    if (!audio.paused) {
-      return;
-    }
-
-    // Устанавливаем начальную громкость
-    audio.volume = startVolume;
-
-    // Запускаем воспроизведение
-    audio.play().catch(() => {});
-
-    // Если начальная и конечная громкость совпадают, анимация не нужна
-    if (startVolume === endVolume) {
-      return;
-    }
-
-    // Время начала анимации
-    const startTime = performance.now();
-
-    // Функция для обновления громкости
-    const fadeIn = (currentTime) => {
-      // Сколько времени прошло с начала анимации
-      const elapsed = currentTime - startTime;
-
-      // Если время вышло, устанавливаем финальную громкость и завершаем анимацию
-      if (elapsed >= duration) {
-        audio.volume = endVolume;
-        return; // Анимация завершена
-      }
-
-      // Вычисляем текущую громкость по линейной интерполяции
-      const progress = elapsed / duration; // от 0 до 1
-      audio.volume = startVolume + (endVolume - startVolume) * progress;
-
-      // Запрашиваем следующий кадр для плавности
-      requestAnimationFrame(fadeIn);
-    };
-
-    // Запускаем анимацию
-    requestAnimationFrame(fadeIn);
+    audioRef.current.play().catch(() => {});
   };
 
   return (
