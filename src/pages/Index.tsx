@@ -200,18 +200,35 @@ export default function Index() {
       year: "numeric",
     });
     return (
-      <div className="meme-page">
+      <div className="meme-page places-page">
         <ScatteredPetals />
-        <div className="meme-card animate-in">
-          <img
-            src={chosenPlace.img}
-            alt={chosenPlace.name}
-            className="cat-img place-img-final"
-          />
-          <h1 className="meme-question yes-text">🎉 Ждём не дождёмся!</h1>
-          <p className="meme-sub">
+        <div className="places-card animate-in" style={{ maxWidth: 700 }}>
+          <h1 className="places-title" style={{ color: "var(--rose-dark)" }}>🎉 Ждём не дождёмся!</h1>
+          {"videoUrl" in chosenPlace && chosenPlace.videoUrl ? (
+            <video
+              src={chosenPlace.videoUrl}
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{
+                width: "100%",
+                borderRadius: "1.4rem",
+                maxHeight: 400,
+                objectFit: "cover",
+              }}
+            />
+          ) : chosenPlace.img ? (
+            <img
+              src={chosenPlace.img}
+              alt={chosenPlace.name}
+              style={{ width: "100%", borderRadius: "1.4rem", maxHeight: 400, objectFit: "cover" }}
+            />
+          ) : null}
+          <p className="place-name" style={{ fontSize: "1.8rem", lineHeight: 1.4, textAlign: "center" }}>
             📍 {chosenPlace.name}
-            <br />
+          </p>
+          <p className="place-name" style={{ fontSize: "1.6rem", lineHeight: 1.4, textAlign: "center", color: "var(--text-muted)" }}>
             📅 {fmt}
           </p>
         </div>
