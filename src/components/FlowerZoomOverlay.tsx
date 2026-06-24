@@ -42,7 +42,7 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
 
         // Фаза 2: плавное погружение до конца без остановок
         setTimeout(() => {
-          root.style.transition = "transform 4s linear";
+          root.style.transition = "transform 6s cubic-bezier(0.25, 0.1, 0.25, 1)";
           root.style.transform = "scale(300)";
 
           // Фаза 3: оверлей появляется в конце
@@ -62,7 +62,7 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
                 setTimeout(() => setCoverVisible(false), 1200);
               }, 80);
             }, 500);
-          }, 3500);
+          }, 5500);
         }, 750);
       });
     });
