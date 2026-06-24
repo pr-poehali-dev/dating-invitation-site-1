@@ -234,22 +234,19 @@ export default function Index() {
             const pos = searchPageRef.current?.getFlowerPos() ?? null;
             setFlowerPos(pos);
             setTransitioning(true);
-            setTimeout(() => {
-              const root = document.getElementById("root");
-              if (root) {
-                root.style.transition = "none";
-                root.style.transform = "";
-                root.style.transformOrigin = "";
-              }
-              setSearching(false);
-              setTransitioning(false);
-              setFlowerPos(null);
-              setAnswered("yes");
-            }, 5600);
           }}
           transitioning={transitioning}
         />
-        <FlowerZoomOverlay active={!!flowerPos} flowerPos={flowerPos} />
+        <FlowerZoomOverlay
+          active={!!flowerPos}
+          flowerPos={flowerPos}
+          onCovered={() => {
+            setSearching(false);
+            setTransitioning(false);
+            setFlowerPos(null);
+            setAnswered("yes");
+          }}
+        />
       </>
     );
   }

@@ -3,12 +3,13 @@ import { useEffect, useRef, useState } from "react";
 interface Props {
   active: boolean;
   flowerPos: { x: number; y: number } | null;
+  onCovered?: () => void;
 }
 
 // Цвет сердцевины лепестка ♥️
 const CORE_COLOR = "#c0435a";
 
-export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
+export default function FlowerZoomOverlay({ active, flowerPos, onCovered }: Props) {
   const startedRef = useRef(false);
   const [coverOpacity, setCoverOpacity] = useState(0);
   const [coverVisible, setCoverVisible] = useState(false);
@@ -65,18 +66,19 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
                 requestAnimationFrame(() => setCoverOpacity(1));
               });
 
-              // Фаза 4: сбрасываем зум, меняем страницу
+              // Фаза 4: сбрасываем зум и меняем страницу пока экран красный
               setTimeout(() => {
                 root!.style.transition = "none";
                 root!.style.transform = "";
                 root!.style.transformOrigin = "";
-              }, 400);
+                onCovered?.(); // <- страница 3 появляется под красным экраном
+              }, 300);
 
-              // Фаза 5: красный медленно тает — страница 3 проявляется сквозь него
+              // Фаза 5: красный медленно тает — страница 3 проявляется
               setTimeout(() => {
                 setCoverOpacity(0);
                 setTimeout(() => setCoverVisible(false), 2000);
-              }, 600);
+              }, 500);
             }
           }
 
