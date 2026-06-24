@@ -10,7 +10,8 @@ import NotFound from "./pages/NotFound";
 import PetalAvalanche from "@/components/PetalAvalanche";
 
 const queryClient = new QueryClient();
-const AUDIO_URL = "https://www.image2url.com/r2/default/audio/1782330962431-a3aa2ab1-7c4a-4877-a714-0a5753d70882.mp3";
+const AUDIO_URL =
+  "https://www.image2url.com/r2/default/audio/1782330962431-a3aa2ab1-7c4a-4877-a714-0a5753d70882.mp3";
 
 export type PetalTrigger = {
   start: () => void;
@@ -43,12 +44,44 @@ function AppInner() {
   // Регистрируем глобальный триггер
   window.__petalStart = () => {
     setPetalActive(true);
+
     // Запускаем музыку при нажатии "Да"
     if (!audioRef.current) {
       audioRef.current = new Audio(AUDIO_URL);
       audioRef.current.loop = true;
     }
-    audioRef.current.play().catch(() => {});
+
+    const audio = audioRef.current;
+
+    // Начальные параметры
+    const startVolume = 0.1; // 10%
+    const targetVolume = 0.2; // 20%
+    const durationMs = 5000; // 5 секунд
+
+    // Устанавливаем начальную громкость
+    audio.volume = startVolume;
+
+    let currentTime = 0;
+    const intervalStep = 10; // Обновляем громкость каждые 10 мс
+    const volumeIncrementPerStep =
+      (targetVolume - startVolume) / (durationMs / intervalStep);
+
+    // Функция для постепенного увеличения громкости
+    const fadeInInterval = setInterval(() => {
+      currentTime += intervalStep;
+
+      if (currentTime >= durationMs || audio.volume >= targetVolume) {
+        audio.volume = targetVolume;
+        clearInterval(fadeInInterval); // Останавливаем таймер
+      } else {
+        audio.volume += volumeIncrementPerStep;
+      }
+    }, intervalStep);
+
+    // Начинаем воспроизведение
+    audio.play().catch((error) => {
+      console.warn("Автовоспроизведение заблокировано браузером:", error);
+    });
   };
 
   return (
