@@ -413,6 +413,8 @@ iframe.place-img {
   font-weight: 600;
   color: var(--text-dark);
   line-height: 2.5;
+  white-space: pre-line;
+  text-align: center;
 }
 
 .place-desc {
