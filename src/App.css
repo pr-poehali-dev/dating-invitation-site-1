@@ -73,8 +73,8 @@ body {
 }
 
 .avalanche-petal--falling {
-  animation: avalancheFalling var(--fall-duration) linear var(--fall-delay)
-    infinite;
+  animation: avalancheFalling var(--fall-duration) linear var(--fall-delay, 0s)
+    forwards;
 }
 
 /* ===== Falling petals ===== */
