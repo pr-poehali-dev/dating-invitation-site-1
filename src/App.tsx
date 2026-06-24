@@ -47,10 +47,9 @@ function AppInner() {
     // Запускаем музыку при нажатии "Да"
     if (!audioRef.current) {
       audioRef.current = new Audio(AUDIO_URL);
-      audioRef.current.volume = 0.1;
       audioRef.current.loop = true;
     }
-    audioRef.current.play().catch(() => {});
+    audioRef.current.play({ volume: 0.1 }).catch(() => {});
   };
 
   return (
