@@ -27,8 +27,8 @@ const PLACES = [
   },
   {
     id: 3,
-    name: "💕Свидание на 67 этаже                                                                               Москва Сити🌇",
-    desc: "💕Свидание на 67 этаже                                                           Москва Сити🌇",
+    name: "💕Свидание на 61 этаже Москва Сити🌇",
+    desc: "💕Свидание на 67 этаже Москва Сити🌇",
     img: "",
     videoUrl:
       "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/24/video_09910850-d8e6-44d8-8695-a1fa61d49c78.mp4",
@@ -42,8 +42,8 @@ const PLACES = [
   },
   {
     id: 5,
-    name: "🍽️Ресторан Osterio Mario🛎️",
-    desc: "🍽️Ресторан Osterio Mario🛎️",
+    name: "🍽️Ресторан Osteria Mario🛎️",
+    desc: "🍽️Ресторан Osteria Mario🛎️",
     img: "",
     videoUrl:
       "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/23/VID_20260619_153156252b734add41c5f3.mp4",
