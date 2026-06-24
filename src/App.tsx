@@ -47,7 +47,7 @@ function AppInner() {
 
     // Параметры громкости
     const startVolume = 0.1; // 5%
-    const endVolume = 0.5; // 40%
+    const endVolume = 0.5; // 10%
     const duration = 5000; // 8 секунд
 
     // Проверяем наличие аудиоплеера
