@@ -53,35 +53,46 @@ function AppInner() {
 
     const audio = audioRef.current;
 
-    // Начальные параметры
-    const startVolume = 0.1; // 10%
-    const targetVolume = 0.2; // 20%
-    const durationMs = 5000; // 5 секунд
+    // --- Параметры нарастания громкости ---
+    const startVolume = 0.1; // Начальная громкость (10%)
+    const targetVolume = 0.2; // Конечная громкость (20%)
+    const durationMs = 5000; // Длительность нарастания (5 секунд)
 
-    // Устанавливаем начальную громкость
+    // Устанавливаем начальную громкость ДО начала воспроизведения
     audio.volume = startVolume;
 
-    let currentTime = 0;
-    const intervalStep = 10; // Обновляем громкость каждые 10 мс
-    const volumeIncrementPerStep =
-      (targetVolume - startVolume) / (durationMs / intervalStep);
-
     // Функция для постепенного увеличения громкости
-    const fadeInInterval = setInterval(() => {
-      currentTime += intervalStep;
-
-      if (currentTime >= durationMs || audio.volume >= targetVolume) {
-        audio.volume = targetVolume;
-        clearInterval(fadeInInterval); // Останавливаем таймер
-      } else {
-        audio.volume += volumeIncrementPerStep;
+    function fadeIn() {
+      // Сохраняем время старта анимации, если оно еще не записано
+      if (!fadeIn.startTime) {
+        fadeIn.startTime = performance.now();
       }
-    }, intervalStep);
 
-    // Начинаем воспроизведение
-    audio.play().catch((error) => {
-      console.warn("Автовоспроизведение заблокировано браузером:", error);
-    });
+      const currentTime = performance.now();
+      const elapsed = currentTime - fadeIn.startTime; // Сколько времени прошло
+
+      // Рассчитываем новую громкость по формуле линейной интерполяции
+      const progress = Math.min(elapsed / durationMs, 1); // Не даем прогрессу превысить 1 (100%)
+      audio.volume = startVolume + (targetVolume - startVolume) * progress;
+
+      // Если анимация не завершена, запрашиваем следующий кадр
+      if (progress < 1) {
+        requestAnimationFrame(fadeIn);
+      } else {
+        // Анимация завершена, сбрасываем переменную для следующего запуска
+        delete fadeIn.startTime;
+      }
+    }
+
+    // Начинаем воспроизведение и запускаем функцию нарастания громкости
+    audio
+      .play()
+      .then(() => {
+        fadeIn(); // Вызовем нашу функцию только ПОСЛЕ успешного начала воспроизведения
+      })
+      .catch((error) => {
+        console.warn("Автовоспроизведение заблокировано браузером:", error);
+      });
   };
 
   return (
