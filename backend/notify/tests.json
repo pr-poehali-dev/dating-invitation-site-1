@@ -1,0 +1,13 @@
+{
+  "tests": [
+    {
+      "name": "Send notification email",
+      "method": "POST",
+      "path": "/",
+      "body": {"place": "🌊Поездка на катере вдвоём🚤", "date": "10 июня 2026 г."},
+      "expectedStatus": 200,
+      "expectedBody": {"ok": true},
+      "bodyMatcher": "partial"
+    }
+  ]
+}
