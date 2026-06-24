@@ -59,21 +59,24 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
             if (t < 1) {
               rafRef.id = requestAnimationFrame(tick);
             } else {
-              // Фаза 3: оверлей
+              // Фаза 3: красный экран появляется
               setCoverVisible(true);
               requestAnimationFrame(() => {
                 requestAnimationFrame(() => setCoverOpacity(1));
               });
-              // Фаза 4: убираем оверлей
+
+              // Фаза 4: сбрасываем зум, меняем страницу
               setTimeout(() => {
                 root!.style.transition = "none";
                 root!.style.transform = "";
                 root!.style.transformOrigin = "";
-                setTimeout(() => {
-                  setCoverOpacity(0);
-                  setTimeout(() => setCoverVisible(false), 1200);
-                }, 80);
-              }, 500);
+              }, 400);
+
+              // Фаза 5: красный медленно тает — страница 3 проявляется сквозь него
+              setTimeout(() => {
+                setCoverOpacity(0);
+                setTimeout(() => setCoverVisible(false), 2000);
+              }, 600);
             }
           }
 
@@ -94,7 +97,7 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
         background: CORE_COLOR,
         opacity: coverOpacity,
         transition:
-          coverOpacity === 0 ? "opacity 1.2s ease" : "opacity 0.15s ease",
+          coverOpacity === 0 ? "opacity 2s ease" : "opacity 0.3s ease",
         pointerEvents: "none",
       }}
     />
