@@ -42,7 +42,7 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
 
         // Фаза 2: равномерное погружение до конца
         setTimeout(() => {
-          root.style.transition = "transform 5s linear";
+          root.style.transition = "transform 5s cubic-bezier(0.1, 0, 0.3, 1)";
           root.style.transform = "scale(300)";
 
           // Фаза 3: оверлей появляется в конце
