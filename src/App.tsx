@@ -46,9 +46,9 @@ function AppInner() {
     setPetalActive(true);
 
     // Параметры громкости
-    const startVolume = 0.1; // 10%
-    const endVolume = 0.5; // 50%
-    const duration = 5000; // 5 секунд
+    const startVolume = 0.1; // 5%
+    const endVolume = 0.5; // 40%
+    const duration = 5000; // 8 секунд
 
     // Проверяем наличие аудиоплеера
     if (!audioRef.current) {
