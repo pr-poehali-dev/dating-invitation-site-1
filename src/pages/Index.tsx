@@ -42,17 +42,18 @@ const PLACES = [
   },
   {
     id: 5,
-    name: "🎻Музыкальный концерт LumiSfera🎹                                          <button id=trigger-btn class=hover-effect>Можешь навести на видео и услышать звук!)</button> const button = document.getElementById('trigger-btn'); const soundUrl = 'sound.mp3'; let lastPlayTime = 0; const minDelay = 300; // (НЕ ВКЛЮЧАЕТ ЗВУК ПРИ НАВЕДЕНИИ НА HTML, ПОПРОБОВАТЬ НА REACT/JAVA В ОТДЕЛЬОЙ КАРТЕ)",
-    desc: "<button id=trigger-btn class=hover-effect>Можешь навести на видео и услышать звук!)</button> const button = document.getElementById('trigger-btn'); const soundUrl = 'sound.mp3'; let lastPlayTime = 0; const minDelay = 300; // (НЕ ВКЛЮЧАЕТ ЗВУК ПРИ НАВЕДЕНИИ НА HTML, ПОПРОБОВАТЬ НА REACT/JAVA В ОТДЕЛЬОЙ КАРТЕ)",
+    name: "🎻Музыкальный концерт LumiSfera🎹",
     img: "",
     videoUrl:
       "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/24/VID_20260624_1048251d0398a89e205c54.mp4",
   },
   {
     id: 6,
-    name: "Кинотеатр на Таганке",
-    desc: "Кино под открытым небом с огнями города",
-    img: "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/b60c496a-a27e-4901-b687-4935315ce948.jpg",
+    name: "💕Свидание на 67 этаже Москва Сити🌇",
+    desc: "💕Свидание на 67 этаже Москва Сити🌇",
+    img: "",
+    videoUrl:
+      "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/24/video_09910850-d8e6-44d8-8695-a1fa61d49c78.mp4",
   },
 ];
 
