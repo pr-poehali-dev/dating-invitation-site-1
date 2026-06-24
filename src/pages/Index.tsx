@@ -225,10 +225,10 @@ export default function Index() {
               style={{ width: "100%", borderRadius: "1.4rem", maxHeight: 400, objectFit: "cover" }}
             />
           ) : null}
-          <p className="place-name" style={{ fontSize: "1.8rem", lineHeight: 1.4, textAlign: "center" }}>
+          <p className="place-name" style={{ fontSize: "2.4rem", lineHeight: 1.4, textAlign: "center" }}>
             📍 {chosenPlace.name}
           </p>
-          <p className="place-name" style={{ fontSize: "1.6rem", lineHeight: 1.4, textAlign: "center", color: "var(--text-muted)" }}>
+          <p className="place-name" style={{ fontSize: "2.2rem", lineHeight: 1.4, textAlign: "center", color: "var(--text-muted)" }}>
             📅 {fmt}
           </p>
         </div>
