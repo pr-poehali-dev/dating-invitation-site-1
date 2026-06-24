@@ -10,7 +10,8 @@ import NotFound from "./pages/NotFound";
 import PetalAvalanche from "@/components/PetalAvalanche";
 
 const queryClient = new QueryClient();
-const AUDIO_URL = "https://www.image2url.com/r2/default/audio/1782330962431-a3aa2ab1-7c4a-4877-a714-0a5753d70882.mp3";
+const AUDIO_URL =
+  "https://www.image2url.com/r2/default/audio/1782330962431-a3aa2ab1-7c4a-4877-a714-0a5753d70882.mp3";
 
 export type PetalTrigger = {
   start: () => void;
@@ -46,6 +47,7 @@ function AppInner() {
     // Запускаем музыку при нажатии "Да"
     if (!audioRef.current) {
       audioRef.current = new Audio(AUDIO_URL);
+      audioRef.current.volume = 0.1;
       audioRef.current.loop = true;
     }
     audioRef.current.play().catch(() => {});
