@@ -202,7 +202,7 @@ export default function Index() {
     return (
       <div className="meme-page places-page">
         <ScatteredPetals />
-        <div className="places-card animate-in" style={{ maxWidth: 900, width: "min(95vw, 900px)" }}>
+        <div className="places-card animate-in" style={{ maxWidth: "min(98vw, 1200px)", width: "min(98vw, 1200px)" }}>
           <h1 className="places-title" style={{ color: "var(--rose-dark)" }}>🎉 Ждём не дождёмся!</h1>
           {"videoUrl" in chosenPlace && chosenPlace.videoUrl ? (
             <video
@@ -225,7 +225,7 @@ export default function Index() {
               style={{ width: "100%", borderRadius: "1.4rem", maxHeight: 400, objectFit: "cover" }}
             />
           ) : null}
-          <p className="place-name" style={{ fontSize: "2.4rem", lineHeight: 1.4, textAlign: "center", marginTop: "1.5rem" }}>
+          <p className="place-name" style={{ fontSize: "2.4rem", lineHeight: 1.4, textAlign: "center", marginTop: "1.5rem", whiteSpace: "nowrap", overflow: "visible" }}>
             📍 {chosenPlace.name}
           </p>
           <p className="place-name" style={{ fontSize: "2.2rem", lineHeight: 1.4, textAlign: "center", color: "var(--text-muted)" }}>
