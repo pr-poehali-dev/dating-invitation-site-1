@@ -55,7 +55,7 @@ const PLACES = [
   },
 ];
 container {
-    width: 200px;
+    width: 120px;
     white-space: normal;
 }
 export default function Index() {
