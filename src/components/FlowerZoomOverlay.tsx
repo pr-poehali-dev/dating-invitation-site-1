@@ -40,29 +40,44 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
         root.style.transition = "transform 0.7s cubic-bezier(0.25, 0, 0.5, 1)";
         root.style.transform = "scale(0.78)";
 
-        // Фаза 2: равномерное погружение до конца
+        // Фаза 2: логарифмическое погружение — визуально одинаковая скорость
         setTimeout(() => {
-          root.style.transition = "transform 5s cubic-bezier(0.1, 0, 0.3, 1)";
-          root.style.transform = "scale(300)";
+          const DURATION = 5000; // мс
+          const START_SCALE = 0.78;
+          const END_SCALE = 300;
+          const startTime = performance.now();
 
-          // Фаза 3: оверлей появляется в конце
-          setTimeout(() => {
-            setCoverVisible(true);
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => setCoverOpacity(1));
-            });
+          const rafRef = { id: 0 };
 
-            // Фаза 4: страница сменилась — убираем оверлей
-            setTimeout(() => {
-              root.style.transition = "none";
-              root.style.transform = "";
-              root.style.transformOrigin = "";
+          function tick(now: number) {
+            const t = Math.min((now - startTime) / DURATION, 1);
+            // логарифмическая интерполяция — каждый % времени даёт одинаковый визуальный прирост
+            const scale = START_SCALE * Math.pow(END_SCALE / START_SCALE, t);
+            root!.style.transition = "none";
+            root!.style.transform = `scale(${scale})`;
+
+            if (t < 1) {
+              rafRef.id = requestAnimationFrame(tick);
+            } else {
+              // Фаза 3: оверлей
+              setCoverVisible(true);
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => setCoverOpacity(1));
+              });
+              // Фаза 4: убираем оверлей
               setTimeout(() => {
-                setCoverOpacity(0);
-                setTimeout(() => setCoverVisible(false), 1200);
-              }, 80);
-            }, 500);
-          }, 4500);
+                root!.style.transition = "none";
+                root!.style.transform = "";
+                root!.style.transformOrigin = "";
+                setTimeout(() => {
+                  setCoverOpacity(0);
+                  setTimeout(() => setCoverVisible(false), 1200);
+                }, 80);
+              }, 500);
+            }
+          }
+
+          rafRef.id = requestAnimationFrame(tick);
         }, 750);
       });
     });
