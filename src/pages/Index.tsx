@@ -43,7 +43,7 @@ const PLACES = [
   {
     id: 5,
     name: "Музыкальный концерт LumiSfera                                                  <button id=trigger-btn class=hover-effect>Можешь навести на видео и услышать звук!)</button> const button = document.getElementById('trigger-btn'); const soundUrl = 'sound.mp3'; let lastPlayTime = 0; const minDelay = 300; // (НЕ РАБОТАЕТ ЗВУК ПРИ НАВЕДЕНИИ НА HTML, НУЖНО ПЕРЕПИСАТЬ НА REACT ТОЛЬКО ЭТУ ЧАСТЬ)",
-    desc: "<button id=trigger-btn class=hover-effect>Можешь навести на видео и услышать звук!)</button> const button = document.getElementById('trigger-btn'); const soundUrl = 'sound.mp3'; let lastPlayTime = 0; const minDelay = 300; // (НЕ РАБОТАЕТ ЗВУК ПРИ НАВЕДЕНИИ НА HTML, НУЖНО ПЕРЕПИСАТЬ НА REACT ТОЛЬКО ЭТУ ЧАСТЬ)",
+    desc: "<button id=trigger-btn class=hover-effect>Можешь навести на видео и услышать звук!)</button> const button = document.getElementById('trigger-btn'); const soundUrl = 'sound.mp3'; let lastPlayTime = 0; const minDelay = 300; // (НЕ ВКЛЮЧАЕТ ЗВУК ПРИ НАВЕДЕНИИ НА HTML, ПОПРОБОВАТЬ НА REACT/JAVA В ОТДЕЛЬОЙ КАРТЕ)",
     img: "",
     videoUrl:
       "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/24/VID_20260624_1048251d0398a89e205c54.mp4",
