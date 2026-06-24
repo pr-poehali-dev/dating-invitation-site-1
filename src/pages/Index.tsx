@@ -27,7 +27,7 @@ const PLACES = [
   },
   {
     id: 3,
-    text = f"Свидание на 61 этаже\nМосква Сити 🌇",
+    name: "Свидание на 67 этажеМосква Сити🌇",
     desc: "💕Свидание на 67 этаже Москва Сити🌇",
     img: "",
     videoUrl:
@@ -54,7 +54,10 @@ const PLACES = [
     videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_162439.mp4",
   },
 ];
-
+container {
+    width: 200px;
+    white-space: normal;
+}
 export default function Index() {
   const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
   const [searching, setSearching] = useState(false);
