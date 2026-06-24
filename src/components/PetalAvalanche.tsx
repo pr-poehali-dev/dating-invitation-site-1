@@ -25,8 +25,8 @@ function generatePetals(): Petal[] {
     emoji: EMOJIS[i % EMOJIS.length],
     left: Math.random() * 110 - 5,
     size: 3 + Math.random() * 4,
-    fallDuration: 1.2 + Math.random() * 1.0,
-    delay: Math.random() * 0.6,
+    fallDuration: 0.7 + Math.random() * 0.5,
+    delay: -(Math.random() * 2.0), // отрицательный — уже в полёте при старте
     rotate: Math.random() * 360,
   }));
 }
@@ -44,24 +44,24 @@ export default function PetalAvalanche({ active, onCovered, onDone }: Props) {
 
     setPhase("falling");
 
-    // 1.4с — экран полностью закрыт лепестками, незаметно меняем страницу
+    // 600мс — лепестки уже заполнили экран (infinite + отриц. delay), меняем страницу
     const t1 = setTimeout(() => {
       if (!calledRef.current) {
         calledRef.current = true;
         onCovered();
       }
-    }, 1400);
+    }, 600);
 
-    // 2.2с — лепестки плавно растворяются
+    // 1.6с — лепестки плавно растворяются, пользователь уже на странице 2
     const t2 = setTimeout(() => {
       setPhase("fading");
-    }, 2200);
+    }, 1600);
 
-    // 3.0с — убираем компонент
+    // 2.4с — убираем компонент
     const t3 = setTimeout(() => {
       setPhase("idle");
       onDone?.();
-    }, 3000);
+    }, 2400);
 
     return () => {
       clearTimeout(t1);
