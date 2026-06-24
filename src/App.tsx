@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import PetalAvalanche from "@/components/PetalAvalanche";
 
 const queryClient = new QueryClient();
+const AUDIO_URL = "https://www.image2url.com/r2/default/audio/1782330962431-a3aa2ab1-7c4a-4877-a714-0a5753d70882.mp3";
 
 export type PetalTrigger = {
   start: () => void;
@@ -28,6 +29,7 @@ declare global {
 
 function AppInner() {
   const [petalActive, setPetalActive] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const handleCovered = useCallback(() => {
     window.__petalOnCovered?.();
@@ -39,7 +41,15 @@ function AppInner() {
   }, []);
 
   // Регистрируем глобальный триггер
-  window.__petalStart = () => setPetalActive(true);
+  window.__petalStart = () => {
+    setPetalActive(true);
+    // Запускаем музыку при нажатии "Да"
+    if (!audioRef.current) {
+      audioRef.current = new Audio(AUDIO_URL);
+      audioRef.current.loop = true;
+    }
+    audioRef.current.play().catch(() => {});
+  };
 
   return (
     <>
