@@ -8,7 +8,7 @@ interface Props {
 }
 
 const EMOJIS = ["🌸", "🌸", "🌸", "💮", "🌸", "🌸", "💮", "🌸"];
-const COUNT = 400;
+const COUNT = 800;
 
 interface Petal {
   id: number;
