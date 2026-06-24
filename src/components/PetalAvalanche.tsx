@@ -7,7 +7,7 @@ interface Props {
 }
 
 const EMOJIS = ["🌸", "🌸", "🌸", "💮", "🌸", "🌸", "💮", "🌸"];
-const COUNT = 120;
+const COUNT = 160;
 
 interface Petal {
   id: number;
@@ -17,25 +17,23 @@ interface Petal {
   fallDuration: number;
   delay: number;
   rotate: number;
-  stopAt: number;
 }
 
 function generatePetals(): Petal[] {
   return Array.from({ length: COUNT }, (_, i) => ({
     id: i,
     emoji: EMOJIS[i % EMOJIS.length],
-    left: Math.random() * 108 - 4,
-    size: 2.8 + Math.random() * 3.5,
-    fallDuration: 0.6 + Math.random() * 0.7,
-    delay: Math.random() * 1.2,
+    left: Math.random() * 110 - 5,
+    size: 3 + Math.random() * 4,
+    fallDuration: 1.2 + Math.random() * 1.0,
+    delay: Math.random() * 0.6,
     rotate: Math.random() * 360,
-    stopAt: 10 + Math.random() * 80,
   }));
 }
 
 export default function PetalAvalanche({ active, onCovered, onDone }: Props) {
   const calledRef = useRef(false);
-  const [phase, setPhase] = useState<"idle" | "falling" | "covered" | "leaving">("idle");
+  const [phase, setPhase] = useState<"idle" | "falling" | "fading">("idle");
   const [petals] = useState<Petal[]>(() => generatePetals());
 
   useEffect(() => {
@@ -46,25 +44,24 @@ export default function PetalAvalanche({ active, onCovered, onDone }: Props) {
 
     setPhase("falling");
 
-    // 1.8с — лепестки заполнили экран, меняем страницу
+    // 1.4с — экран полностью закрыт лепестками, незаметно меняем страницу
     const t1 = setTimeout(() => {
-      setPhase("covered");
       if (!calledRef.current) {
         calledRef.current = true;
         onCovered();
       }
-    }, 1800);
+    }, 1400);
 
-    // 3.0с — лепестки улетают вверх
+    // 2.2с — лепестки плавно растворяются
     const t2 = setTimeout(() => {
-      setPhase("leaving");
-    }, 3000);
+      setPhase("fading");
+    }, 2200);
 
-    // 4.0с — анимация закончена
+    // 3.0с — убираем компонент
     const t3 = setTimeout(() => {
       setPhase("idle");
       onDone?.();
-    }, 4000);
+    }, 3000);
 
     return () => {
       clearTimeout(t1);
@@ -76,18 +73,24 @@ export default function PetalAvalanche({ active, onCovered, onDone }: Props) {
   if (phase === "idle") return null;
 
   return (
-    <div className="petal-avalanche">
+    <div
+      className="petal-avalanche"
+      style={
+        phase === "fading"
+          ? { opacity: 0, transition: "opacity 0.8s ease" }
+          : { opacity: 1 }
+      }
+    >
       {petals.map((p) => (
         <span
           key={p.id}
-          className={`avalanche-petal avalanche-petal--${phase}`}
+          className="avalanche-petal avalanche-petal--falling"
           style={{
             left: `${p.left}%`,
             fontSize: `${p.size}rem`,
             "--fall-duration": `${p.fallDuration}s`,
             "--fall-delay": `${p.delay}s`,
             "--rotate": `${p.rotate}deg`,
-            "--stop-at": `${p.stopAt}vh`,
           } as React.CSSProperties}
         >
           {p.emoji}

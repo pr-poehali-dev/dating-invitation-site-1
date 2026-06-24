@@ -47,7 +47,6 @@ body {
   overflow: hidden;
 }
 
-/* Фаза 1: лепесток падает и останавливается на своей позиции */
 @keyframes avalancheFalling {
   0% {
     top: -120px;
@@ -55,22 +54,9 @@ body {
     opacity: 1;
   }
   100% {
-    top: var(--stop-at);
-    transform: rotate(calc(var(--rotate) + 360deg));
+    top: 110vh;
+    transform: rotate(calc(var(--rotate) + 540deg));
     opacity: 1;
-  }
-}
-
-/* Фаза 3: лепесток улетает вверх за экран */
-@keyframes avalancheLeave {
-  0% {
-    opacity: 1;
-    transform: rotate(var(--rotate));
-  }
-  100% {
-    top: -130px;
-    opacity: 0;
-    transform: rotate(calc(var(--rotate) - 180deg));
   }
 }
 
@@ -80,27 +66,9 @@ body {
   user-select: none;
 }
 
-/* Падение — каждый со своей задержкой и скоростью, останавливается на --stop-at */
 .avalanche-petal--falling {
-  animation: avalancheFalling var(--fall-duration)
-    cubic-bezier(0.25, 0.46, 0.45, 0.94) var(--fall-delay) both;
-}
-
-/* Заморожены на месте (во время смены страницы) */
-.avalanche-petal--covered {
-  animation: avalancheFalling var(--fall-duration)
-    cubic-bezier(0.25, 0.46, 0.45, 0.94) var(--fall-delay) both;
-  animation-play-state: paused;
-  animation-fill-mode: forwards;
-  /* Принудительно удерживаем в конечной позиции */
-  top: var(--stop-at);
-  transform: rotate(calc(var(--rotate) + 360deg));
-}
-
-/* Улетают вверх */
-.avalanche-petal--leaving {
-  animation: avalancheLeave 0.9s ease-in forwards;
-  top: var(--stop-at);
+  animation: avalancheFalling var(--fall-duration) linear var(--fall-delay)
+    infinite;
 }
 
 /* ===== Falling petals ===== */
