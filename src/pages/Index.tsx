@@ -27,26 +27,26 @@ const PLACES = [
   },
   {
     id: 3,
-    name: "💕Свидание на 67 этаже                                                      Москва Сити🌇",
-    desc: "💕Свидание на 67 этаже                                                      Москва Сити🌇",
+    name: "💕Свидание на 67 этаже                                                                               Москва Сити🌇",
+    desc: "💕Свидание на 67 этаже                                                           Москва Сити🌇",
     img: "",
     videoUrl:
       "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/24/video_09910850-d8e6-44d8-8695-a1fa61d49c78.mp4",
   },
   {
     id: 4,
+    name: "🎻Музыкальный концерт LumiSfera🎹",
+    img: "",
+    videoUrl:
+      "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/24/VID_20260624_1048251d0398a89e205c54.mp4",
+  },
+  {
+    id: 5,
     name: "🍽️Ресторан Osterio Mario🛎️",
     desc: "🍽️Ресторан Osterio Mario🛎️",
     img: "",
     videoUrl:
       "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/23/VID_20260619_153156252b734add41c5f3.mp4",
-  },
-  {
-    id: 5,
-    name: "🎻Музыкальный концерт LumiSfera🎹",
-    img: "",
-    videoUrl:
-      "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/24/VID_20260624_1048251d0398a89e205c54.mp4",
   },
   {
     id: 6,
