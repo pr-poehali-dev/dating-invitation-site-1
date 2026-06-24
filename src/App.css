@@ -49,32 +49,24 @@ body {
 
 @keyframes avalancheFalling {
   0% {
-    top: -200px;
-    transform: rotate(var(--rotate));
-    opacity: 0;
-  }
-  5% {
-    opacity: 1;
-  }
-  95% {
+    transform: translateY(-200px) rotate(var(--rotate));
     opacity: 1;
   }
   100% {
-    top: 110vh;
-    transform: rotate(calc(var(--rotate) + 540deg));
-    opacity: 0;
+    transform: translateY(110vh) rotate(calc(var(--rotate) + 540deg));
+    opacity: 1;
   }
 }
 
 .avalanche-petal {
   position: absolute;
-  top: -120px;
+  top: 0;
   user-select: none;
 }
 
 .avalanche-petal--falling {
   animation: avalancheFalling var(--fall-duration) linear var(--fall-delay, 0s)
-    forwards;
+    infinite;
 }
 
 /* ===== Falling petals ===== */
