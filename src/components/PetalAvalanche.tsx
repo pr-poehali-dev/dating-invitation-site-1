@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 interface Props {
   active: boolean;
@@ -19,22 +20,20 @@ interface Petal {
   rotate: number;
 }
 
-function generatePetals(): Petal[] {
-  return Array.from({ length: COUNT }, (_, i) => ({
-    id: i,
-    emoji: EMOJIS[i % EMOJIS.length],
-    left: Math.random() * 110 - 5,
-    size: 3.5 + Math.random() * 4.5,
-    fallDuration: 0.6 + Math.random() * 0.4,
-    delay: Math.random() * 0.8,
-    rotate: Math.random() * 360,
-  }));
-}
+const PETALS: Petal[] = Array.from({ length: COUNT }, (_, i) => ({
+  id: i,
+  emoji: EMOJIS[i % EMOJIS.length],
+  left: Math.random() * 110 - 5,
+  size: 3.5 + Math.random() * 4.5,
+  fallDuration: 0.6 + Math.random() * 0.4,
+  delay: Math.random() * 0.8,
+  rotate: Math.random() * 360,
+}));
 
 export default function PetalAvalanche({ active, onCovered, onDone }: Props) {
   const calledRef = useRef(false);
-  const [phase, setPhase] = useState<"idle" | "falling" | "fading">("idle");
-  const [petals] = useState<Petal[]>(() => generatePetals());
+  const [show, setShow] = useState(false);
+  const [fading, setFading] = useState(false);
 
   useEffect(() => {
     if (!active) {
@@ -42,9 +41,10 @@ export default function PetalAvalanche({ active, onCovered, onDone }: Props) {
       return;
     }
 
-    setPhase("falling");
+    setShow(true);
+    setFading(false);
 
-    // 1.4с — все лепестки упали хотя бы раз, экран закрыт, меняем страницу
+    // 1.4с — экран закрыт, меняем страницу
     const t1 = setTimeout(() => {
       if (!calledRef.current) {
         calledRef.current = true;
@@ -52,16 +52,15 @@ export default function PetalAvalanche({ active, onCovered, onDone }: Props) {
       }
     }, 1400);
 
-    // 1.8с — лепестки плавно растворяются, пользователь уже на странице 2
-    const t2 = setTimeout(() => {
-      setPhase("fading");
-    }, 1800);
+    // 2.2с — плавно растворяем
+    const t2 = setTimeout(() => setFading(true), 2200);
 
-    // 2.6с — убираем компонент
+    // 3.0с — убираем
     const t3 = setTimeout(() => {
-      setPhase("idle");
+      setShow(false);
+      setFading(false);
       onDone?.();
-    }, 2600);
+    }, 3000);
 
     return () => {
       clearTimeout(t1);
@@ -70,32 +69,37 @@ export default function PetalAvalanche({ active, onCovered, onDone }: Props) {
     };
   }, [active, onCovered, onDone]);
 
-  if (phase === "idle") return null;
-
-  return (
-    <div
-      className="petal-avalanche"
-      style={
-        phase === "fading"
-          ? { opacity: 0, transition: "opacity 0.8s ease" }
-          : { opacity: 1 }
-      }
-    >
-      {petals.map((p) => (
-        <span
-          key={p.id}
-          className="avalanche-petal avalanche-petal--falling"
-          style={{
-            left: `${p.left}%`,
-            fontSize: `${p.size}rem`,
-            "--fall-duration": `${p.fallDuration}s`,
-            "--fall-delay": `${p.delay}s`,
-            "--rotate": `${p.rotate}deg`,
-          } as React.CSSProperties}
-        >
-          {p.emoji}
-        </span>
-      ))}
-    </div>
+  return createPortal(
+    show ? (
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 9999,
+          pointerEvents: "none",
+          overflow: "hidden",
+          opacity: fading ? 0 : 1,
+          transition: fading ? "opacity 0.8s ease" : "none",
+        }}
+      >
+        {PETALS.map((p) => (
+          <span
+            key={p.id}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: `${p.left}%`,
+              fontSize: `${p.size}rem`,
+              userSelect: "none",
+              animation: `avalancheFalling ${p.fallDuration}s linear ${p.delay}s infinite backwards`,
+              "--rotate": `${p.rotate}deg`,
+            } as React.CSSProperties}
+          >
+            {p.emoji}
+          </span>
+        ))}
+      </div>
+    ) : null,
+    document.body,
   );
 }

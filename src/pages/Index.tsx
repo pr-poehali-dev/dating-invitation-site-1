@@ -5,7 +5,6 @@ import SearchingScreen, {
   SearchingScreenHandle,
 } from "@/components/SearchingScreen";
 import FlowerZoomOverlay from "@/components/FlowerZoomOverlay";
-import PetalAvalanche from "@/components/PetalAvalanche";
 
 const CAT_IMG =
   "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/bucket/64c47ecb-0129-4cfd-b8b5-303bf6157694.png";
@@ -59,7 +58,6 @@ const PLACES = [
 export default function Index() {
   const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
   const [searching, setSearching] = useState(false);
-  const [petalStorm, setPetalStorm] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
   const [flowerPos, setFlowerPos] = useState<{ x: number; y: number } | null>(
     null,
@@ -191,17 +189,8 @@ export default function Index() {
     };
   }, []);
 
-  const petalOverlay = (
-    <PetalAvalanche
-      active={petalStorm}
-      onCovered={() => {
-        setSearching(true);
-      }}
-      onDone={() => {
-        setPetalStorm(false);
-      }}
-    />
-  );
+  // Регистрируем колбэк — вызовется из App.tsx когда экран закрыт лепестками
+  window.__petalOnCovered = () => setSearching(true);
 
   // Финальный экран
   if (chosenPlace && chosenDate) {
@@ -212,7 +201,6 @@ export default function Index() {
     });
     return (
       <div className="meme-page">
-        {petalOverlay}
         <ScatteredPetals />
         <div className="meme-card animate-in">
           <img
@@ -240,16 +228,13 @@ export default function Index() {
   if (searching) {
     return (
       <>
-        {petalOverlay}
         <SearchingScreen
           ref={searchPageRef}
           onDone={() => {
-            // Читаем координаты ДО заморозки — лепесток статичный, качание не мешает центру
             const pos = searchPageRef.current?.getFlowerPos() ?? null;
             setFlowerPos(pos);
             setTransitioning(true);
             setTimeout(() => {
-              // Сначала сбрасываем transform на #root, потом меняем страницу
               const root = document.getElementById("root");
               if (root) {
                 root.style.transition = "none";
@@ -273,7 +258,6 @@ export default function Index() {
   if (answered === "yes") {
     return (
       <div className="meme-page places-page">
-        {petalOverlay}
         <ScatteredPetals />
         <div className="places-card animate-in">
           <h1 className="places-title">Кое-что нашёл!) Выбери место 🗺️</h1>
@@ -305,9 +289,9 @@ export default function Index() {
       </div>
     );
   }
+
   return (
     <div className="meme-page">
-      {petalOverlay}
       <ScatteredPetals />
       <div className="meme-card animate-in">
         <img src={CAT_IMG} alt="пёс" className="cat-img" />
@@ -328,7 +312,7 @@ export default function Index() {
         <div className="meme-buttons">
           <button
             className="bubble-btn bubble-yes"
-            onClick={() => setPetalStorm(true)}
+            onClick={() => window.__petalStart?.()}
           >
             Да ✔️
           </button>
