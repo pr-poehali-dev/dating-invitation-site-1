@@ -290,22 +290,6 @@ export default function Index() {
       </div>
     );
   }
-
-  if (answered === "maybe") {
-    return (
-      <div className="meme-page">
-        <ScatteredPetals />
-        <div className="meme-card animate-in">
-          <img src={CAT_IMG} alt="пёс" className="cat-img" />
-          <h1 className="meme-question" style={{ color: "#a07cc5" }}>
-            🤔 Буду ждать... 🤔
-          </h1>
-          <p className="meme-sub">главное, что ты думаешь об этом 💜</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="meme-page">
       <ScatteredPetals />
