@@ -8,7 +8,7 @@ interface Props {
 }
 
 const EMOJIS = ["🌸", "🌸", "🌸", "💮", "🌸", "🌸", "💮", "🌸"];
-const COUNT = 800;
+const COUNT = 1200;
 
 interface Petal {
   id: number;
@@ -85,15 +85,17 @@ export default function PetalAvalanche({ active, onCovered, onDone }: Props) {
         {PETALS.map((p) => (
           <span
             key={p.id}
-            style={{
-              position: "absolute",
-              top: 0,
-              left: `${p.left}%`,
-              fontSize: `${p.size}rem`,
-              userSelect: "none",
-              animation: `avalancheFalling ${p.fallDuration}s linear ${p.delay}s infinite backwards`,
-              "--rotate": `${p.rotate}deg`,
-            } as React.CSSProperties}
+            style={
+              {
+                position: "absolute",
+                top: 0,
+                left: `${p.left}%`,
+                fontSize: `${p.size}rem`,
+                userSelect: "none",
+                animation: `avalancheFalling ${p.fallDuration}s linear ${p.delay}s infinite backwards`,
+                "--rotate": `${p.rotate}deg`,
+              } as React.CSSProperties
+            }
           >
             {p.emoji}
           </span>
