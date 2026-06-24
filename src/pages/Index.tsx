@@ -191,6 +191,18 @@ export default function Index() {
     };
   }, []);
 
+  const petalOverlay = (
+    <PetalAvalanche
+      active={petalStorm}
+      onCovered={() => {
+        setSearching(true);
+      }}
+      onDone={() => {
+        setPetalStorm(false);
+      }}
+    />
+  );
+
   // Финальный экран
   if (chosenPlace && chosenDate) {
     const fmt = chosenDate.toLocaleDateString("ru-RU", {
@@ -200,6 +212,7 @@ export default function Index() {
     });
     return (
       <div className="meme-page">
+        {petalOverlay}
         <ScatteredPetals />
         <div className="meme-card animate-in">
           <img
@@ -227,6 +240,7 @@ export default function Index() {
   if (searching) {
     return (
       <>
+        {petalOverlay}
         <SearchingScreen
           ref={searchPageRef}
           onDone={() => {
@@ -259,6 +273,7 @@ export default function Index() {
   if (answered === "yes") {
     return (
       <div className="meme-page places-page">
+        {petalOverlay}
         <ScatteredPetals />
         <div className="places-card animate-in">
           <h1 className="places-title">Кое-что нашёл!) Выбери место 🗺️</h1>
@@ -292,14 +307,8 @@ export default function Index() {
   }
   return (
     <div className="meme-page">
+      {petalOverlay}
       <ScatteredPetals />
-      <PetalAvalanche
-        active={petalStorm}
-        onCovered={() => {
-          setSearching(true);
-          setPetalStorm(false);
-        }}
-      />
       <div className="meme-card animate-in">
         <img src={CAT_IMG} alt="пёс" className="cat-img" />
         {showMaybeHint ? (
