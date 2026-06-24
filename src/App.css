@@ -66,7 +66,7 @@ body {
 
 .avalanche-petal--falling {
   animation: avalancheFalling var(--fall-duration) linear var(--fall-delay, 0s)
-    infinite;
+    infinite backwards;
 }
 
 /* ===== Falling petals ===== */
