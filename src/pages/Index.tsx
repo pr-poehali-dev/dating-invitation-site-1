@@ -240,7 +240,7 @@ export default function Index() {
           <p
             className="place-name"
             style={{
-              fontSize: "2.3rem",
+              fontSize: "2.5rem",
               lineHeight: 1.4,
               textAlign: "center",
               marginTop: "2rem",
@@ -253,7 +253,7 @@ export default function Index() {
           <p
             className="place-name"
             style={{
-              fontSize: "2.1rem",
+              fontSize: "2.5rem",
               lineHeight: 1.4,
               textAlign: "center",
               color: "var(--text-muted)",
