@@ -7,7 +7,7 @@ interface Props {
 }
 
 const EMOJIS = ["🌸", "🌸", "🌸", "💮", "🌸", "🌸", "💮", "🌸"];
-const COUNT = 160;
+const COUNT = 400;
 
 interface Petal {
   id: number;
@@ -24,9 +24,9 @@ function generatePetals(): Petal[] {
     id: i,
     emoji: EMOJIS[i % EMOJIS.length],
     left: Math.random() * 110 - 5,
-    size: 3 + Math.random() * 4,
-    fallDuration: 0.7 + Math.random() * 0.5,
-    delay: -(Math.random() * 2.0), // отрицательный — уже в полёте при старте
+    size: 3.5 + Math.random() * 4.5,
+    fallDuration: 0.6 + Math.random() * 0.4,
+    delay: -(Math.random() * 1.2), // отрицательный — уже в полёте при старте
     rotate: Math.random() * 360,
   }));
 }
