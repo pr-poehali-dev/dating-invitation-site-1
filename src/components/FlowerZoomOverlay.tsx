@@ -40,18 +40,12 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
         root.style.transition = "transform 0.7s cubic-bezier(0.25, 0, 0.5, 1)";
         root.style.transform = "scale(0.78)";
 
-        // Фаза 2а: медленно начинаем (до scale 3)
+        // Фаза 2: равномерное погружение до конца
         setTimeout(() => {
-          root.style.transition = "transform 1.5s ease-in";
-          root.style.transform = "scale(3)";
+          root.style.transition = "transform 5s linear";
+          root.style.transform = "scale(300)";
 
-          // Фаза 2б: резко ускоряемся до конца
-          setTimeout(() => {
-            root.style.transition = "transform 2s ease-in";
-            root.style.transform = "scale(300)";
-          }, 2500);
-
-          // Фаза 3: оверлей появляется когда уже летим
+          // Фаза 3: оверлей появляется в конце
           setTimeout(() => {
             setCoverVisible(true);
             requestAnimationFrame(() => {
@@ -68,7 +62,7 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
                 setTimeout(() => setCoverVisible(false), 1200);
               }, 80);
             }, 500);
-          }, 4000);
+          }, 4500);
         }, 750);
       });
     });
