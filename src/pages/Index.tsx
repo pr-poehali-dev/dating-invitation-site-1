@@ -42,8 +42,9 @@ const PLACES = [
   },
   {
     id: 5,
-    name: "<script> document.querySelectorAll('.sound-btn').forEach(btn => { btn.addEventListener('mouseenter', (e) => { const soundUrl = e.target.dataset.sound; const tempAudio = new Audio(soundUrl) (ЭТА ШЛЯПА НЕ ЗАПУСКАЕТСЯ НА HTML, НАДО ПЕРЕПИСАТЬ НА REACT)",
-    desc: "<script> document.querySelectorAll('.sound-btn').forEach(btn => { btn.addEventListener('mouseenter', (e) => { const soundUrl = e.target.dataset.sound; const tempAudio = new Audio(soundUrl) (ЭТА ШЛЯПА НЕ ЗАПУСКАЕТСЯ НА HTML, НАДО ПЕРЕПИСАТЬ НА REACT)",
+    name: "Музыкальный концерт LumiSfera",
+",
+    desc: "<button id="trigger-btn" class="hover-effect">Можешь навести на видео и услышать звук!)</button> const button = document.getElementById('trigger-btn'); const soundUrl = 'sound.mp3'; let lastPlayTime = 0; const minDelay = 300; // (НЕ РАБОТАЕТ НА HTML, НУЖНО ПЕРЕПИСАТЬ НА REACT)",
     img: "",
     videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_164140.mp4",
   },
