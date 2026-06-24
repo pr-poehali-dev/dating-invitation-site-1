@@ -42,8 +42,8 @@ const PLACES = [
   },
   {
     id: 5,
-    name: "Концерт при свете 3000 свечей",
-    desc: "Концерт при свете 3000 свечей",
+    name: "const HoverButton = () => { const [play] = useSound(hoverSound); return ( <button onMouseEnter={play} style={{ padding: '10px 20px' }}> Наведи на меня </button> (НЕ РАБОТАЕТ С JAVA, НЕ ЗАБЫТЬ ПЕРЕПИСАТЬ НА REACT В КОНЦЕ)",
+    desc: "const HoverButton = () => { const [play] = useSound(hoverSound); return ( <button onMouseEnter={play} style={{ padding: '10px 20px' }}> Наведи на меня </button> (НЕ РАБОТАЕТ С JAVA, НЕ ЗАБЫТЬ ПЕРЕПИСАТЬ НА REACT В КОНЦЕ)",
     img: "",
     videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_164140.mp4",
   },
