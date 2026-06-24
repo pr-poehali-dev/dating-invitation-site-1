@@ -40,9 +40,9 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
         root.style.transition = "transform 0.7s cubic-bezier(0.25, 0, 0.5, 1)";
         root.style.transform = "scale(0.78)";
 
-        // Фаза 2: погружение до scale 300
+        // Фаза 2: одно плавное погружение до конца
         setTimeout(() => {
-          root.style.transition = "transform 1.5s ease-in";
+          root.style.transition = "transform 7s linear";
           root.style.transform = "scale(300)";
 
           // Фаза 3: оверлей появляется когда уже летим
@@ -62,7 +62,7 @@ export default function FlowerZoomOverlay({ active, flowerPos }: Props) {
                 setTimeout(() => setCoverVisible(false), 1200);
               }, 80);
             }, 500);
-          }, 1000);
+          }, 6250);
         }, 750);
       });
     });
