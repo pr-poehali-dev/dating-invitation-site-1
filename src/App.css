@@ -357,7 +357,7 @@ body:has(.places-page) {
 
 .places-title {
   font-family: var(--font-hand);
-  font-size: clamp(1.4rem, 4vw, 1.9rem);
+  font-size: clamp(2rem, 5vw, 2.8rem);
   font-weight: 700;
   color: var(--text-dark);
   text-align: center;
@@ -451,18 +451,18 @@ iframe.place-img {
 }
 
 .date-field-placeholder {
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   color: var(--text-muted);
 }
 
 .date-field-filled {
-  font-size: 1.25rem;
+  font-size: 1.9rem;
   font-weight: 600;
   color: var(--rose-dark);
 }
 
 .date-field-icon {
-  font-size: 1.3rem;
+  font-size: 2rem;
 }
 
 .date-confirm-btn {
@@ -490,7 +490,7 @@ iframe.place-img {
 
 .cal-month-label {
   font-family: var(--font-hand);
-  font-size: 1.15rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: var(--text-dark);
 }
@@ -498,7 +498,7 @@ iframe.place-img {
 .cal-nav {
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 2.2rem;
   cursor: pointer;
   color: var(--rose);
   line-height: 1;
@@ -519,19 +519,19 @@ iframe.place-img {
 
 .cal-day-name {
   font-family: var(--font-hand);
-  font-size: 0.85rem;
+  font-size: 1.3rem;
   color: var(--text-muted);
-  padding: 0.2rem 0;
+  padding: 0.4rem 0;
 }
 
 .cal-day {
   font-family: var(--font-hand);
-  font-size: 1rem;
+  font-size: 1.5rem;
   background: none;
   border: none;
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  width: 48px;
+  height: 48px;
   cursor: pointer;
   color: var(--text-dark);
   transition:
