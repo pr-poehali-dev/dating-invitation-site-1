@@ -215,17 +215,13 @@ export default function Index() {
           </h1>
           {"videoUrl" in chosenPlace && chosenPlace.videoUrl ? (
             <video
+              className="place-img"
               src={chosenPlace.videoUrl}
               autoPlay
               muted
               loop
               playsInline
-              style={{
-                width: "100%",
-                borderRadius: "1.4rem",
-                maxHeight: 450,
-                objectFit: "cover",
-              }}
+              style={{ objectFit: "cover", pointerEvents: "none" }}
             />
           ) : chosenPlace.img ? (
             <img
