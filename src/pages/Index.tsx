@@ -27,7 +27,7 @@ const PLACES = [
   },
   {
     id: 3,
-    name: "💕Свидание на 61 этаже\nМосква Сити🌇",
+    text = f"Свидание на 61 этаже\nМосква Сити 🌇",
     desc: "💕Свидание на 67 этаже Москва Сити🌇",
     img: "",
     videoUrl:
@@ -37,16 +37,14 @@ const PLACES = [
     id: 4,
     name: "🎻Музыкальный концерт LumiSfera🎹",
     img: "",
-    videoUrl:
-      "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/24/VID_20260624_1048251d0398a89e205c54.mp4",
+    videoUrl: "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/24/VID_20260624_1048251d0398a89e205c54.mp4",
   },
   {
     id: 5,
-    name: "🍽️Ресторан Osteria Mario🛎️",
+     name: "🍽️Ресторан Osteria Mario🛎️",
     desc: "🍽️Ресторан Osteria Mario🛎️",
     img: "",
-    videoUrl:
-      "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/23/VID_20260619_153156252b734add41c5f3.mp4",
+    videoUrl: "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/23/VID_20260619_153156252b734add41c5f3.mp4",
   },
   {
     id: 6,
