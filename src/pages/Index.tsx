@@ -226,7 +226,7 @@ export default function Index() {
             maxWidth: "min(98vw, 1200px)",
             width: "min(98vw, 1200px)",
             marginTop: "-8vh",
-            transform: "scale(0.45)",
+            transform: "scale(0.1)",
             transformOrigin: "top center",
           }}
         >
