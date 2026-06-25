@@ -286,7 +286,8 @@ export default function Index() {
 
   // Экран выбора даты
   if (chosenPlace) {
-    return <DatePickerScreen place={chosenPlace} onDone={setChosenDate} />;
+    return;
+    <DatePickerScreen place={chosenPlace} onDone={setChosenDate} />;
   }
 
   // Экран "ищу места"
