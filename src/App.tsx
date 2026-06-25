@@ -57,17 +57,17 @@ function AppInner() {
 
       // Если прошло менее 5 секунд, плавно увеличиваем громкость
       if (elapsed < 5) {
-    // Начнем почти с тишины (0.01), конечный предел - 0.15
-    const targetVolume = Math.min(0.01 + (0.1 * elapsed) / 8, 0.15);
-    audio.volume = targetVolume;
-} else {
-    audio.volume = 0.15;
-    audio.removeEventListener("timeupdate", handleVolumeRamp);
-}
-
+        // Линейная интерполяция от 0.1 до 0.5 за 5 секунд
+        const targetVolume = Math.min(0.05 + (0.25 * elapsed) / 8, 0.3);
+        audio.volume = targetVolume;
+      } else {
+        // По истечении 5 секунд устанавливаем громкость на 0.5
+        audio.volume = 0.3;
+        // Отключаем слушатель, чтобы он больше не вызывался
+        audio.removeEventListener("timeupdate", handleVolumeRamp);
       }
     }
-  }, [];
+  }, []);
 
   // Регистрируем глобальный триггер с новой логикой
   window.__petalStart = useCallback(() => {
