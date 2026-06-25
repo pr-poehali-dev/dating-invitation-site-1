@@ -51,21 +51,21 @@ function AppInner() {
     const currentTime = audio.currentTime;
     const startTime = audio.dataset.startTime;
 
-    // Проверяем, было ли записано время начала
     if (startTime) {
       const elapsed = currentTime - parseFloat(startTime);
 
-      // Если прошло менее 5 секунд, плавно увеличиваем громкость
-      if (elapsed < 5) {
-        // Линейная интерполяция от 0.1 до 0.5 за 5 секунд
-        const targetVolume = Math.min(0.01 + (0.02 * elapsed) / 8, 0.03);
+      // --- ИЗМЕНЕННЫЙ БЛОК ---
+      if (elapsed < 8) {
+        // Новая формула: стартуем с 0.05, добавляем часть от общего диапазона 0.25
+        // за прошедшие секунды из 8.
+        const targetVolume = Math.min(0.05 + (0.25 * elapsed) / 8, 0.3);
         audio.volume = targetVolume;
       } else {
-        // По истечении 5 секунд устанавливаем громкость на 0.5
-        audio.volume = 0.03;
-        // Отключаем слушатель, чтобы он больше не вызывался
+        // По истечении 8 секунд устанавливаем финальную громкость на 30%
+        audio.volume = 0.3;
         audio.removeEventListener("timeupdate", handleVolumeRamp);
       }
+      // --- КОНЕЦ ИЗМЕНЕННОГО БЛОКА ---
     }
   }, []);
 
