@@ -223,10 +223,10 @@ export default function Index() {
         <div
           className="places-card animate-in"
           style={{
-            maxWidth: "min(80vw, 1000px)",
-            width: "min(80vw, 1000px)",
+            maxWidth: "min(98vw, 1200px)",
+            width: "min(98vw, 1200px)",
             marginTop: "-8vh",
-            transform: "scale(0.85)",
+            transform: "scale(0.70)",
             transformOrigin: "top center",
           }}
         >

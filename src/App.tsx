@@ -11,7 +11,7 @@ import PetalAvalanche from "@/components/PetalAvalanche";
 
 const queryClient = new QueryClient();
 const AUDIO_URL =
-  "https://www.image2url.com/r2/default/files/1782379512329-7b5291f3-ab05-4204-b990-03d18524b72a.mp3";
+  "https://www.image2url.com/r2/default/audio/1782330962431-a3aa2ab1-7c4a-4877-a714-0a5753d70882.mp3";
 
 export type PetalTrigger = {
   start: () => void;
@@ -56,13 +56,13 @@ function AppInner() {
       const elapsed = currentTime - parseFloat(startTime);
 
       // Если прошло менее 5 секунд, плавно увеличиваем громкость
-      if (elapsed < 8) {
+      if (elapsed < 5) {
         // Линейная интерполяция от 0.1 до 0.5 за 5 секунд
-        const targetVolume = Math.min(0.01 + (0.01 * elapsed) / 8, 0.09);
+        const targetVolume = Math.min(0.05 + (0.25 * elapsed) / 8, 0.3);
         audio.volume = targetVolume;
       } else {
         // По истечении 5 секунд устанавливаем громкость на 0.5
-        audio.volume = 0.07;
+        audio.volume = 0.3;
         // Отключаем слушатель, чтобы он больше не вызывался
         audio.removeEventListener("timeupdate", handleVolumeRamp);
       }
