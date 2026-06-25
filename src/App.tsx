@@ -43,96 +43,57 @@ function AppInner() {
 
   // --- НАЧАЛО ИЗМЕНЕНИЙ ---
 
-  import { useCallback, useRef } from "react";
-
-  // ... внутри вашего компонента ...
-  const audioRef = useRef(null);
-  const AUDIO_URL = "ссылка_на_вашу_музыку.mp3"; // Не забудьте указать свою ссылку
-
-  // --- ЭТА ФУНКЦИЯ ОСТАЕТСЯ БЕЗ ИЗМЕНЕНИЙ ---
-  // Она отвечает за само плавное нарастание громкости
+  // Эта функция будет управлять плавным нарастанием громкости
   const handleVolumeRamp = useCallback(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const startTime = parseFloat(audio.dataset.startTime);
+    const currentTime = audio.currentTime;
+    const startTime = audio.dataset.startTime;
 
-    // Проверяем, было ли записано время начала
-    if (!isNaN(startTime)) {
-      const elapsed = audio.currentTime - startTime; // Сколько секунд прошло
+    if (startTime) {
+      const elapsed = currentTime - parseFloat(startTime);
 
-      // Если прошло менее 8 секунд...
-      if (elapsed < 5) {
-        // ...плавно увеличиваем громкость от 0.01 до 0.03
-        const targetVolume = Math.min(0.01 + (0.02 * elapsed) / 5, 0.03);
+      // --- ИЗМЕНЕННЫЙ БЛОК ---
+      if (elapsed < 8) {
+        // Новая формула: стартуем с 0.05, добавляем часть от общего диапазона 0.25
+        // за прошедшие секунды из 8.
+        const targetVolume = Math.min(0.05 + (0.25 * elapsed) / 8, 0.3);
         audio.volume = targetVolume;
       } else {
-        // Через 5 секунд ставим финальную громкость
-        audio.volume = 0.03;
-        // Отключаем слушатель, чтобы экономить ресурсы
+        // По истечении 8 секунд устанавливаем финальную громкость на 30%
+        audio.volume = 0.3;
         audio.removeEventListener("timeupdate", handleVolumeRamp);
       }
+      // --- КОНЕЦ ИЗМЕНЕННОГО БЛОКА ---
     }
   }, []);
 
-  // --- НОВАЯ ФУНКЦИЯ ДЛЯ РАЗБЛОКИРОВКИ ЗВУКА ---
-  // Эта функция обманывает браузер, заставляя его разрешить управление звуком.
-  const unlockAudio = async () => {
-    try {
-      // Создаем новый контекст для работы со звуком
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-
-      // "Возобновляем" работу контекста (это ключевая команда)
-      await ctx.resume();
-
-      // Создаем пустой источник звука (тишину)
-      const buffer = ctx.createBufferSource();
-      buffer.buffer = ctx.createBuffer(1, 1, 22050); // 1 канал, 1 секунда
-      buffer.connect(ctx.destination);
-      buffer.start(0);
-      buffer.stop(0); // Сразу выключаем
-
-      console.log("Звук успешно разблокирован");
-    } catch (err) {
-      console.error("Не удалось разблокировать звук:", err);
-    }
-  };
-
-  // --- ГЛАВНАЯ ФУНКЦИЯ ЗАПУСКА МУЗЫКИ ---
-  // Здесь мы собираем все части воедино
-  window.__petalStart = useCallback(async () => {
+  // Регистрируем глобальный триггер с новой логикой
+  window.__petalStart = useCallback(() => {
     setPetalActive(true);
 
-    // ЕСЛИ АУДИО ЕЩЕ НЕ СОЗДАНО...
     if (!audioRef.current) {
       audioRef.current = new Audio(AUDIO_URL);
       audioRef.current.loop = true;
-      // ВАЖНО: УБИРАЕМ СТРОЧКУ .volume = 0.01 отсюда!
-      // Теперь громкость будет контролироваться только функцией ramp-up.
+      // Устанавливаем начальную громкость сразу при создании объекта
+      audioRef.current.volume = 0.1;
     }
 
     const audio = audioRef.current;
     if (audio) {
-      // ШАГ 1: Сначала разблокируем звук в браузере.
-      // Это происходит очень быстро и незаметно для пользователя.
-      await unlockAudio();
+      // Записываем текущее время воспроизведения как время старта эффекта
+      // ВАЖНОЕ ИЗМЕНЕНИЕ:
+      // 1. Устанавливаем начальную громкость ДО вызова play()
+      audio.volume = 0.001;
 
-      // ШАГ 2: Записываем текущее время как точку старта.
-      audio.dataset.startTime = audio.currentTime.toString();
-
-      // ШАГ 3: Включаем нашу функцию контроля громкости.
+      // Добавляем слушатель для управления громкостью
       audio.addEventListener("timeupdate", handleVolumeRamp);
 
-      // ШАГ 4: Вручную запускаем логику нарастания ОДИН раз,
-      // чтобы она сработала мгновенно, а не через секунду.
-      handleVolumeRamp();
-
-      // ШАГ 5: Наконец, включаем музыку.
-      audio.play().catch((error) => {
-        console.error("Ошибка при попытке включить музыку:", error);
-      });
+      // Запускаем воспроизведение
+      audio.play().catch(() => {});
     }
-  }, [handleVolumeRamp]);
+  }, [handleVolumeRamp]); // Не забудьте добавить handleVolumeRamp в зависимости
 
   return (
     <>
