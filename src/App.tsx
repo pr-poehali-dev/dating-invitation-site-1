@@ -76,8 +76,6 @@ function AppInner() {
     if (!audioRef.current) {
       audioRef.current = new Audio(AUDIO_URL);
       audioRef.current.loop = true;
-      // Устанавливаем начальную громкость сразу при создании объекта
-      audioRef.current.volume = 0.1;
     }
 
     const audio = audioRef.current;
