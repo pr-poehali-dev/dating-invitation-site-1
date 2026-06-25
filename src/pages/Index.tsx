@@ -231,7 +231,7 @@ export default function Index() {
           }}
         >
           <h1 className="places-title" style={{ color: "var(--rose-dark)" }}>
-            🎉 Ждём не дождёмся!
+            Буду ждать 😉
           </h1>
           {"videoUrl" in chosenPlace && chosenPlace.videoUrl ? (
             <video
