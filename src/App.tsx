@@ -8,17 +8,40 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PetalAvalanche from "@/components/PetalAvalanche";
+import { useState, useCallback, useRef } from "react";
 
 const queryClient = new QueryClient();
-const AUDIO_URL =
-  "https://www.image2url.com/r2/default/audio/1782330962431-a3aa2ab1-7c4a-4877-a714-0a5753d70882.mp3";
+const AUDIO_URL = "https://www.image2url.com/r2/default/audio/1782330962431-a3aa2ab1-7c4a-4877-a714-0a5753d70882.mp3";
 
 export type PetalTrigger = {
   start: () => void;
   onCovered: (cb: () => void) => void;
   onDone: (cb: () => void) => void;
 };
+declare global {
+  interface Window {
+    __petalStart?: () => void;
+    // ...
+  }
+}
 
+function AppInner() {
+  const [petalActive, setPetalActive] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  
+  // Новая переменная состояния для контроля процесса фейда
+  const [isFading, setIsFading] = useState(false); 
+
+  const handleCovered = useCallback(() => {
+    window.__petalOnCovered?.();
+  }, []);
+
+  const handleDone = useCallback(() => {
+    setPetalActive(false);
+    window.__petalOnDone?.();
+  }, []);
+
+// Глобальные колбэки — Index.tsx регистрирует их через window
 declare global {
   interface Window {
     __petalStart?: () => void;
@@ -30,7 +53,6 @@ declare global {
 function AppInner() {
   const [petalActive, setPetalActive] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const rafRef = useRef<number | null>(null); // для отмены анимации при необходимости
 
   const handleCovered = useCallback(() => {
     window.__petalOnCovered?.();
@@ -41,63 +63,59 @@ function AppInner() {
     window.__petalOnDone?.();
   }, []);
 
-  // Функция плавного нарастания громкости
-  const fadeInVolume = (
-    audio: HTMLAudioElement,
-    startVol: number,
-    endVol: number,
-    durationMs: number,
-  ) => {
-    const startTime = performance.now();
-
-    const animate = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / durationMs, 1); // от 0 до 1
-
-      // Линейная интерполяция: start + (end - start) * progress
-      const targetVol = startVol + (endVol - startVol) * progress;
-      audio.volume = targetVol;
-
-      if (progress < 1 && rafRef.current !== null) {
-        rafRef.current = requestAnimationFrame(animate);
-      } else {
-        // После завершения анимации фиксируем громкость на целевом уровне
-        audio.volume = endVol;
-      }
-    };
-
-    rafRef.current = requestAnimationFrame(animate);
-  };
-
+   // Регистрируем глобальный триггер с новой логикой
   window.__petalStart = () => {
+    if (isFading || petalActive) return; // Предотвращаем повторный вызов во время анимации
+
     setPetalActive(true);
+    setIsFading(true); // Начинаем процесс фейда
 
     if (!audioRef.current) {
       audioRef.current = new Audio(AUDIO_URL);
       audioRef.current.loop = true;
-      // Начальную громкость ставим сразу в 0.1 (10%), а дальше плавно поднимем
-      audioRef.current.volume = 0.1;
     }
 
-    // Запускаем воспроизведение
-    audioRef.current.play().catch(() => {});
+    const audio = audioRef.current;
+    if (!audio) return;
 
-    // Плавно поднимаем громкость с 0.1 до 0.5 за 5000 мс (5 секунд)
-    fadeInVolume(audioRef.current, 0.1, 0.5, 5000);
-  };
+    // Начальные параметры
+    const durationMs = 5000; // Общая длительность анимации: 5 секунд
+    const targetVolume = 0.5; // Целевая громкость: 50%
+    const initialVolume = 0.1; // Стартовая громкость: 10%
+    const stepsCount = Math.round(durationMs / 50); // Количество шагов (каждые 50 мс)
+    const volumeStep = (targetVolume - initialVolume) / stepsCount; // Шаг изменения громкости за один интервал
 
-  useEffect(() => {
-    // Очистка при размонтировании компонента
-    return () => {
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current);
+    // Устанавливаем начальную громкость
+    audio.volume = initialVolume;
+
+    // Функция для запуска воспроизведения и анимации
+    const playAndFade = async () => {
+      try {
+        await audio.play(); // Пробуем запустить музыку
+      } catch (error) {
+        console.error("Автовоспроизведение заблокировано браузером", error);
+        setIsFading(false); // Останавливаем анимацию, если звук не запустился
+        return;
       }
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
+
+      let currentStep = 0;
+      const fadeInterval = setInterval(() => {
+        if (currentStep < stepsCount && !audio.paused) {
+          // Увеличиваем громкость на шаг
+          audio.volume += volumeStep;
+          currentStep++;
+        } else {
+          // Анимация завершена или музыка поставлена на паузу
+          clearInterval(fadeInterval);
+          // Фиксируем итоговую громкость на случай погрешностей вычислений
+          audio.volume = targetVolume;
+          setIsFading(false);
+        }
+      }, 50);
     };
-  }, []);
+
+    playAndFade();
+  };
 
   return (
     <>
