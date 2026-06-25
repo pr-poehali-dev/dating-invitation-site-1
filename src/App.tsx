@@ -11,7 +11,7 @@ import PetalAvalanche from "@/components/PetalAvalanche";
 
 const queryClient = new QueryClient();
 const AUDIO_URL =
-  "https://www.image2url.com/r2/default/files/1782379512329-7b5291f3-ab05-4204-b990-03d18524b72a.mp3";
+  "https://www.image2url.com/r2/default/audio/1782330962431-a3aa2ab1-7c4a-4877-a714-0a5753d70882.mp3";
 
 export type PetalTrigger = {
   start: () => void;
@@ -51,21 +51,21 @@ function AppInner() {
     const currentTime = audio.currentTime;
     const startTime = audio.dataset.startTime;
 
+    // Проверяем, было ли записано время начала
     if (startTime) {
       const elapsed = currentTime - parseFloat(startTime);
 
-      // --- ИЗМЕНЕННЫЙ БЛОК ---
-      if (elapsed < 8) {
-        // Новая формула: стартуем с 0.05, добавляем часть от общего диапазона 0.25
-        // за прошедшие секунды из 8.
-        const targetVolume = Math.min(0.05 + (0.25 * elapsed) / 8, 0.3);
+      // Если прошло менее 5 секунд, плавно увеличиваем громкость
+      if (elapsed < 5) {
+        // Линейная интерполяция от 0.1 до 0.5 за 5 секунд
+        const targetVolume = Math.min(0.01 + (0.02 * elapsed) / 8, 0.03);
         audio.volume = targetVolume;
       } else {
-        // По истечении 8 секунд устанавливаем финальную громкость на 30%
-        audio.volume = 0.4;
+        // По истечении 5 секунд устанавливаем громкость на 0.5
+        audio.volume = 0.03;
+        // Отключаем слушатель, чтобы он больше не вызывался
         audio.removeEventListener("timeupdate", handleVolumeRamp);
       }
-      // --- КОНЕЦ ИЗМЕНЕННОГО БЛОКА ---
     }
   }, []);
 
@@ -76,14 +76,14 @@ function AppInner() {
     if (!audioRef.current) {
       audioRef.current = new Audio(AUDIO_URL);
       audioRef.current.loop = true;
+      // Устанавливаем начальную громкость сразу при создании объекта
+      audioRef.current.volume = 0.1;
     }
 
     const audio = audioRef.current;
     if (audio) {
       // Записываем текущее время воспроизведения как время старта эффекта
-      // ВАЖНОЕ ИЗМЕНЕНИЕ:
-      // 1. Устанавливаем начальную громкость ДО вызова play()
-      audio.volume = 0.001;
+      audio.dataset.startTime = audio.currentTime.toString();
 
       // Добавляем слушатель для управления громкостью
       audio.addEventListener("timeupdate", handleVolumeRamp);
