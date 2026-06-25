@@ -195,19 +195,12 @@ export default function Index() {
   // Отправляем email когда пользователь выбрал место и дату
   useEffect(() => {
     if (!chosenPlace || !chosenDate) return;
-    const fmt = chosenDate.toLocaleDateString("ru-RU", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-    fetch(
-      "https://functions.poehali.dev/edb34b59-7a36-4d19-a712-b8db2970566d",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ place: chosenPlace.name, date: fmt }),
-      },
-    ).catch(() => {});
+    const fmt = chosenDate.toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
+    fetch("https://functions.poehali.dev/edb34b59-7a36-4d19-a712-b8db2970566d", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ place: chosenPlace.name, date: fmt }),
+    }).catch(() => {});
   }, [chosenPlace, chosenDate]);
 
   // Финальный экран
@@ -226,7 +219,7 @@ export default function Index() {
             maxWidth: "min(98vw, 1200px)",
             width: "min(98vw, 1200px)",
             marginTop: "-8vh",
-            transform: "scale(0.1)",
+            transform: "scale(0.85)",
             transformOrigin: "top center",
           }}
         >
@@ -286,8 +279,7 @@ export default function Index() {
 
   // Экран выбора даты
   if (chosenPlace) {
-    return;
-    <DatePickerScreen place={chosenPlace} onDone={setChosenDate} />;
+    return <DatePickerScreen place={chosenPlace} onDone={setChosenDate} />;
   }
 
   // Экран "ищу места"
