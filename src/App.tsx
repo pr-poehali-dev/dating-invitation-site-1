@@ -83,7 +83,9 @@ function AppInner() {
     const audio = audioRef.current;
     if (audio) {
       // Записываем текущее время воспроизведения как время старта эффекта
-      audio.dataset.startTime = audio.currentTime.toString();
+      // ВАЖНОЕ ИЗМЕНЕНИЕ:
+      // 1. Устанавливаем начальную громкость ДО вызова play()
+      audio.volume = 0.05;
 
       // Добавляем слушатель для управления громкостью
       audio.addEventListener("timeupdate", handleVolumeRamp);
