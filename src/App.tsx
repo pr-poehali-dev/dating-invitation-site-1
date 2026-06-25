@@ -51,6 +51,24 @@ function AppInner() {
     }
     audioRef.current.play().catch(() => {});
   };
+   // 2. Плавно поднимаем до 50% за 5 секунд
+    let vol = 0.1;
+    const targetVol = 0.5;
+    const durationMs = 5000;
+    const stepMs = 50; // шаг каждые 50 мс — получается 100 шагов, очень плавно
+    const steps = durationMs / stepMs;
+    const delta = (targetVol - vol) / steps;
+
+    const interval = setInterval(() => {
+      vol += delta;
+      if (vol >= targetVol) {
+        vol = targetVol;
+        clearInterval(interval);
+      }
+      if (audioRef.current) audioRef.current!.volume = vol;
+    }, stepMs);
+  };
+
 
   return (
     <>
