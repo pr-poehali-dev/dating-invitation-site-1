@@ -227,8 +227,6 @@ export default function Index() {
             width: "min(98vw, 1200px)",
             marginTop: "-8vh",
             transform: "scale(0.7)",
-            transformOrigin: "top center",
-            fontSize: "70%",
           }}
         >
           <h1 className="places-title" style={{ color: "var(--rose-dark)" }}>
