@@ -67,7 +67,7 @@ function AppInner() {
 
       }
     }
-  }, []);
+  }, [];
 
   // Регистрируем глобальный триггер с новой логикой
   window.__petalStart = useCallback(() => {
