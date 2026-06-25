@@ -217,70 +217,75 @@ export default function Index() {
       month: "long",
       year: "numeric",
     });
+
+    // Оборачиваем всё в новый div
     return (
-      <div className="meme-page places-page">
-        <ScatteredPetals />
-        <div
-          className="places-card animate-in"
-          style={{
-            maxWidth: "min(98vw, 1200px)",
-            width: "min(98vw, 1200px)",
-            marginTop: "-8vh",
-            transform: "scale(0.1)",
-            transformOrigin: "top center",
-          }}
-        >
-          <h1 className="places-title" style={{ color: "var(--rose-dark)" }}>
-            🎉 Ждём не дождёмся!
-          </h1>
-          {"videoUrl" in chosenPlace && chosenPlace.videoUrl ? (
-            <video
-              className="place-img"
-              src={chosenPlace.videoUrl}
-              autoPlay
-              muted
-              loop
-              playsInline
-              style={{ objectFit: "cover", pointerEvents: "none" }}
-            />
-          ) : chosenPlace.img ? (
-            <img
-              src={chosenPlace.img}
-              alt={chosenPlace.name}
+      <div style={{ transform: "scale(0.9)" }}>
+        {/* Весь ваш существующий код */}
+        <div className="meme-page places-page">
+          <ScatteredPetals />
+          <div
+            className="places-card animate-in"
+            style={{
+              maxWidth: "min(98vw, 1200px)",
+              width: "min(98vw, 1200px)",
+              marginTop: "-8vh",
+              transform: "scale(0.1)",
+              transformOrigin: "top center",
+            }}
+          >
+            <h1 className="places-title" style={{ color: "var(--rose-dark)" }}>
+              🎉 Ждём не дождёмся!
+            </h1>
+            {"videoUrl" in chosenPlace && chosenPlace.videoUrl ? (
+              <video
+                className="place-img"
+                src={chosenPlace.videoUrl}
+                autoPlay
+                muted
+                loop
+                playsInline
+                style={{ objectFit: "cover", pointerEvents: "none" }}
+              />
+            ) : chosenPlace.img ? (
+              <img
+                src={chosenPlace.img}
+                alt={chosenPlace.name}
+                style={{
+                  width: "100%",
+                  borderRadius: "1.4rem",
+                  maxHeight: 400,
+                  objectFit: "cover",
+                }}
+              />
+            ) : null}
+            <p
+              className="place-name"
               style={{
-                width: "100%",
-                borderRadius: "1.4rem",
-                maxHeight: 400,
-                objectFit: "cover",
+                fontSize: "2.5rem",
+                lineHeight: 1.4,
+                textAlign: "center",
+                marginTop: "2rem",
+                whiteSpace: "nowrap",
+                overflow: "visible",
               }}
-            />
-          ) : null}
-          <p
-            className="place-name"
-            style={{
-              fontSize: "2.5rem",
-              lineHeight: 1.4,
-              textAlign: "center",
-              marginTop: "2rem",
-              whiteSpace: "nowrap",
-              overflow: "visible",
-            }}
-          >
-            📍 {chosenPlace.name}
-          </p>
-          <p
-            className="place-name"
-            style={{
-              fontSize: "2.5rem",
-              lineHeight: 1.4,
-              textAlign: "center",
-              color: "var(--text-muted)",
-            }}
-          >
-            📅 {fmt}
-          </p>
+            >
+              📍 {chosenPlace.name}
+            </p>
+            <p
+              className="place-name"
+              style={{
+                fontSize: "2.5rem",
+                lineHeight: 1.4,
+                textAlign: "center",
+                color: "var(--text-muted)",
+              }}
+            >
+              📅 {fmt}
+            </p>
+          </div>
         </div>
-      </div>
+      </div> // <-- Закрывающий тег нового div
     );
   }
 
