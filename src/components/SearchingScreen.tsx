@@ -9,23 +9,23 @@ import ScatteredPetals from "@/components/ScatteredPetals";
 
 export const SEARCH_STEPS = [
   { from: 0, to: 10, label: "Ищу...", duration: 6000 },
-  { from: 10, to: 25, label: "Убираю Фобо из списка", duration: 5000 },
+  { from: 10, to: 25, label: "Убираю Фобо из списка", duration: 5500 },
   {
     from: 25,
     to: 40,
     label: "Исключаю странные рестораны в подвале",
     duration: 4680,
   },
-  { from: 40, to: 65, label: "Выбираю что-то поинтереснее", duration: 5000 },
-  { from: 65, to: 75, label: "Почти нашёл....", duration: 5000 },
+  { from: 40, to: 65, label: "Выбираю что-то поинтереснее", duration: 5500 },
+  { from: 65, to: 75, label: "Почти нашёл....", duration: 5500 },
   {
     from: 75,
     to: 88,
     label: "Быстренько создаю следующую страницу",
-    duration: 5000,
+    duration: 5500,
   },
-  { from: 88, to: 95, label: "Ещё чуть-чуть", duration: 5000 },
-  { from: 95, to: 100, label: "Готово", duration: 5000 },
+  { from: 88, to: 95, label: "Ещё чуть-чуть", duration: 5500 },
+  { from: 95, to: 100, label: "Готово", duration: 5500 },
 ];
 
 export interface SearchingScreenHandle {
