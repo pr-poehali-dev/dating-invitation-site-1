@@ -12,10 +12,10 @@ const CAT_IMG =
 const PLACES = [
   {
     id: 1,
-    name: "🌊Поездка на катере вдвоём🚤",
-    desc: "🌊Поездка на катере вдвоём🚤",
+    name: "🎻Музыкальный концерт LumiSfera🎹",
     img: "",
-    videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_162720.mp4",
+    videoUrl:
+      "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/24/VID_20260624_1048251d0398a89e205c54.mp4",
   },
   {
     id: 2,
@@ -34,10 +34,10 @@ const PLACES = [
   },
   {
     id: 4,
-    name: "🎻Музыкальный концерт LumiSfera🎹",
+    name: "🌊Поездка на катере вдвоём🚤",
+    desc: "🌊Поездка на катере вдвоём🚤",
     img: "",
-    videoUrl:
-      "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/24/VID_20260624_1048251d0398a89e205c54.mp4",
+    videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_162720.mp4",
   },
   {
     id: 5,
