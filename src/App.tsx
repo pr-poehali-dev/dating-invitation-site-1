@@ -58,11 +58,11 @@ function AppInner() {
       // Если прошло менее 5 секунд, плавно увеличиваем громкость
       if (elapsed < 5) {
         // Линейная интерполяция от 0.1 до 0.5 за 5 секунд
-        const targetVolume = Math.min(0.02 + (0.1 * elapsed) / 8, 0.15);
+        const targetVolume = Math.min(0.01 + (0.05 * elapsed) / 8, 0.1);
         audio.volume = targetVolume;
       } else {
         // По истечении 5 секунд устанавливаем громкость на 0.5
-        audio.volume = 0.15;
+        audio.volume = 0.1;
         // Отключаем слушатель, чтобы он больше не вызывался
         audio.removeEventListener("timeupdate", handleVolumeRamp);
       }
