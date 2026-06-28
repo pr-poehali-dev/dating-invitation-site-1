@@ -129,6 +129,8 @@ export default function Index() {
       setNoPos({ x: nx, y: ny });
     }
 
+    let firstHover = true;
+
     function onDocMouseMove(e: MouseEvent) {
       const rect = btn!.getBoundingClientRect();
       const inside =
@@ -139,6 +141,33 @@ export default function Index() {
 
       if (inside && !wasInside) {
         setNoDodgeCount((prev) => prev + 1);
+
+        if (firstHover) {
+          firstHover = false;
+          // Первый прыжок — фиксированно влево-вниз от карточки
+          const originLeft = rect.left - noPosRef.current.x;
+          const originTop = rect.top - noPosRef.current.y;
+          const nx = Math.max(
+            -originLeft + 24,
+            Math.min(
+              window.innerWidth - originLeft - rect.width - 24,
+              -(originLeft - 24) - rect.width,
+            ),
+          );
+          const ny = Math.max(
+            -originTop + 24,
+            Math.min(
+              window.innerHeight - originTop - rect.height - 24,
+              window.innerHeight - originTop - rect.height - 60,
+            ),
+          );
+          noPosRef.current = { x: nx, y: ny };
+          setNoPos({ x: nx, y: ny });
+          jumping = true;
+          setTimeout(() => { jumping = false; }, 320);
+          wasInside = inside;
+          return;
+        }
       }
       wasInside = inside;
 
