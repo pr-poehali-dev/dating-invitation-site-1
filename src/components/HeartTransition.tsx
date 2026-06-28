@@ -78,30 +78,19 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
           const cosA = Math.cos(rad);
           const sinA = Math.sin(rad);
 
-          // Точки контура сердца в координатах экрана
-          const heartPts = HEART_POINTS.map(([nx, ny]) => {
+          // Маска-след — ровно форма сердца (как красное эмодзи), без дозакрасок.
+          ctx.beginPath();
+          HEART_POINTS.forEach(([nx, ny], i) => {
             const px = nx * r;
             const py = ny * r;
-            return [px * cosA - py * sinA + cx, px * sinA + py * cosA + cy] as [number, number];
-          });
-
-          // Заливаем само сердце
-          ctx.beginPath();
-          heartPts.forEach(([x, y], i) => {
+            const x = px * cosA - py * sinA + cx;
+            const y = px * sinA + py * cosA + cy;
             if (i === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
           });
           ctx.closePath();
           ctx.fillStyle = "#000";
           ctx.fill();
-
-          // "Пройденное": заливаем всё левее самой левой точки сердца.
-          // Граница всегда внутри/под телом сердца → переход к финалу скрыт,
-          // без рассинхрона на верх/низ экрана.
-          const minX = Math.min(...heartPts.map((pt) => pt[0]));
-          if (minX > 0) {
-            ctx.fillRect(0, 0, minX, dims.h);
-          }
 
           setMaskUrl(c.toDataURL());
         }
