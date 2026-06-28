@@ -67,11 +67,13 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
   // Угол вращения по часовой стрелке: 540deg за весь путь
   const rotate = progress * 540;
 
-  // Центр сердца в px, синхронно с эмодзи
+  // Центр сердца в px, синхронно с эмодзи.
+  // Реальное красное сердце эмодзи меньше своего бокса (~0.72 от font-size)
+  // и слегка смещено вверх внутри строки.
   const cx = (heartCenterVw / 100) * dims.w;
-  const cy = dims.h / 2;
-  // Радиус сердца в px (эмодзи ~90vh по высоте, полувысота ~ 0.45 * h)
-  const r = dims.h * 0.45;
+  const cy = dims.h / 2 - dims.h * 0.02;
+  // Радиус маски подгоняем под видимое красное сердце (меньше бокса)
+  const r = dims.h * 0.45 * 0.72;
   const rad = (rotate * Math.PI) / 180;
   const cosA = Math.cos(rad);
   const sinA = Math.sin(rad);
