@@ -18,7 +18,10 @@ const HEART_POINTS: Array<[number, number]> = (() => {
   for (let i = 0; i <= N; i++) {
     const t = (i / N) * Math.PI * 2;
     const x = 16 * Math.sin(t) ** 3;
-    const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+    let y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+    // Срезаем верхнюю выемку сердца, чтобы маска не давала острых "обрывков" сверху.
+    // y здесь по математике вверх, верхняя ложбинка — около y≈5..7 при больших |x|.
+    if (y > 4) y = Math.min(y, 8.5);
     pts.push([x / 16, -y / 16]);
   }
   return pts;
