@@ -237,22 +237,24 @@ export default function Index() {
     ).catch(() => {});
   }, [chosenPlace, chosenDate]);
 
-  // Финальный экран + переход сердцем.
-  // Сердце РИСУЕТ финальную карточку по своему следу (finalContent).
-  // Когда дата уже подтверждена — показываем ту же карточку как базовый экран.
-  if (chosenPlace && (pendingDate || chosenDate)) {
-    const shownDate = (chosenDate ?? pendingDate) as Date;
-    const finalCard = <FinalCard place={chosenPlace} date={shownDate} />;
+  // Переход сердцем: сердце РИСУЕТ финальную карточку по своему следу.
+  // Пока дата не подтверждена — карточка живёт ТОЛЬКО внутри HeartTransition
+  // (finalContent), сердце её "проявляет". Никакого базового дубля под ним.
+  if (chosenPlace && pendingDate && !chosenDate) {
+    return (
+      <HeartTransition
+        onDone={() => setChosenDate(pendingDate)}
+        finalContent={<FinalCard place={chosenPlace} date={pendingDate} />}
+        datepickerContent={<DatePickerScreen place={chosenPlace} onDone={() => {}} />}
+      />
+    );
+  }
+
+  // Финальный экран — после завершения перехода. Та же карточка.
+  if (chosenPlace && chosenDate) {
     return (
       <div className="meme-page places-page" style={{ position: "relative" }}>
-        {finalCard}
-        {!chosenDate && pendingDate && (
-          <HeartTransition
-            onDone={() => setChosenDate(pendingDate)}
-            finalContent={finalCard}
-            datepickerContent={<DatePickerScreen place={chosenPlace} onDone={() => {}} />}
-          />
-        )}
+        <FinalCard place={chosenPlace} date={chosenDate} />
       </div>
     );
   }
