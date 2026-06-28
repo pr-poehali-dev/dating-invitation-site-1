@@ -140,27 +140,21 @@ export default function Index() {
         const awayX = btnCx > window.innerWidth / 2 ? -1 : 1;
         const awayY = btnCy > window.innerHeight / 2 ? -1 : 1;
         const rnd = Math.random() > 0.5;
-        nx = Math.max(
-          minX,
-          Math.min(
-            maxX,
-            pos.x +
-              (rnd ? awayX : Math.sign(Math.cos(angle))) *
-                OFFSET *
-                (0.7 + Math.random() * 0.6),
-          ),
-        );
-        ny = Math.max(
-          minY,
-          Math.min(
-            maxY,
-            pos.y +
-              (!rnd ? awayY : Math.sign(Math.sin(angle))) *
-                OFFSET *
-                (0.7 + Math.random() * 0.6),
-          ),
-        );
+        nx = pos.x +
+          (rnd ? awayX : Math.sign(Math.cos(angle))) *
+            OFFSET *
+            (0.7 + Math.random() * 0.6);
+        ny = pos.y +
+          (!rnd ? awayY : Math.sign(Math.sin(angle))) *
+            OFFSET *
+            (0.7 + Math.random() * 0.6);
       }
+
+      // Жёсткое ограничение — кнопка никогда не выходит за экран
+      if (minX <= maxX) nx = Math.max(minX, Math.min(maxX, nx));
+      else nx = (minX + maxX) / 2;
+      if (minY <= maxY) ny = Math.max(minY, Math.min(maxY, ny));
+      else ny = (minY + maxY) / 2;
 
       noPosRef.current = { x: nx, y: ny };
       setNoPos({ x: nx, y: ny });
