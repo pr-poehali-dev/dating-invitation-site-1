@@ -62,6 +62,8 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
 
   // Центр сердца движется от -50vw до 150vw
   const heartCenterVw = -HEART_HALF_VW + progress * (100 + HEART_HALF_VW * 2);
+  // Граница "стёртого" — строго по центру сердца (как в рабочей версии)
+  const revealedVw = heartCenterVw;
   // Угол вращения по часовой стрелке: 540deg за весь путь
   const rotate = progress * 540;
 
@@ -73,33 +75,31 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
   const rad = (rotate * Math.PI) / 180;
   const cosA = Math.cos(rad);
   const sinA = Math.sin(rad);
+  // Граница раздела в px (вертикальная линия по центру сердца)
+  const edgeX = (revealedVw / 100) * dims.w;
 
-  // Контур сердца в пикселях экрана с учётом позиции и вращения
-  const heartPoly = HEART_POINTS.map(([nx, ny]) => {
+  // Точки контура сердца в px (с учётом позиции и вращения)
+  const heartPx = HEART_POINTS.map(([nx, ny]) => {
     const px = nx * r;
     const py = ny * r;
-    const rx = px * cosA - py * sinA + cx;
-    const ry = px * sinA + py * cosA + cy;
-    return `${rx.toFixed(1)}px ${ry.toFixed(1)}px`;
-  }).join(", ");
+    return [px * cosA - py * sinA + cx, px * sinA + py * cosA + cy] as [number, number];
+  });
+  const heartPathD = heartPx
+    .map(([x, y], i) => `${i === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`)
+    .join(" ") + "Z";
 
-  // Клип финального экрана — внутри контура сердца
-  const finalClip = `polygon(${heartPoly})`;
-  // Клип DatePicker — снаружи сердца (весь экран минус сердце, evenodd)
-  const dateClip =
-    `path(evenodd, "M0 0H${dims.w}V${dims.h}H0Z ` +
-    HEART_POINTS.map(([nx, ny], i) => {
-      const px = nx * r;
-      const py = ny * r;
-      const rx = px * cosA - py * sinA + cx;
-      const ry = px * sinA + py * cosA + cy;
-      return `${i === 0 ? "M" : "L"}${rx.toFixed(1)} ${ry.toFixed(1)}`;
-    }).join(" ") +
-    'Z")';
+  // Финальный экран: левая полуплоскость (до edgeX) ОБЪЕДИНЁННАЯ с сердцем.
+  // nonzero fill: оба контура по часовой → объединение.
+  const W = dims.w;
+  const H = dims.h;
+  const finalClip = `path(nonzero, "M0 0 L${edgeX.toFixed(1)} 0 L${edgeX.toFixed(1)} ${H} L0 ${H}Z ${heartPathD}")`;
+  // DatePicker: правая полуплоскость (от edgeX) МИНУС сердце.
+  // evenodd: прямоугольник справа, минус перекрытие с сердцем.
+  const dateClip = `path(evenodd, "M${edgeX.toFixed(1)} 0 L${W} 0 L${W} ${H} L${edgeX.toFixed(1)} ${H}Z ${heartPathD}")`;
 
   return createPortal(
     <>
-      {/* DatePicker — виден снаружи сердца */}
+      {/* DatePicker — справа от границы, минус область сердца */}
       <div
         style={{
           position: "fixed",
@@ -113,7 +113,7 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
         {datepickerContent}
       </div>
 
-      {/* Финальный экран — виден внутри сердца */}
+      {/* Финальный экран — слева от границы, плюс область сердца */}
       <div
         style={{
           position: "fixed",
