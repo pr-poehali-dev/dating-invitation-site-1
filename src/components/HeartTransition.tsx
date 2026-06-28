@@ -5,19 +5,17 @@ interface Props {
   onDone: () => void;
 }
 
-const DURATION = 6000;
-
 export default function HeartTransition({ onDone }: Props) {
   const doneRef = useRef(false);
 
   useEffect(() => {
-    // Вызываем onDone в середине пути — сердце точно перекрывает весь экран
+    // Убираем сердце после завершения анимации
     const t1 = setTimeout(() => {
       if (!doneRef.current) {
         doneRef.current = true;
         onDone();
       }
-    }, DURATION / 2);
+    }, 3500);
 
     return () => clearTimeout(t1);
   }, [onDone]);
@@ -36,19 +34,18 @@ export default function HeartTransition({ onDone }: Props) {
         style={{
           position: "absolute",
           top: "50%",
-          left: 0,
-          fontSize: "150vw",
+          fontSize: "90vh",
           lineHeight: 1,
           whiteSpace: "nowrap",
-          animation: `heartRoll ${DURATION}ms linear forwards`,
+          animation: "heartRoll 3.5s linear forwards",
         }}
       >
-        ❤️
+        ♥️
       </div>
       <style>{`
         @keyframes heartRoll {
-          0%   { transform: translateY(-50%) translateX(-150vw) rotate(0deg); }
-          100% { transform: translateY(-50%) translateX(150vw)  rotate(720deg); }
+          0%   { transform: translateY(-50%) translateX(-100vh) rotate(0deg); }
+          100% { transform: translateY(-50%) translateX(110vw)  rotate(540deg); }
         }
       `}</style>
     </div>,
