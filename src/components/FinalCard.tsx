@@ -19,10 +19,10 @@ export default function FinalCard({ place, date }: Props) {
   });
 
   return (
-    <div className="meme-page places-page" style={{ position: "absolute", inset: 0 }}>
+    <div className="meme-page places-page">
       <ScatteredPetals />
       <div
-        className="places-card"
+        className="places-card animate-in"
         style={{
           maxWidth: "min(80vw, 1000px)",
           width: "min(80vw, 1000px)",
