@@ -35,8 +35,7 @@ export default function HeartTransition({ onDone }: Props) {
           position: "absolute",
           top: "50%",
           left: 0,
-          // 160vmax — гарантированно больше любого края экрана
-          fontSize: "160vmax",
+          fontSize: "90vh",
           lineHeight: 1,
           animation: "heartRoll 5s cubic-bezier(0.3, 0, 0.7, 1) forwards",
         }}
@@ -45,10 +44,10 @@ export default function HeartTransition({ onDone }: Props) {
       </div>
       <style>{`
         @keyframes heartRoll {
-          0%   { transform: translateY(-50%) translateX(-110%) rotate(0deg); }
-          45%  { transform: translateY(-50%) translateX(-50%) rotate(-180deg); }
-          55%  { transform: translateY(-50%) translateX(-50%) rotate(-180deg); }
-          100% { transform: translateY(-50%) translateX(10%)  rotate(-360deg); }
+          0%   { transform: translateY(-50%) translateX(-110vw) rotate(0deg); }
+          45%  { transform: translateY(-50%) translateX(5vw)    rotate(-360deg); }
+          55%  { transform: translateY(-50%) translateX(5vw)    rotate(-360deg); }
+          100% { transform: translateY(-50%) translateX(120vw)  rotate(-720deg); }
         }
       `}</style>
     </div>,
