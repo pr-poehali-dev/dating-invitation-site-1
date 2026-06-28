@@ -7,7 +7,7 @@ interface Props {
 }
 
 const DURATION = 5000;
-const HEART_VW = 130; // ширина сердца в vw
+const HEART_VW = 70; // ширина сердца в vw
 
 export default function HeartTransition({ onDone, finalContent }: Props) {
   const doneRef = useRef(false);
