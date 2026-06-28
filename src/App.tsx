@@ -30,7 +30,13 @@ declare global {
 
 function AppInner() {
   const [petalActive, setPetalActive] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>((() => {
+    const a = new Audio(AUDIO_URL);
+    a.loop = true;
+    a.volume = 0.1;
+    a.preload = "auto";
+    return a;
+  })());
 
   const handleCovered = useCallback(() => {
     window.__petalOnCovered?.();
@@ -72,13 +78,6 @@ function AppInner() {
   // Регистрируем глобальный триггер с новой логикой
   window.__petalStart = useCallback(() => {
     setPetalActive(true);
-
-    if (!audioRef.current) {
-      audioRef.current = new Audio(AUDIO_URL);
-      audioRef.current.loop = true;
-      // Устанавливаем начальную громкость сразу при создании объекта
-      audioRef.current.volume = 0.1;
-    }
 
     const audio = audioRef.current;
     if (audio) {
