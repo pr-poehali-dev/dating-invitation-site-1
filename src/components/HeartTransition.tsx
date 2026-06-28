@@ -73,8 +73,9 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
           const cx = textLeftPx + 0.5 * fontPx;
           const cy = dims.h / 2;
           // Радиус подгоняем так, чтобы маска-след покрывала ВЕСЬ красный глиф ❤️.
-          // Параметрическое сердце уже/острее глифа, поэтому берём с запасом.
-          const r = fontPx * 0.5;
+          // Параметрическое сердце уже/острее глифа, поэтому берём с запасом,
+          // чтобы прокрашивались крайние верхние детали (смайлик у "Буду ждать").
+          const r = fontPx * 0.58;
           const rad = (rotate * Math.PI) / 180;
           const cosA = Math.cos(rad);
           const sinA = Math.sin(rad);
