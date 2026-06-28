@@ -70,21 +70,23 @@ export default function PetalAvalanche({ active, onCovered, onDone }: Props) {
   }, [active, onCovered, onDone]);
 
   return createPortal(
-    show ? (
       <div
-        style={{
+        style={
+          {
           position: "fixed",
-          inset: 0,
+          inset: 0, 
           zIndex: 9999,
           pointerEvents: "none",
           overflow: "hidden",
-          opacity: fading ? 0 : 1,
+          opacity: fading ? 0 : show ? 1 : 0,
+          visibilit: show ? "visible" : 
+"hidden",
           transition: fading ? "opacity 0.8s ease" : "none",
         }}
       >
         {PETALS.map((p) => (
           <span
-            key={p.id}
+            key={p.id}  
             style={
               {
                 position: "absolute",
@@ -92,9 +94,13 @@ export default function PetalAvalanche({ active, onCovered, onDone }: Props) {
                 left: `${p.left}%`,
                 fontSize: `${p.size}rem`,
                 userSelect: "none",
-                animation: `avalancheFalling ${p.fallDuration}s linear ${p.delay}s infinite backwards`,
-                "--rotate": `${p.rotate}deg`,
-              } as React.CSSProperties
+                animation: show
+                ? `avalancheFalling ${p.
+fallDuration}
+s linear ${p.delay}s infinite backwards`
+:"none",
+"--rotate": `${p.rotate}deg`,
+} as React.CSSProperties
             }
           >
             {p.emoji}
