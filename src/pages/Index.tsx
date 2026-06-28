@@ -192,7 +192,7 @@ export default function Index() {
           const minY = -originTop + MARGIN;
           const maxY = window.innerHeight - originTop - rect.height - MARGIN;
 
-          const nx = Math.max(minX, Math.min(maxX, minX));
+          const nx = Math.max(minX, Math.min(maxX, minX + (maxX - minX) * 0.25));
           const ny = Math.max(minY, Math.min(maxY, (minY + maxY) * 0.5));
 
           noPosRef.current = { x: nx, y: ny };
