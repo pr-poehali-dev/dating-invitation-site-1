@@ -88,10 +88,13 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
 
   const W = dims.w;
   const H = dims.h;
-  // Финальный экран: виден ТОЛЬКО внутри сердца
-  const finalClip = `path("${heartPathD}")`;
-  // DatePicker: виден везде, КРОМЕ сердца (прямоугольник экрана минус сердце, evenodd)
-  const dateClip = `path(evenodd, "M0 0 L${W} 0 L${W} ${H} L0 ${H}Z ${heartPathD}")`;
+  // Граница "пройденного" — по центру сердца (всё левее уже стёрто/нарисовано)
+  const edgeX = cx;
+  // Финальный экран: левая полуплоскость (след) ОБЪЕДИНЁННАЯ с сердцем.
+  // Оба контура по часовой стрелке → nonzero даёт объединение, стык по контуру сердца.
+  const finalClip = `path(nonzero, "M0 0 L${edgeX.toFixed(1)} 0 L${edgeX.toFixed(1)} ${H} L0 ${H}Z ${heartPathD}")`;
+  // DatePicker: правая полуплоскость МИНУС сердце (evenodd).
+  const dateClip = `path(evenodd, "M${edgeX.toFixed(1)} 0 L${W} 0 L${W} ${H} L${edgeX.toFixed(1)} ${H}Z ${heartPathD}")`;
 
   return createPortal(
     <>
