@@ -91,6 +91,12 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
           ctx.fillStyle = "#000";
           ctx.fill();
 
+          // Когда сердце почти ушло за правый край — добиваем маску до всего экрана,
+          // чтобы финальная картинка прорисовалась полностью (верх/низ тоже).
+          if (cx - r > dims.w) {
+            ctx.fillRect(0, 0, dims.w, dims.h);
+          }
+
           setMaskUrl(c.toDataURL());
         }
       }
