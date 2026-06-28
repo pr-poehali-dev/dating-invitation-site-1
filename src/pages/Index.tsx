@@ -238,17 +238,18 @@ export default function Index() {
   }, [chosenPlace, chosenDate]);
 
   // Финальный экран + переход сердцем.
-  // FinalCard рендерится на ОДНОЙ позиции в дереве в обоих случаях, поэтому
-  // <video> не перемонтируется и не мигает при завершении перехода.
+  // Сердце РИСУЕТ финальную карточку по своему следу (finalContent).
+  // Когда дата уже подтверждена — показываем ту же карточку как базовый экран.
   if (chosenPlace && (pendingDate || chosenDate)) {
     const shownDate = (chosenDate ?? pendingDate) as Date;
+    const finalCard = <FinalCard place={chosenPlace} date={shownDate} />;
     return (
       <div className="meme-page places-page" style={{ position: "relative" }}>
-        <FinalCard place={chosenPlace} date={shownDate} />
+        {finalCard}
         {!chosenDate && pendingDate && (
           <HeartTransition
             onDone={() => setChosenDate(pendingDate)}
-            finalContent={null}
+            finalContent={finalCard}
             datepickerContent={<DatePickerScreen place={chosenPlace} onDone={() => {}} />}
           />
         )}

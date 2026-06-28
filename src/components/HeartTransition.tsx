@@ -87,10 +87,20 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
           const cy = dims.h / 2; // вертикальный центр (translateY(-50%))
           const rad = (rotate * Math.PI) / 180;
 
-          // Готовый силуэт-штамп просто двигаем и поворачиваем — форма всегда идентична.
+          // Маска 1 — основной силуэт сердца (двигаем и поворачиваем).
           ctx.save();
           ctx.translate(cx, cy);
           ctx.rotate(rad);
+          ctx.drawImage(stamp, -stamp.width / 2, -stamp.height / 2);
+          ctx.restore();
+
+          // Маска 2 — слегка увеличенный силуэт, гарантированно закрашивает
+          // верхнюю зону эмодзи, где основной силуэт не дотягивается.
+          const k = 1.06;
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(rad);
+          ctx.scale(k, k);
           ctx.drawImage(stamp, -stamp.width / 2, -stamp.height / 2);
           ctx.restore();
 
