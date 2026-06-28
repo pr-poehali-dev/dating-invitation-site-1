@@ -3,8 +3,8 @@ import { createPortal } from "react-dom";
 
 interface Props {
   onDone: () => void;
+  finalContent: React.ReactNode;
   datepickerContent: React.ReactNode;
-  active: boolean;
 }
 
 const DURATION = 5000;
@@ -34,7 +34,7 @@ function makeHeartStamp(size: number): HTMLCanvasElement {
   return c;
 }
 
-export default function HeartTransition({ onDone, datepickerContent, active }: Props) {
+export default function HeartTransition({ onDone, finalContent, datepickerContent }: Props) {
   const doneRef = useRef(false);
   const startRef = useRef<number | null>(null);
   const rafRef = useRef<number>(0);
@@ -117,68 +117,73 @@ export default function HeartTransition({ onDone, datepickerContent, active }: P
       }
       rafRef.current = requestAnimationFrame(animate);
     };
-    if (!active) return;
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [onDone, dims.w, dims.h, active]);
+  }, [onDone, dims.w, dims.h]);
 
-  // Маска применяется к дейтпикеру ТОЛЬКО во время перехода (active).
-  // Сам дейтпикер всегда один и тот же элемент в потоке → не перемонтируется.
-  const maskStyle =
-    active && maskUrl
-      ? {
-          maskImage: `linear-gradient(#000,#000), url(${maskUrl})`,
-          WebkitMaskImage: `linear-gradient(#000,#000), url(${maskUrl})`,
-          maskSize: "100% 100%, 100% 100%" as const,
-          WebkitMaskSize: "100% 100%, 100% 100%" as const,
-          maskComposite: "subtract" as const,
-          WebkitMaskComposite: "xor" as const,
-        }
-      : {};
-
-  return (
+  return createPortal(
     <>
-      {/* DatePicker — постоянный слой. Во время перехода стирается по следу. */}
+      {/* DatePicker — виден везде, КРОМЕ следа сердца (след СТИРАЕТ дейтпикер).
+          Два слоя маски: сплошной прямоугольник МИНУС след сердца. */}
       <div
         style={{
-          position: "absolute",
+          position: "fixed",
           inset: 0,
-          zIndex: 5,
-          ...maskStyle,
+          zIndex: 99996,
+          pointerEvents: "none",
+          ...(maskUrl
+            ? {
+                maskImage: `linear-gradient(#000,#000), url(${maskUrl})`,
+                WebkitMaskImage: `linear-gradient(#000,#000), url(${maskUrl})`,
+                maskSize: "100% 100%, 100% 100%",
+                WebkitMaskSize: "100% 100%, 100% 100%",
+                maskComposite: "subtract",
+                WebkitMaskComposite: "xor",
+              }
+            : {}),
         }}
       >
         {datepickerContent}
       </div>
 
-      {/* Сердце — через портал поверх всего, только во время перехода. */}
-      {active &&
-        createPortal(
-          <div
-            style={{
-              position: "fixed",
-              inset: 0,
-              zIndex: 99999,
-              pointerEvents: "none",
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: 0,
-                fontSize: HEART_SIZE,
-                lineHeight: 1,
-                whiteSpace: "nowrap",
-                transform: `translateY(-50%) translateX(${emoji.x - HEART_HALF_VW}vw) rotate(${emoji.rot}deg)`,
-                filter: "drop-shadow(0 0 30px rgba(255,80,120,0.4))",
-              }}
-            >
-              ❤️
-            </div>
-          </div>,
-          document.body,
-        )}
-    </>
+      {/* Финальный экран — виден там, где прошло сердце (по маске-следу).
+          Рендерится только если передан (старый режим). Когда карточка лежит
+          базовым слоем под оверлеем — finalContent не нужен. */}
+      {finalContent && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 99997,
+            pointerEvents: "none",
+            maskImage: maskUrl ? `url(${maskUrl})` : undefined,
+            WebkitMaskImage: maskUrl ? `url(${maskUrl})` : undefined,
+            maskSize: "100% 100%",
+            WebkitMaskSize: "100% 100%",
+          }}
+        >
+          {finalContent}
+        </div>
+      )}
+
+      {/* Само сердце */}
+      <div style={{ position: "fixed", inset: 0, zIndex: 99999, pointerEvents: "none", overflow: "hidden" }}>
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: 0,
+            fontSize: HEART_SIZE,
+            lineHeight: 1,
+            whiteSpace: "nowrap",
+            transform: `translateY(-50%) translateX(${emoji.x - HEART_HALF_VW}vw) rotate(${emoji.rot}deg)`,
+            filter: "drop-shadow(0 0 30px rgba(255,80,120,0.4))",
+          }}
+        >
+          ❤️
+        </div>
+      </div>
+    </>,
+    document.body,
   );
 }
