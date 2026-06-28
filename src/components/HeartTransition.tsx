@@ -18,20 +18,31 @@ const HEART_POINTS: Array<[number, number]> = (() => {
   for (let i = 0; i <= N; i++) {
     const t = (i / N) * Math.PI * 2;
     const x = 16 * Math.sin(t) ** 3;
-    let y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+    let y =
+      13 * Math.cos(t) -
+      5 * Math.cos(2 * t) -
+      2 * Math.cos(3 * t) -
+      Math.cos(4 * t);
     // Срезаем верхнюю выемку сердца, чтобы маска не давала острых "обрывков" сверху.
     // y здесь по математике вверх, верхняя ложбинка — около y≈5..7 при больших |x|.
-    if (y > 4) y = Math.min(y, 8.5);
+    if (y > 4) y = Math.min(y, 7.5);
     pts.push([x / 16, -y / 16]);
   }
   return pts;
 })();
 
-export default function HeartTransition({ onDone, finalContent, datepickerContent }: Props) {
+export default function HeartTransition({
+  onDone,
+  finalContent,
+  datepickerContent,
+}: Props) {
   const doneRef = useRef(false);
   const startRef = useRef<number | null>(null);
   const rafRef = useRef<number>(0);
-  const [dims, setDims] = useState({ w: window.innerWidth, h: window.innerHeight });
+  const [dims, setDims] = useState({
+    w: window.innerWidth,
+    h: window.innerHeight,
+  });
   const [maskUrl, setMaskUrl] = useState<string>("");
 
   // Canvas, на котором накапливается след сердца (НЕ очищается между кадрами)
@@ -40,7 +51,8 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
   const [emoji, setEmoji] = useState({ x: -HEART_HALF_VW, rot: 0 });
 
   useEffect(() => {
-    const onResize = () => setDims({ w: window.innerWidth, h: window.innerHeight });
+    const onResize = () =>
+      setDims({ w: window.innerWidth, h: window.innerHeight });
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
@@ -152,7 +164,15 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
       </div>
 
       {/* Само сердце */}
-      <div style={{ position: "fixed", inset: 0, zIndex: 99999, pointerEvents: "none", overflow: "hidden" }}>
+      <div
+        style={{
+          position: "fixed",
+          inset: 0,
+          zIndex: 99999,
+          pointerEvents: "none",
+          overflow: "hidden",
+        }}
+      >
         <div
           style={{
             position: "absolute",
