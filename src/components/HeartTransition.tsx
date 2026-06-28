@@ -132,21 +132,25 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
         {datepickerContent}
       </div>
 
-      {/* Финальный экран — виден там, где прошло сердце (по маске-следу) */}
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          zIndex: 99997,
-          pointerEvents: "none",
-          maskImage: maskUrl ? `url(${maskUrl})` : undefined,
-          WebkitMaskImage: maskUrl ? `url(${maskUrl})` : undefined,
-          maskSize: "100% 100%",
-          WebkitMaskSize: "100% 100%",
-        }}
-      >
-        {finalContent}
-      </div>
+      {/* Финальный экран — виден там, где прошло сердце (по маске-следу).
+          Рендерится только если передан (старый режим). Когда карточка лежит
+          базовым слоем под оверлеем — finalContent не нужен. */}
+      {finalContent && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 99997,
+            pointerEvents: "none",
+            maskImage: maskUrl ? `url(${maskUrl})` : undefined,
+            WebkitMaskImage: maskUrl ? `url(${maskUrl})` : undefined,
+            maskSize: "100% 100%",
+            WebkitMaskSize: "100% 100%",
+          }}
+        >
+          {finalContent}
+        </div>
+      )}
 
       {/* Само сердце */}
       <div style={{ position: "fixed", inset: 0, zIndex: 99999, pointerEvents: "none", overflow: "hidden" }}>
