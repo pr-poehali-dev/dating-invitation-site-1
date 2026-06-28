@@ -191,9 +191,9 @@ export default function Index() {
           const minY = -originTop + MARGIN;
           const maxY = window.innerHeight - originTop - rect.height - MARGIN;
 
-          // Левая треть экрана по X, чуть выше середины по Y
-          const nx = Math.max(minX, Math.min(maxX, minX + (maxX - minX) * 0.15));
-          const ny = Math.max(minY, Math.min(maxY, minY + (maxY - minY) * 0.4));
+          // Вплотную слева от карточки по X, ровно по центру карточки по Y
+          const nx = Math.max(minX, Math.min(maxX, minX + (maxX - minX) * 0.22));
+          const ny = Math.max(minY, Math.min(maxY, minY + (maxY - minY) * 0.5));
 
           noPosRef.current = { x: nx, y: ny };
           setNoPos({ x: nx, y: ny });
