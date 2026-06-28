@@ -6,6 +6,7 @@ import SearchingScreen, {
 } from "@/components/SearchingScreen";
 import FlowerZoomOverlay from "@/components/FlowerZoomOverlay";
 import HeartTransition from "@/components/HeartTransition";
+import FinalCard from "@/components/FinalCard";
 
 const CAT_IMG =
   "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/bucket/64c47ecb-0129-4cfd-b8b5-303bf6157694.png";
@@ -236,149 +237,32 @@ export default function Index() {
     ).catch(() => {});
   }, [chosenPlace, chosenDate]);
 
-  // Финальный экран
-  if (chosenPlace && chosenDate) {
-    const fmt = chosenDate.toLocaleDateString("ru-RU", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-    const finalScreen = (
-      <div className="meme-page places-page" style={{ position: "absolute", inset: 0 }}>
-        <ScatteredPetals />
-        <div
-          className="places-card"
-          style={{
-            maxWidth: "min(80vw, 1000px)",
-            width: "min(80vw, 1000px)",
-            marginTop: "-8vh",
-            transform: "scale(0.85)",
-            transformOrigin: "top center",
-          }}
-        >
-          <h1 className="places-title" style={{ color: "var(--rose-dark)" }}>
-            Буду ждать 😉
-          </h1>
-          {"videoUrl" in chosenPlace && chosenPlace.videoUrl ? (
-            <video
-              className="place-img"
-              src={chosenPlace.videoUrl}
-              autoPlay
-              muted
-              loop
-              playsInline
-              style={{ objectFit: "cover", pointerEvents: "none" }}
-            />
-          ) : chosenPlace.img ? (
-            <img
-              src={chosenPlace.img}
-              alt={chosenPlace.name}
-              style={{
-                width: "100%",
-                borderRadius: "1.4rem",
-                maxHeight: 400,
-                objectFit: "cover",
-              }}
-            />
-          ) : null}
-          <p
-            className="place-name"
-            style={{
-              fontSize: "2.5rem",
-              lineHeight: 1.4,
-              textAlign: "center",
-              marginTop: "2rem",
-              whiteSpace: "nowrap",
-              overflow: "visible",
-            }}
-          >
-            📍 {chosenPlace.name}
-          </p>
-          <p
-            className="place-name"
-            style={{
-              fontSize: "2.5rem",
-              lineHeight: 1.4,
-              textAlign: "center",
-              color: "var(--text-muted)",
-            }}
-          >
-            📅 {fmt}
-          </p>
-        </div>
-      </div>
-    );
+  // Финальный экран + переход сердцем.
+  // FinalCard рендерится на ОДНОЙ позиции в дереве в обоих случаях, поэтому
+  // <video> не перемонтируется и не мигает при завершении перехода.
+  if (chosenPlace && (pendingDate || chosenDate)) {
+    const shownDate = (chosenDate ?? pendingDate) as Date;
     return (
       <div className="meme-page places-page" style={{ position: "relative" }}>
-        {finalScreen}
+        <FinalCard place={chosenPlace} date={shownDate} />
+        {!chosenDate && pendingDate && (
+          <HeartTransition
+            onDone={() => setChosenDate(pendingDate)}
+            finalContent={null}
+            datepickerContent={<DatePickerScreen place={chosenPlace} onDone={() => {}} />}
+          />
+        )}
       </div>
     );
   }
 
-  // Экран выбора даты (с переходом сердцем)
+  // Экран выбора даты (до выбора даты)
   if (chosenPlace && !chosenDate) {
-    const pendingFmt = pendingDate?.toLocaleDateString("ru-RU", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-    const finalScreen = pendingDate ? (
-      <div className="meme-page places-page" style={{ position: "absolute", inset: 0 }}>
-        <ScatteredPetals />
-        <div
-          className="places-card"
-          style={{
-            maxWidth: "min(80vw, 1000px)",
-            width: "min(80vw, 1000px)",
-            marginTop: "-8vh",
-            transform: "scale(0.85)",
-            transformOrigin: "top center",
-          }}
-        >
-          <h1 className="places-title" style={{ color: "var(--rose-dark)" }}>
-            Буду ждать 😉
-          </h1>
-          {"videoUrl" in chosenPlace && chosenPlace.videoUrl ? (
-            <video
-              className="place-img"
-              src={chosenPlace.videoUrl}
-              autoPlay
-              muted
-              loop
-              playsInline
-              style={{ objectFit: "cover", pointerEvents: "none" }}
-            />
-          ) : chosenPlace.img ? (
-            <img
-              src={chosenPlace.img}
-              alt={chosenPlace.name}
-              style={{ width: "100%", borderRadius: "1.4rem", maxHeight: 400, objectFit: "cover" }}
-            />
-          ) : null}
-          <p className="place-name" style={{ fontSize: "2.5rem", lineHeight: 1.4, textAlign: "center", marginTop: "2rem", whiteSpace: "nowrap", overflow: "visible" }}>
-            📍 {chosenPlace.name}
-          </p>
-          <p className="place-name" style={{ fontSize: "2.5rem", lineHeight: 1.4, textAlign: "center", color: "var(--text-muted)" }}>
-            📅 {pendingFmt}
-          </p>
-        </div>
-      </div>
-    ) : null;
-
     return (
-      <>
-        <DatePickerScreen
-          place={chosenPlace}
-          onDone={(date) => setPendingDate(date)}
-        />
-        {pendingDate && finalScreen && (
-          <HeartTransition
-            onDone={() => setChosenDate(pendingDate)}
-            finalContent={finalScreen}
-            datepickerContent={<DatePickerScreen place={chosenPlace} onDone={() => {}} />}
-          />
-        )}
-      </>
+      <DatePickerScreen
+        place={chosenPlace}
+        onDone={(date) => setPendingDate(date)}
+      />
     );
   }
 
