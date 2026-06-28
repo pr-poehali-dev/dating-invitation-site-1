@@ -66,7 +66,7 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
         if (ctx) {
           const cx = (heartCenterVw / 100) * dims.w;
           const cy = dims.h / 2 - dims.h * 0.02;
-          const r = dims.h * 0.45 * 0.72;
+          const r = dims.h * 0.45 * 0.92;
           const rad = (rotate * Math.PI) / 180;
           const cosA = Math.cos(rad);
           const sinA = Math.sin(rad);
