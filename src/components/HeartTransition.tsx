@@ -75,9 +75,9 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
           // Глиф ❤️ внутри em-бокса: горизонтальный центр ~0.5em, вертикальный ~0.55em от верха строки
           const cx = textLeftPx + 0.5 * fontPx;
           const cy = dims.h / 2;
-          // Радиус подгоняем так, чтобы маска-след ТОЧНО совпадала с красным глифом ❤️
-          // и не выходила за его пределы (никаких тёмных ободков сзади).
-          const r = fontPx * 0.5;
+          // Радиус берём чуть меньше глифа, чтобы маска-след гарантированно была
+          // ВНУТРИ красного сердца и нигде не выступала за него (никаких пятен сзади).
+          const r = fontPx * 0.46;
           const rad = (rotate * Math.PI) / 180;
           const cosA = Math.cos(rad);
           const sinA = Math.sin(rad);
