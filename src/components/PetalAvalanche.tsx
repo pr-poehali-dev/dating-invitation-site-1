@@ -70,40 +70,39 @@ export default function PetalAvalanche({ active, onCovered, onDone }: Props) {
   }, [active, onCovered, onDone]);
 
   return createPortal(
-      <div
-        style={{
-          position: "fixed",
-          inset: 0, 
-          zIndex: 9999,
-          pointerEvents: "none",
-          overflow: "hidden",
-          opacity: fading ? 0 : show ? 1 : 0,
-          visibilit: show ? "visible" : "hidden",
-          transition: fading ? "opacity 0.8s ease" : "none",
-        }}
-      >
-        {PETALS.map((p) => (
-          <span
-            key={p.id}  
-            style={
-              {
-                position: "absolute",
-                top: 0,
-                left: `${p.left}%`,
-                fontSize: `${p.size}rem`,
-                userSelect: "none",
-                animation: show
-                ? `avalancheFalling ${p.fallDuration}
-s linear ${p.delay}s infinite backwards`
-:"none",
-"--rotate": `${p.rotate}deg`,
-} as React.CSSProperties
-            }
-          >
-            {p.emoji}
-          </span>
-        ))}
-      </div>
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        pointerEvents: "none",
+        overflow: "hidden",
+        opacity: fading ? 0 : show ? 1 : 0,
+        visibility: show ? "visible" : "hidden",
+        transition: fading ? "opacity 0.8s ease" : "none",
+      }}
+    >
+      {PETALS.map((p) => (
+        <span
+          key={p.id}
+          style={
+            {
+              position: "absolute",
+              top: 0,
+              left: `${p.left}%`,
+              fontSize: `${p.size}rem`,
+              userSelect: "none",
+              animation: show
+                ? `avalancheFalling ${p.fallDuration}s linear ${p.delay}s infinite backwards`
+                : "none",
+              "--rotate": `${p.rotate}deg`,
+            } as React.CSSProperties
+          }
+        >
+          {p.emoji}
+        </span>
+      ))}
+    </div>,
     document.body,
   );
 }
