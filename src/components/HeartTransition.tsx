@@ -123,20 +123,24 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
 
   return createPortal(
     <>
-      {/* DatePicker — везде, КРОМЕ области, которую уже прошло сердце (инверсия маски) */}
+      {/* DatePicker — виден везде, КРОМЕ следа сердца (след СТИРАЕТ дейтпикер).
+          Два слоя маски: сплошной прямоугольник МИНУС след сердца. */}
       <div
         style={{
           position: "fixed",
           inset: 0,
           zIndex: 99996,
           pointerEvents: "none",
-          maskImage: maskUrl ? `url(${maskUrl})` : undefined,
-          WebkitMaskImage: maskUrl ? `url(${maskUrl})` : undefined,
-          maskSize: "100% 100%",
-          WebkitMaskSize: "100% 100%",
-          maskMode: "luminance",
-          WebkitMaskComposite: "destination-out",
-          maskComposite: "subtract",
+          ...(maskUrl
+            ? {
+                maskImage: `linear-gradient(#000,#000), url(${maskUrl})`,
+                WebkitMaskImage: `linear-gradient(#000,#000), url(${maskUrl})`,
+                maskSize: "100% 100%, 100% 100%",
+                WebkitMaskSize: "100% 100%, 100% 100%",
+                maskComposite: "subtract",
+                WebkitMaskComposite: "xor",
+              }
+            : {}),
         }}
       >
         {datepickerContent}
