@@ -100,9 +100,13 @@ export default function Index() {
       const rect = btn!.getBoundingClientRect();
       const pos = noPosRef.current;
 
-      // Базовая позиция кнопки без transform
       const originLeft = rect.left - pos.x;
       const originTop = rect.top - pos.y;
+
+      const minX = -originLeft + MARGIN;
+      const maxX = window.innerWidth - originLeft - rect.width - MARGIN;
+      const minY = -originTop + MARGIN;
+      const maxY = window.innerHeight - originTop - rect.height - MARGIN;
 
       const btnCx = rect.left + rect.width / 2;
       const btnCy = rect.top + rect.height / 2;
@@ -116,14 +120,41 @@ export default function Index() {
       let nx = pos.x + Math.cos(angle) * OFFSET;
       let ny = pos.y + Math.sin(angle) * OFFSET;
 
-      // Вычисляем допустимый диапазон для translate на основе новой позиции кнопки
-      const safeMinX = -originLeft + MARGIN;
-      const safeMaxX = window.innerWidth - originLeft - rect.width - MARGIN;
-      const safeMinY = -originTop + MARGIN;
-      const safeMaxY = window.innerHeight - originTop - rect.height - MARGIN;
+      let bounced = false;
+      if (nx < minX) {
+        nx = minX;
+        bounced = true;
+      } else if (nx > maxX) {
+        nx = maxX;
+        bounced = true;
+      }
+      if (ny < minY) {
+        ny = minY;
+        bounced = true;
+      } else if (ny > maxY) {
+        ny = maxY;
+        bounced = true;
+      }
 
-      nx = Math.max(safeMinX, Math.min(safeMaxX, nx));
-      ny = Math.max(safeMinY, Math.min(safeMaxY, ny));
+      if (bounced) {
+        const awayX = btnCx > window.innerWidth / 2 ? -1 : 1;
+        const awayY = btnCy > window.innerHeight / 2 ? -1 : 1;
+        const rnd = Math.random() > 0.5;
+        nx = pos.x +
+          (rnd ? awayX : Math.sign(Math.cos(angle))) *
+            OFFSET *
+            (0.7 + Math.random() * 0.6);
+        ny = pos.y +
+          (!rnd ? awayY : Math.sign(Math.sin(angle))) *
+            OFFSET *
+            (0.7 + Math.random() * 0.6);
+      }
+
+      // Жёсткое ограничение — кнопка никогда не выходит за экран
+      if (minX <= maxX) nx = Math.max(minX, Math.min(maxX, nx));
+      else nx = (minX + maxX) / 2;
+      if (minY <= maxY) ny = Math.max(minY, Math.min(maxY, ny));
+      else ny = (minY + maxY) / 2;
 
       noPosRef.current = { x: nx, y: ny };
       setNoPos({ x: nx, y: ny });
