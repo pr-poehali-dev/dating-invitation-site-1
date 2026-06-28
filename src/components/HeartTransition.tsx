@@ -9,13 +9,13 @@ export default function HeartTransition({ onDone }: Props) {
   const doneRef = useRef(false);
 
   useEffect(() => {
-    // Переключаем экран когда сердце в центре (закрывает всё)
+    // Переход делается сразу — сердце едет поверх и маскирует смену страницы
     const t1 = setTimeout(() => {
       if (!doneRef.current) {
         doneRef.current = true;
         onDone();
       }
-    }, 2500);
+    }, 300);
 
     return () => clearTimeout(t1);
   }, [onDone]);
@@ -34,20 +34,18 @@ export default function HeartTransition({ onDone }: Props) {
         style={{
           position: "absolute",
           top: "50%",
-          left: 0,
           fontSize: "90vh",
           lineHeight: 1,
-          animation: "heartRoll 5s cubic-bezier(0.3, 0, 0.7, 1) forwards",
+          whiteSpace: "nowrap",
+          animation: "heartRoll 3.5s linear forwards",
         }}
       >
         ❤️
       </div>
       <style>{`
         @keyframes heartRoll {
-          0%   { transform: translateY(-50%) translateX(-110vw) rotate(0deg); }
-          45%  { transform: translateY(-50%) translateX(5vw)    rotate(-360deg); }
-          55%  { transform: translateY(-50%) translateX(5vw)    rotate(-360deg); }
-          100% { transform: translateY(-50%) translateX(120vw)  rotate(-720deg); }
+          0%   { transform: translateY(-50%) translateX(-100vh) rotate(0deg); }
+          100% { transform: translateY(-50%) translateX(110vw)  rotate(-540deg); }
         }
       `}</style>
     </div>,
