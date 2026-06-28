@@ -5,6 +5,7 @@ import SearchingScreen, {
   SearchingScreenHandle,
 } from "@/components/SearchingScreen";
 import FlowerZoomOverlay from "@/components/FlowerZoomOverlay";
+import HeartTransition from "@/components/HeartTransition";
 
 const CAT_IMG =
   "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/bucket/64c47ecb-0129-4cfd-b8b5-303bf6157694.png";
@@ -67,6 +68,7 @@ export default function Index() {
     null,
   );
   const [chosenDate, setChosenDate] = useState<Date | null>(null);
+  const [pendingDate, setPendingDate] = useState<Date | null>(null);
   const [noPos, setNoPos] = useState({ x: 0, y: 0 });
   const [noDodgeCount, setNoDodgeCount] = useState(0);
   const [showMaybeHint, setShowMaybeHint] = useState(false);
@@ -310,7 +312,14 @@ export default function Index() {
 
   // Экран выбора даты
   if (chosenPlace) {
-    return <DatePickerScreen place={chosenPlace} onDone={setChosenDate} />;
+    return (
+      <>
+        <DatePickerScreen place={chosenPlace} onDone={setPendingDate} />
+        {pendingDate && (
+          <HeartTransition onDone={() => setChosenDate(pendingDate)} />
+        )}
+      </>
+    );
   }
 
   // Экран "ищу места"
