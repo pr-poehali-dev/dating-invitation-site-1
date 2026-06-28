@@ -64,9 +64,16 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
       if (c) {
         const ctx = c.getContext("2d");
         if (ctx) {
-          const cx = (heartCenterVw / 100) * dims.w;
-          const cy = dims.h / 2 - dims.h * 0.02;
-          const r = dims.h * 0.45 * 0.92;
+          // Точный центр глифа ❤️, как он реально отрисован эмодзи:
+          // div: left:0, translateX((x-45)vw); внутри em-бокс шрифта 90vh.
+          // Левый край текста:
+          const textLeftPx = ((heartCenterVw - HEART_HALF_VW) / 100) * dims.w;
+          const fontPx = dims.h * 0.9; // font-size 90vh
+          // Глиф ❤️ внутри em-бокса: горизонтальный центр ~0.5em, вертикальный ~0.55em от верха строки
+          const cx = textLeftPx + 0.5 * fontPx;
+          const cy = dims.h / 2;
+          // Радиус красного сердца внутри глифа ~0.41 от font-size
+          const r = fontPx * 0.41;
           const rad = (rotate * Math.PI) / 180;
           const cosA = Math.cos(rad);
           const sinA = Math.sin(rad);
