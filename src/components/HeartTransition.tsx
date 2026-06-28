@@ -91,11 +91,11 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
           ctx.fillStyle = "#000";
           ctx.fill();
 
-          // Закрашиваем всю вертикальную полосу левее заднего края сердца:
-          // там сердце уже прошло, поэтому верх/низ должны быть финальной картинкой.
-          const backEdge = cx - r;
-          if (backEdge > 0) {
-            ctx.fillRect(0, 0, backEdge, dims.h);
+          // Закрашиваем вертикальную полосу до центра сердца:
+          // эта граница всегда спрятана под телом сердца, поэтому переход
+          // к финальной картинке (верх/низ) скрыт и появляется ровно за сердцем.
+          if (cx > 0) {
+            ctx.fillRect(0, 0, cx, dims.h);
           }
 
           setMaskUrl(c.toDataURL());
