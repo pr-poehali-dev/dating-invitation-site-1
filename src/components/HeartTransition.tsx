@@ -96,6 +96,13 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
           ctx.closePath();
           ctx.fillStyle = "#000";
           ctx.fill();
+          // Сглаживаем края следа: толстая обводка той же формы закрывает
+          // "зубцы" и промежутки, которые возникают между кадрами при вращении.
+          ctx.lineJoin = "round";
+          ctx.lineCap = "round";
+          ctx.lineWidth = fontPx * 0.12;
+          ctx.strokeStyle = "#000";
+          ctx.stroke();
 
           setMaskUrl(c.toDataURL());
         }
