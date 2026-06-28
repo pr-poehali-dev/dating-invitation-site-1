@@ -8,14 +8,10 @@ interface Props {
 }
 
 const DURATION = 5000;
-// Сердце ~90vh как в версии fix: heart loader transition mask
-// Эмодзи занимает ~75% от font-size по ширине, поэтому берём 90vh / 0.75 ~ 120vh для перекрытия
 const HEART_SIZE = "90vh";
-// Ширина сердца в vw для расчёта границы (приблизительно)
 const HEART_HALF_VW = 45;
 
 // Контур сердца в нормализованных координатах (центр 0,0), диапазон ~[-1..1]
-// Параметрически: x = 16 sin^3 t, y = 13 cos t - 5 cos2t - 2 cos3t - cos4t
 const HEART_POINTS: Array<[number, number]> = (() => {
   const pts: Array<[number, number]> = [];
   const N = 60;
@@ -23,17 +19,22 @@ const HEART_POINTS: Array<[number, number]> = (() => {
     const t = (i / N) * Math.PI * 2;
     const x = 16 * Math.sin(t) ** 3;
     const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-    pts.push([x / 16, -y / 16]); // нормируем и переворачиваем Y (экран вниз)
+    pts.push([x / 16, -y / 16]);
   }
   return pts;
 })();
 
 export default function HeartTransition({ onDone, finalContent, datepickerContent }: Props) {
   const doneRef = useRef(false);
-  const [progress, setProgress] = useState(0);
   const startRef = useRef<number | null>(null);
   const rafRef = useRef<number>(0);
   const [dims, setDims] = useState({ w: window.innerWidth, h: window.innerHeight });
+  const [maskUrl, setMaskUrl] = useState<string>("");
+
+  // Canvas, на котором накапливается след сердца (НЕ очищается между кадрами)
+  const trailRef = useRef<HTMLCanvasElement | null>(null);
+  // Позиция эмодзи для рендера
+  const [emoji, setEmoji] = useState({ x: -HEART_HALF_VW, rot: 0 });
 
   useEffect(() => {
     const onResize = () => setDims({ w: window.innerWidth, h: window.innerHeight });
@@ -41,11 +42,51 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  // Инициализируем canvas следа при изменении размеров
+  useEffect(() => {
+    const c = document.createElement("canvas");
+    c.width = dims.w;
+    c.height = dims.h;
+    trailRef.current = c;
+  }, [dims.w, dims.h]);
+
   useEffect(() => {
     const animate = (now: number) => {
       if (!startRef.current) startRef.current = now;
       const p = Math.min((now - startRef.current) / DURATION, 1);
-      setProgress(p);
+
+      const heartCenterVw = -HEART_HALF_VW + p * (100 + HEART_HALF_VW * 2);
+      const rotate = p * 540;
+      setEmoji({ x: heartCenterVw, rot: rotate });
+
+      // Рисуем сердце на canvas следа (накопление, без очистки)
+      const c = trailRef.current;
+      if (c) {
+        const ctx = c.getContext("2d");
+        if (ctx) {
+          const cx = (heartCenterVw / 100) * dims.w;
+          const cy = dims.h / 2 - dims.h * 0.02;
+          const r = dims.h * 0.45 * 0.72;
+          const rad = (rotate * Math.PI) / 180;
+          const cosA = Math.cos(rad);
+          const sinA = Math.sin(rad);
+
+          ctx.beginPath();
+          HEART_POINTS.forEach(([nx, ny], i) => {
+            const px = nx * r;
+            const py = ny * r;
+            const x = px * cosA - py * sinA + cx;
+            const y = px * sinA + py * cosA + cy;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          });
+          ctx.closePath();
+          ctx.fillStyle = "#000";
+          ctx.fill();
+
+          setMaskUrl(c.toDataURL());
+        }
+      }
 
       if (p >= 1) {
         if (!doneRef.current) {
@@ -58,84 +99,47 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
     };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [onDone]);
-
-  // Центр сердца движется от -50vw до 150vw
-  const heartCenterVw = -HEART_HALF_VW + progress * (100 + HEART_HALF_VW * 2);
-  // Угол вращения по часовой стрелке: 540deg за весь путь
-  const rotate = progress * 540;
-
-  // Центр сердца в px, синхронно с эмодзи.
-  // Реальное красное сердце эмодзи меньше своего бокса (~0.72 от font-size)
-  // и слегка смещено вверх внутри строки.
-  const cx = (heartCenterVw / 100) * dims.w;
-  const cy = dims.h / 2 - dims.h * 0.02;
-  // Радиус маски подгоняем под видимое красное сердце (меньше бокса)
-  const r = dims.h * 0.45 * 0.72;
-  const rad = (rotate * Math.PI) / 180;
-  const cosA = Math.cos(rad);
-  const sinA = Math.sin(rad);
-
-  // Точки контура сердца в px (с учётом позиции и вращения)
-  const heartPx = HEART_POINTS.map(([nx, ny]) => {
-    const px = nx * r;
-    const py = ny * r;
-    return [px * cosA - py * sinA + cx, px * sinA + py * cosA + cy] as [number, number];
-  });
-  const heartPathD = heartPx
-    .map(([x, y], i) => `${i === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`)
-    .join(" ") + "Z";
-
-  const W = dims.w;
-  const H = dims.h;
-  // Граница "пройденного" — по центру сердца (всё левее уже стёрто/нарисовано)
-  const edgeX = cx;
-  // Финальный экран: левая полуплоскость (след) ОБЪЕДИНЁННАЯ с сердцем.
-  // Оба контура по часовой стрелке → nonzero даёт объединение, стык по контуру сердца.
-  const finalClip = `path(nonzero, "M0 0 L${edgeX.toFixed(1)} 0 L${edgeX.toFixed(1)} ${H} L0 ${H}Z ${heartPathD}")`;
-  // DatePicker: правая полуплоскость МИНУС сердце (evenodd).
-  const dateClip = `path(evenodd, "M${edgeX.toFixed(1)} 0 L${W} 0 L${W} ${H} L${edgeX.toFixed(1)} ${H}Z ${heartPathD}")`;
+  }, [onDone, dims.w, dims.h]);
 
   return createPortal(
     <>
-      {/* DatePicker — справа от границы, минус область сердца */}
+      {/* DatePicker — везде, КРОМЕ области, которую уже прошло сердце (инверсия маски) */}
       <div
         style={{
           position: "fixed",
           inset: 0,
           zIndex: 99996,
-          clipPath: dateClip,
-          overflow: "hidden",
           pointerEvents: "none",
+          maskImage: maskUrl ? `url(${maskUrl})` : undefined,
+          WebkitMaskImage: maskUrl ? `url(${maskUrl})` : undefined,
+          maskSize: "100% 100%",
+          WebkitMaskSize: "100% 100%",
+          maskMode: "luminance",
+          WebkitMaskComposite: "destination-out",
+          maskComposite: "subtract",
         }}
       >
         {datepickerContent}
       </div>
 
-      {/* Финальный экран — слева от границы, плюс область сердца */}
+      {/* Финальный экран — виден там, где прошло сердце (по маске-следу) */}
       <div
         style={{
           position: "fixed",
           inset: 0,
           zIndex: 99997,
-          clipPath: finalClip,
-          overflow: "hidden",
           pointerEvents: "none",
+          maskImage: maskUrl ? `url(${maskUrl})` : undefined,
+          WebkitMaskImage: maskUrl ? `url(${maskUrl})` : undefined,
+          maskSize: "100% 100%",
+          WebkitMaskSize: "100% 100%",
         }}
       >
         {finalContent}
       </div>
 
       {/* Само сердце */}
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          zIndex: 99999,
-          pointerEvents: "none",
-          overflow: "hidden",
-        }}
-      >
+      <div style={{ position: "fixed", inset: 0, zIndex: 99999, pointerEvents: "none", overflow: "hidden" }}>
         <div
           style={{
             position: "absolute",
@@ -144,7 +148,7 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
             fontSize: HEART_SIZE,
             lineHeight: 1,
             whiteSpace: "nowrap",
-            transform: `translateY(-50%) translateX(${heartCenterVw - HEART_HALF_VW}vw) rotate(${rotate}deg)`,
+            transform: `translateY(-50%) translateX(${emoji.x - HEART_HALF_VW}vw) rotate(${emoji.rot}deg)`,
             filter: "drop-shadow(0 0 30px rgba(255,80,120,0.4))",
           }}
         >
