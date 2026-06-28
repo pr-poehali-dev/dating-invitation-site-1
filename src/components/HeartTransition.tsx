@@ -11,22 +11,6 @@ const DURATION = 5000;
 const HEART_SIZE = "90vh";
 const HEART_HALF_VW = 45;
 
-// Контур сердца в нормализованных координатах (центр 0,0), диапазон ~[-1..1]
-const HEART_POINTS: Array<[number, number]> = (() => {
-  const pts: Array<[number, number]> = [];
-  const N = 60;
-  for (let i = 0; i <= N; i++) {
-    const t = (i / N) * Math.PI * 2;
-    const x = 16 * Math.sin(t) ** 3;
-    let y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-    // Срезаем верхнюю выемку сердца, чтобы маска не давала острых "обрывков" сверху.
-    // y здесь по математике вверх, верхняя ложбинка — около y≈5..7 при больших |x|.
-    if (y > 4) y = Math.min(y, 8.5);
-    pts.push([x / 16, -y / 16]);
-  }
-  return pts;
-})();
-
 export default function HeartTransition({ onDone, finalContent, datepickerContent }: Props) {
   const doneRef = useRef(false);
   const startRef = useRef<number | null>(null);
@@ -36,6 +20,8 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
 
   // Canvas, на котором накапливается след сердца (НЕ очищается между кадрами)
   const trailRef = useRef<HTMLCanvasElement | null>(null);
+  // Временный canvas для отрисовки силуэта эмодзи каждого кадра
+  const tmpRef = useRef<HTMLCanvasElement | null>(null);
   // Позиция эмодзи для рендера
   const [emoji, setEmoji] = useState({ x: -HEART_HALF_VW, rot: 0 });
 
@@ -51,6 +37,10 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
     c.width = dims.w;
     c.height = dims.h;
     trailRef.current = c;
+    const t = document.createElement("canvas");
+    t.width = dims.w;
+    t.height = dims.h;
+    tmpRef.current = t;
   }, [dims.w, dims.h]);
 
   useEffect(() => {
@@ -64,37 +54,36 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
 
       // Рисуем сердце на canvas следа (накопление, без очистки)
       const c = trailRef.current;
-      if (c) {
+      const tmp = tmpRef.current;
+      if (c && tmp) {
         const ctx = c.getContext("2d");
-        if (ctx) {
-          // Точный центр глифа ❤️, как он реально отрисован эмодзи:
-          // div: left:0, translateX((x-45)vw); внутри em-бокс шрифта 90vh.
-          // Левый край текста:
+        const tctx = tmp.getContext("2d");
+        if (ctx && tctx) {
+          // Маска-след — это ТОТ ЖЕ эмодзи ❤️, что и красное сердце, в той же
+          // позиции/размере/повороте. Значит маска 1-в-1 повторяет красное сердце.
           const textLeftPx = ((heartCenterVw - HEART_HALF_VW) / 100) * dims.w;
           const fontPx = dims.h * 0.9; // font-size 90vh
-          // Глиф ❤️ внутри em-бокса: горизонтальный центр ~0.5em, вертикальный ~0.55em от верха строки
-          const cx = textLeftPx + 0.5 * fontPx;
-          const cy = dims.h / 2;
-          // Радиус берём чуть меньше глифа, чтобы маска-след гарантированно была
-          // ВНУТРИ красного сердца и нигде не выступала за него (никаких пятен сзади).
-          const r = fontPx * 0.46;
+          const cx = textLeftPx + 0.5 * fontPx; // центр глифа по X (как в CSS-блоке)
+          const cy = dims.h / 2; // вертикальный центр (translateY(-50%))
           const rad = (rotate * Math.PI) / 180;
-          const cosA = Math.cos(rad);
-          const sinA = Math.sin(rad);
 
-          // Маска-след — ровно форма сердца (как красное эмодзи), без дозакрасок.
-          ctx.beginPath();
-          HEART_POINTS.forEach(([nx, ny], i) => {
-            const px = nx * r;
-            const py = ny * r;
-            const x = px * cosA - py * sinA + cx;
-            const y = px * sinA + py * cosA + cy;
-            if (i === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-          });
-          ctx.closePath();
-          ctx.fillStyle = "#000";
-          ctx.fill();
+          // 1) Рисуем эмодзи на временном canvas
+          tctx.clearRect(0, 0, tmp.width, tmp.height);
+          tctx.save();
+          tctx.translate(cx, cy);
+          tctx.rotate(rad);
+          tctx.font = `${fontPx}px "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif`;
+          tctx.textAlign = "center";
+          tctx.textBaseline = "middle";
+          tctx.fillText("❤️", 0, 0);
+          // 2) Превращаем цветной глиф в сплошной чёрный силуэт (по его альфе)
+          tctx.globalCompositeOperation = "source-in";
+          tctx.fillStyle = "#000";
+          tctx.fillRect(0, 0, tmp.width, tmp.height);
+          tctx.restore();
+
+          // 3) Переносим силуэт на накопительный canvas следа
+          ctx.drawImage(tmp, 0, 0);
 
           setMaskUrl(c.toDataURL());
         }
