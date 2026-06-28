@@ -5,6 +5,7 @@ import SearchingScreen, {
   SearchingScreenHandle,
 } from "@/components/SearchingScreen";
 import FlowerZoomOverlay from "@/components/FlowerZoomOverlay";
+import HeartTransition from "@/components/HeartTransition";
 import FinalCard from "@/components/FinalCard";
 
 const CAT_IMG =
@@ -68,6 +69,7 @@ export default function Index() {
     null,
   );
   const [chosenDate, setChosenDate] = useState<Date | null>(null);
+  const [pendingDate, setPendingDate] = useState<Date | null>(null);
   const [noPos, setNoPos] = useState({ x: 0, y: 0 });
   const [noDodgeCount, setNoDodgeCount] = useState(0);
   const [showMaybeHint, setShowMaybeHint] = useState(false);
@@ -235,17 +237,34 @@ export default function Index() {
     ).catch(() => {});
   }, [chosenPlace, chosenDate]);
 
-  // Финальный экран — обычная карточка после выбора даты.
-  if (chosenPlace && chosenDate) {
-    return <FinalCard place={chosenPlace} date={chosenDate} />;
+  // Переход сердцем: сердце РИСУЕТ финальную карточку по своему следу.
+  // Пока дата не подтверждена — карточка живёт ТОЛЬКО внутри HeartTransition
+  // (finalContent), сердце её "проявляет". Никакого базового дубля под ним.
+  if (chosenPlace && pendingDate && !chosenDate) {
+    return (
+      <HeartTransition
+        onDone={() => setChosenDate(pendingDate)}
+        finalContent={<FinalCard place={chosenPlace} date={pendingDate} />}
+        datepickerContent={<DatePickerScreen place={chosenPlace} onDone={() => {}} />}
+      />
+    );
   }
 
-  // Экран выбора даты — обычная карточка.
+  // Финальный экран — после завершения перехода. Та же карточка.
+  if (chosenPlace && chosenDate) {
+    return (
+      <div className="meme-page places-page" style={{ position: "relative" }}>
+        <FinalCard place={chosenPlace} date={chosenDate} />
+      </div>
+    );
+  }
+
+  // Экран выбора даты (до выбора даты)
   if (chosenPlace && !chosenDate) {
     return (
       <DatePickerScreen
         place={chosenPlace}
-        onDone={(date) => setChosenDate(date)}
+        onDone={(date) => setPendingDate(date)}
       />
     );
   }

@@ -85,11 +85,9 @@ function MiniCalendar({ onSelect }: { onSelect: (date: Date) => void }) {
 export default function DatePickerScreen({
   place,
   onDone,
-  animate = true,
 }: {
   place: { name: string; img: string };
   onDone: (date: Date) => void;
-  animate?: boolean;
 }) {
   const [showCal, setShowCal] = useState(false);
   const [pickedDate, setPickedDate] = useState<Date | null>(null);
@@ -109,7 +107,7 @@ export default function DatePickerScreen({
   return (
     <div className="meme-page places-page">
       <ScatteredPetals />
-      <div className={`places-card${animate ? " animate-in" : ""}`}>
+      <div className="places-card animate-in">
         <h1 className="places-title">Выбери день 🗓️</h1>
 
         <button className="date-field" onClick={() => setShowCal((v) => !v)}>
