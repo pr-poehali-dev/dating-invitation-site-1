@@ -93,6 +93,13 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
           ctx.fillStyle = "#000";
           ctx.fill();
 
+          // Когда сердце полностью уехало за правый край экрана — добиваем маску
+          // до всего экрана, чтобы прорисовались крайние верхние/нижние детали
+          // (напр. смайлик у "Буду ждать"). Не видно, т.к. сердца уже нет на экране.
+          if (cx - r > dims.w) {
+            ctx.fillRect(0, 0, dims.w, dims.h);
+          }
+
           setMaskUrl(c.toDataURL());
         }
       }
