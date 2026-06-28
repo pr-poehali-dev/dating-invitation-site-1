@@ -9,13 +9,13 @@ export default function HeartTransition({ onDone }: Props) {
   const doneRef = useRef(false);
 
   useEffect(() => {
-    // Переход на финальный экран в середине анимации — когда сердце закрыло экран
+    // Переключаем экран когда сердце в центре (закрывает всё)
     const t1 = setTimeout(() => {
       if (!doneRef.current) {
         doneRef.current = true;
         onDone();
       }
-    }, 1200);
+    }, 2500);
 
     return () => clearTimeout(t1);
   }, [onDone]);
@@ -35,20 +35,20 @@ export default function HeartTransition({ onDone }: Props) {
           position: "absolute",
           top: "50%",
           left: 0,
-          transform: "translateY(-50%)",
-          fontSize: "min(100vw, 100vh)",
+          // 160vmax — гарантированно больше любого края экрана
+          fontSize: "160vmax",
           lineHeight: 1,
-          animation: "heartRoll 2.4s cubic-bezier(0.4, 0, 0.2, 1) forwards",
+          animation: "heartRoll 5s cubic-bezier(0.3, 0, 0.7, 1) forwards",
         }}
       >
         ❤️
       </div>
       <style>{`
         @keyframes heartRoll {
-          0%   { transform: translateY(-50%) translateX(-110%) rotate(0deg); opacity: 1; }
-          50%  { transform: translateY(-50%) translateX(0%)   rotate(-360deg); opacity: 1; }
-          75%  { transform: translateY(-50%) translateX(0%)   rotate(-360deg); opacity: 1; }
-          100% { transform: translateY(-50%) translateX(110%) rotate(-720deg); opacity: 1; }
+          0%   { transform: translateY(-50%) translateX(-110%) rotate(0deg); }
+          45%  { transform: translateY(-50%) translateX(-50%) rotate(-180deg); }
+          55%  { transform: translateY(-50%) translateX(-50%) rotate(-180deg); }
+          100% { transform: translateY(-50%) translateX(10%)  rotate(-360deg); }
         }
       `}</style>
     </div>,
