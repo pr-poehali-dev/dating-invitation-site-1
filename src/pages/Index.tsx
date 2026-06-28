@@ -247,7 +247,7 @@ export default function Index() {
       <div className="meme-page places-page" style={{ position: "absolute", inset: 0 }}>
         <ScatteredPetals />
         <div
-          className="places-card animate-in"
+          className="places-card"
           style={{
             maxWidth: "min(80vw, 1000px)",
             width: "min(80vw, 1000px)",
