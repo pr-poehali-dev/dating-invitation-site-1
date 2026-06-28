@@ -75,10 +75,9 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
           // Глиф ❤️ внутри em-бокса: горизонтальный центр ~0.5em, вертикальный ~0.55em от верха строки
           const cx = textLeftPx + 0.5 * fontPx;
           const cy = dims.h / 2;
-          // Радиус подгоняем так, чтобы маска-след покрывала ВЕСЬ красный глиф ❤️.
-          // Параметрическое сердце уже/острее глифа, поэтому берём с запасом,
-          // чтобы прокрашивались крайние верхние детали (смайлик у "Буду ждать").
-          const r = fontPx * 0.58;
+          // Радиус подгоняем так, чтобы маска-след ТОЧНО совпадала с красным глифом ❤️
+          // и не выходила за его пределы (никаких тёмных ободков сзади).
+          const r = fontPx * 0.5;
           const rad = (rotate * Math.PI) / 180;
           const cosA = Math.cos(rad);
           const sinA = Math.sin(rad);
@@ -96,13 +95,6 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
           ctx.closePath();
           ctx.fillStyle = "#000";
           ctx.fill();
-          // Сглаживаем края следа: толстая обводка той же формы закрывает
-          // "зубцы" и промежутки, которые возникают между кадрами при вращении.
-          ctx.lineJoin = "round";
-          ctx.lineCap = "round";
-          ctx.lineWidth = fontPx * 0.12;
-          ctx.strokeStyle = "#000";
-          ctx.stroke();
 
           setMaskUrl(c.toDataURL());
         }
