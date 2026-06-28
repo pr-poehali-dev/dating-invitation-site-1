@@ -41,8 +41,8 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
 
   // Центр сердца движется от -50vw до 150vw
   const heartCenterVw = -HEART_HALF_VW + progress * (100 + HEART_HALF_VW * 2);
-  // Граница "стёртого": правый край сердца
-  const revealedVw = heartCenterVw + HEART_HALF_VW;
+  // Граница клипа строго по центру сердца — переход полностью скрыт за ним
+  const revealedVw = heartCenterVw;
   // Угол вращения по часовой стрелке: 540deg за весь путь
   const rotate = progress * 540;
 
