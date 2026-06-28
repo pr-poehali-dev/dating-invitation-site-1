@@ -45,7 +45,7 @@ export default function HeartTransition({ onDone }: Props) {
       <style>{`
         @keyframes heartRoll {
           0%   { transform: translateY(-50%) translateX(-100vh) rotate(0deg); }
-          100% { transform: translateY(-50%) translateX(110vw)  rotate(-540deg); }
+          100% { transform: translateY(-50%) translateX(110vw)  rotate(540deg); }
         }
       `}</style>
     </div>,
