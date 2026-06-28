@@ -9,13 +9,13 @@ export default function HeartTransition({ onDone }: Props) {
   const doneRef = useRef(false);
 
   useEffect(() => {
-    // Переход делается сразу — сердце едет поверх и маскирует смену страницы
+    // Убираем сердце после завершения анимации
     const t1 = setTimeout(() => {
       if (!doneRef.current) {
         doneRef.current = true;
         onDone();
       }
-    }, 300);
+    }, 3500);
 
     return () => clearTimeout(t1);
   }, [onDone]);

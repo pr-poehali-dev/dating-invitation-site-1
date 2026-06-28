@@ -245,6 +245,7 @@ export default function Index() {
     });
     return (
       <div className="meme-page places-page">
+        {pendingDate && <HeartTransition onDone={() => setPendingDate(null)} />}
         <ScatteredPetals />
         <div
           className="places-card animate-in"
@@ -311,14 +312,15 @@ export default function Index() {
   }
 
   // Экран выбора даты
-  if (chosenPlace) {
+  if (chosenPlace && !chosenDate) {
     return (
-      <>
-        <DatePickerScreen place={chosenPlace} onDone={setPendingDate} />
-        {pendingDate && (
-          <HeartTransition onDone={() => setChosenDate(pendingDate)} />
-        )}
-      </>
+      <DatePickerScreen
+        place={chosenPlace}
+        onDone={(date) => {
+          setPendingDate(date);
+          setChosenDate(date);
+        }}
+      />
     );
   }
 
