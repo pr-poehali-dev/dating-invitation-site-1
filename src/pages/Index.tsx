@@ -90,18 +90,6 @@ export default function Index() {
 
     btn.style.pointerEvents = "none";
 
-    // Запоминаем начальную позицию кнопки один раз — до любых transform
-    const initRect = btn.getBoundingClientRect();
-    const originLeft = initRect.left;
-    const originTop = initRect.top;
-    const btnW = initRect.width;
-    const btnH = initRect.height;
-
-    const minX = -originLeft + MARGIN;
-    const maxX = window.innerWidth - originLeft - btnW - MARGIN;
-    const minY = -originTop + MARGIN;
-    const maxY = window.innerHeight - originTop - btnH - MARGIN;
-
     function jump(clientX: number, clientY: number) {
       if (jumping) return;
       jumping = true;
@@ -112,6 +100,14 @@ export default function Index() {
       const rect = btn!.getBoundingClientRect();
       const pos = noPosRef.current;
 
+      const originLeft = rect.left - pos.x;
+      const originTop = rect.top - pos.y;
+
+      const minX = -originLeft + MARGIN;
+      const maxX = window.innerWidth - originLeft - rect.width - MARGIN;
+      const minY = -originTop + MARGIN;
+      const maxY = window.innerHeight - originTop - rect.height - MARGIN;
+
       const btnCx = rect.left + rect.width / 2;
       const btnCy = rect.top + rect.height / 2;
 
@@ -121,8 +117,50 @@ export default function Index() {
       const spread = (Math.random() - 0.5) * ((Math.PI * 2) / 3);
       const angle = baseAngle + spread;
 
-      const nx = Math.max(minX, Math.min(maxX, pos.x + Math.cos(angle) * OFFSET));
-      const ny = Math.max(minY, Math.min(maxY, pos.y + Math.sin(angle) * OFFSET));
+      let nx = pos.x + Math.cos(angle) * OFFSET;
+      let ny = pos.y + Math.sin(angle) * OFFSET;
+
+      let bounced = false;
+      if (nx < minX) {
+        nx = minX;
+        bounced = true;
+      } else if (nx > maxX) {
+        nx = maxX;
+        bounced = true;
+      }
+      if (ny < minY) {
+        ny = minY;
+        bounced = true;
+      } else if (ny > maxY) {
+        ny = maxY;
+        bounced = true;
+      }
+
+      if (bounced) {
+        const awayX = btnCx > window.innerWidth / 2 ? -1 : 1;
+        const awayY = btnCy > window.innerHeight / 2 ? -1 : 1;
+        const rnd = Math.random() > 0.5;
+        nx = Math.max(
+          minX,
+          Math.min(
+            maxX,
+            pos.x +
+              (rnd ? awayX : Math.sign(Math.cos(angle))) *
+                OFFSET *
+                (0.7 + Math.random() * 0.6),
+          ),
+        );
+        ny = Math.max(
+          minY,
+          Math.min(
+            maxY,
+            pos.y +
+              (!rnd ? awayY : Math.sign(Math.sin(angle))) *
+                OFFSET *
+                (0.7 + Math.random() * 0.6),
+          ),
+        );
+      }
 
       noPosRef.current = { x: nx, y: ny };
       setNoPos({ x: nx, y: ny });
