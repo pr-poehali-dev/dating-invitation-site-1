@@ -245,7 +245,7 @@ export default function Index() {
       <HeartTransition
         onDone={() => setChosenDate(pendingDate)}
         finalContent={<FinalCard place={chosenPlace} date={pendingDate} />}
-        datepickerContent={<DatePickerScreen place={chosenPlace} onDone={() => {}} />}
+        datepickerContent={<DatePickerScreen place={chosenPlace} onDone={() => {}} animate={false} />}
       />
     );
   }
