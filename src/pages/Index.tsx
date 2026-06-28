@@ -237,35 +237,32 @@ export default function Index() {
     ).catch(() => {});
   }, [chosenPlace, chosenDate]);
 
-  // Переход сердцем: сердце РИСУЕТ финальную карточку по своему следу.
-  // Пока дата не подтверждена — карточка живёт ТОЛЬКО внутри HeartTransition
-  // (finalContent), сердце её "проявляет". Никакого базового дубля под ним.
-  if (chosenPlace && pendingDate && !chosenDate) {
-    return (
-      <HeartTransition
-        onDone={() => setChosenDate(pendingDate)}
-        finalContent={<FinalCard place={chosenPlace} date={pendingDate} />}
-        datepickerContent={<DatePickerScreen place={chosenPlace} onDone={() => {}} animate={false} />}
-      />
-    );
-  }
-
-  // Финальный экран — после завершения перехода. Та же карточка.
-  if (chosenPlace && chosenDate) {
+  // Единая фаза "выбор даты + переход + финал". Дерево СТАБИЛЬНО:
+  // - FinalCard (с видео) всегда смонтирована базовым слоем — не перемонтируется.
+  // - DatePicker всегда тот же самый элемент сверху — не перемонтируется.
+  // - HeartTransition лишь накладывает сердце и маску. Никаких пересозданий
+  //   → нет моргания ни в начале (нажатие "Отлично"), ни в конце.
+  if (chosenPlace) {
+    const shownDate = (chosenDate ?? pendingDate) as Date | null;
     return (
       <div className="meme-page places-page" style={{ position: "relative" }}>
-        <FinalCard place={chosenPlace} date={chosenDate} />
+        {shownDate && (
+          <FinalCard place={chosenPlace} date={shownDate} />
+        )}
+        {!chosenDate && (
+          <HeartTransition
+            active={!!pendingDate}
+            onDone={() => setChosenDate(pendingDate)}
+            datepickerContent={
+              <DatePickerScreen
+                place={chosenPlace}
+                onDone={(date) => setPendingDate(date)}
+                animate={!pendingDate}
+              />
+            }
+          />
+        )}
       </div>
-    );
-  }
-
-  // Экран выбора даты (до выбора даты)
-  if (chosenPlace && !chosenDate) {
-    return (
-      <DatePickerScreen
-        place={chosenPlace}
-        onDone={(date) => setPendingDate(date)}
-      />
     );
   }
 
