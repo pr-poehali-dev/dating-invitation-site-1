@@ -40,7 +40,7 @@ export default function HeartTransition({ onDone }: Props) {
           animation: "heartRoll 3.5s linear forwards",
         }}
       >
-        ❤️
+        ♥️
       </div>
       <style>{`
         @keyframes heartRoll {
