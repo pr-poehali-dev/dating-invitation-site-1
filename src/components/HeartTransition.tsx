@@ -11,6 +11,28 @@ const DURATION = 5000;
 const HEART_SIZE = "90vh";
 const HEART_HALF_VW = 45;
 
+// Создаёт PNG-силуэт сердца ОДИН раз. Форма строится через Безье (как у эмодзи),
+// заливается чёрным. Дальше его просто двигаем/поворачиваем — форма всегда идентична.
+function makeHeartStamp(size: number): HTMLCanvasElement {
+  const c = document.createElement("canvas");
+  c.width = size;
+  c.height = size;
+  const ctx = c.getContext("2d")!;
+  ctx.translate(size / 2, size / 2);
+  const s = size / 32; // масштаб под систему координат ниже
+  ctx.beginPath();
+  // Классическое сердце двумя дугами и нижним остриём (координаты в "единицах")
+  ctx.moveTo(0, 11 * s);
+  ctx.bezierCurveTo(-2 * s, 6 * s, -8 * s, 2 * s, -8 * s, -3 * s);
+  ctx.bezierCurveTo(-8 * s, -8 * s, -4 * s, -10 * s, 0, -5 * s);
+  ctx.bezierCurveTo(4 * s, -10 * s, 8 * s, -8 * s, 8 * s, -3 * s);
+  ctx.bezierCurveTo(8 * s, 2 * s, 2 * s, 6 * s, 0, 11 * s);
+  ctx.closePath();
+  ctx.fillStyle = "#000";
+  ctx.fill();
+  return c;
+}
+
 export default function HeartTransition({ onDone, finalContent, datepickerContent }: Props) {
   const doneRef = useRef(false);
   const startRef = useRef<number | null>(null);
@@ -20,8 +42,8 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
 
   // Canvas, на котором накапливается след сердца (НЕ очищается между кадрами)
   const trailRef = useRef<HTMLCanvasElement | null>(null);
-  // Временный canvas для отрисовки силуэта эмодзи каждого кадра
-  const tmpRef = useRef<HTMLCanvasElement | null>(null);
+  // Готовый PNG-силуэт сердца (рисуется ОДИН раз, форма всегда идентична)
+  const stampRef = useRef<HTMLCanvasElement | null>(null);
   // Позиция эмодзи для рендера
   const [emoji, setEmoji] = useState({ x: -HEART_HALF_VW, rot: 0 });
 
@@ -37,10 +59,9 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
     c.width = dims.w;
     c.height = dims.h;
     trailRef.current = c;
-    const t = document.createElement("canvas");
-    t.width = dims.w;
-    t.height = dims.h;
-    tmpRef.current = t;
+    // Силуэт-штамп размером с глиф (90vh). Запас по диагонали для поворота.
+    const stampSize = Math.ceil(dims.h * 0.9 * 1.45);
+    stampRef.current = makeHeartStamp(stampSize);
   }, [dims.w, dims.h]);
 
   useEffect(() => {
@@ -54,36 +75,23 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
 
       // Рисуем сердце на canvas следа (накопление, без очистки)
       const c = trailRef.current;
-      const tmp = tmpRef.current;
-      if (c && tmp) {
+      const stamp = stampRef.current;
+      if (c && stamp) {
         const ctx = c.getContext("2d");
-        const tctx = tmp.getContext("2d");
-        if (ctx && tctx) {
-          // Маска-след — это ТОТ ЖЕ эмодзи ❤️, что и красное сердце, в той же
-          // позиции/размере/повороте. Значит маска 1-в-1 повторяет красное сердце.
+        if (ctx) {
+          // Центр сердца в тех же координатах, что и красное CSS-сердце.
           const textLeftPx = ((heartCenterVw - HEART_HALF_VW) / 100) * dims.w;
           const fontPx = dims.h * 0.9; // font-size 90vh
-          const cx = textLeftPx + 0.5 * fontPx; // центр глифа по X (как в CSS-блоке)
+          const cx = textLeftPx + 0.5 * fontPx; // центр глифа по X
           const cy = dims.h / 2; // вертикальный центр (translateY(-50%))
           const rad = (rotate * Math.PI) / 180;
 
-          // 1) Рисуем эмодзи на временном canvas
-          tctx.clearRect(0, 0, tmp.width, tmp.height);
-          tctx.save();
-          tctx.translate(cx, cy);
-          tctx.rotate(rad);
-          tctx.font = `${fontPx}px "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif`;
-          tctx.textAlign = "center";
-          tctx.textBaseline = "middle";
-          tctx.fillText("❤️", 0, 0);
-          // 2) Превращаем цветной глиф в сплошной чёрный силуэт (по его альфе)
-          tctx.globalCompositeOperation = "source-in";
-          tctx.fillStyle = "#000";
-          tctx.fillRect(0, 0, tmp.width, tmp.height);
-          tctx.restore();
-
-          // 3) Переносим силуэт на накопительный canvas следа
-          ctx.drawImage(tmp, 0, 0);
+          // Готовый силуэт-штамп просто двигаем и поворачиваем — форма всегда идентична.
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(rad);
+          ctx.drawImage(stamp, -stamp.width / 2, -stamp.height / 2);
+          ctx.restore();
 
           setMaskUrl(c.toDataURL());
         }
