@@ -243,12 +243,11 @@ export default function Index() {
       month: "long",
       year: "numeric",
     });
-    return (
-      <div className="meme-page places-page">
-        {pendingDate && <HeartTransition onDone={() => setPendingDate(null)} />}
+    const finalScreen = (
+      <div className="meme-page places-page" style={{ position: "absolute", inset: 0 }}>
         <ScatteredPetals />
         <div
-          className="places-card animate-in"
+          className="places-card"
           style={{
             maxWidth: "min(80vw, 1000px)",
             width: "min(80vw, 1000px)",
@@ -307,6 +306,13 @@ export default function Index() {
             📅 {fmt}
           </p>
         </div>
+      </div>
+    );
+    return (
+      <div className="meme-page places-page" style={{ position: "relative" }}>
+        {pendingDate
+          ? <HeartTransition onDone={() => setPendingDate(null)} finalContent={finalScreen} />
+          : finalScreen}
       </div>
     );
   }
