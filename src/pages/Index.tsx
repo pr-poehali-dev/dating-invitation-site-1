@@ -166,6 +166,8 @@ export default function Index() {
       setNoPos({ x: nx, y: ny });
     }
 
+    let isFirstHover = true;
+
     function onDocMouseMove(e: MouseEvent) {
       const rect = btn!.getBoundingClientRect();
       const inside =
@@ -176,6 +178,28 @@ export default function Index() {
 
       if (inside && !wasInside) {
         setNoDodgeCount((prev) => prev + 1);
+
+        if (isFirstHover) {
+          isFirstHover = false;
+          jumping = true;
+          setTimeout(() => { jumping = false; }, 320);
+
+          // Первый прыжок — фиксированно в левый нижний угол экрана
+          const originLeft = rect.left - noPosRef.current.x;
+          const originTop = rect.top - noPosRef.current.y;
+          const minX = -originLeft + MARGIN;
+          const maxX = window.innerWidth - originLeft - rect.width - MARGIN;
+          const minY = -originTop + MARGIN;
+          const maxY = window.innerHeight - originTop - rect.height - MARGIN;
+
+          const nx = Math.max(minX, Math.min(maxX, minX + (maxX - minX) * 0.25));
+          const ny = Math.max(minY, Math.min(maxY, (minY + maxY) * 0.5));
+
+          noPosRef.current = { x: nx, y: ny };
+          setNoPos({ x: nx, y: ny });
+          wasInside = inside;
+          return;
+        }
       }
       wasInside = inside;
 
