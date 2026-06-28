@@ -21,12 +21,13 @@ function makeHeartStamp(size: number): HTMLCanvasElement {
   ctx.translate(size / 2, size / 2);
   const s = size / 32; // масштаб под систему координат ниже
   ctx.beginPath();
-  // Классическое сердце двумя дугами и нижним остриём (координаты в "единицах")
+  // Сердце с РАЗДУТЫМИ верхними горбами — чтобы маска гарантированно перекрывала
+  // широкий верх эмодзи ❤️ и сверху не оставалось незакрашенной зоны.
   ctx.moveTo(0, 11 * s);
-  ctx.bezierCurveTo(-2 * s, 6 * s, -8 * s, 2 * s, -8 * s, -3 * s);
-  ctx.bezierCurveTo(-8 * s, -8 * s, -4 * s, -10 * s, 0, -5 * s);
-  ctx.bezierCurveTo(4 * s, -10 * s, 8 * s, -8 * s, 8 * s, -3 * s);
-  ctx.bezierCurveTo(8 * s, 2 * s, 2 * s, 6 * s, 0, 11 * s);
+  ctx.bezierCurveTo(-3 * s, 6 * s, -9.5 * s, 2 * s, -9.5 * s, -4 * s);
+  ctx.bezierCurveTo(-9.5 * s, -10 * s, -4 * s, -11 * s, 0, -4.5 * s);
+  ctx.bezierCurveTo(4 * s, -11 * s, 9.5 * s, -10 * s, 9.5 * s, -4 * s);
+  ctx.bezierCurveTo(9.5 * s, 2 * s, 3 * s, 6 * s, 0, 11 * s);
   ctx.closePath();
   ctx.fillStyle = "#000";
   ctx.fill();
