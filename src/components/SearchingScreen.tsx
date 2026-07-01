@@ -22,7 +22,7 @@ export const SEARCH_STEPS = [
     from: 75,
     to: 88,
     label: "Быстренько создаю следующую страницу",
-    duration: 45000,
+    duration: 4500,
   },
   { from: 88, to: 95, label: "Ещё чуть-чуть", duration: 4500 },
   { from: 95, to: 100, label: "Готово", duration: 4500 },
