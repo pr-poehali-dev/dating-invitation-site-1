@@ -19,7 +19,6 @@ export type PetalTrigger = {
   onDone: (cb: () => void) => void;
 };
 
-// Глобальные колбэки — Index.tsx регистрирует их через window
 declare global {
   interface Window {
     __petalStart?: () => void;
@@ -30,11 +29,13 @@ declare global {
 
 function AppInner() {
   const [petalActive, setPetalActive] = useState(false);
+
+  // Создаем аудиотег с нужными параметрами (loop, volume, preload)
   const audioRef = useRef<HTMLAudioElement | null>(
     (() => {
       const a = new Audio(AUDIO_URL);
-      a.loop = true;
-      a.volume = 0.1;
+      a.loop = true; // Трек будет повторяться автоматически
+      a.volume = 0.1; // Начальная громкость
       a.preload = "auto";
       return a;
     })(),
@@ -49,50 +50,16 @@ function AppInner() {
     window.__petalOnDone?.();
   }, []);
 
-  // --- НАЧАЛО ИЗМЕНЕНИЙ ---
-
-  // Эта функция будет управлять плавным нарастанием громкости
-  const handleVolumeRamp = useCallback(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const currentTime = audio.currentTime;
-    const startTime = audio.dataset.startTime;
-
-    // Проверяем, было ли записано время начала
-    if (startTime) {
-      const elapsed = currentTime - parseFloat(startTime);
-
-      // Если прошло менее 5 секунд, плавно увеличиваем громкость
-      if (elapsed < 5) {
-        // Линейная интерполяция от 0.1 до 0.5 за 5 секунд
-        const targetVolume = Math.min(0.01 + (0.05 * elapsed) / 8, 0.4);
-        audio.volume = targetVolume;
-      } else {
-        // По истечении 5 секунд устанавливаем громкость на 0.5
-        audio.volume = 0.4;
-        // Отключаем слушатель, чтобы он больше не вызывался
-        audio.removeEventListener("timeupdate", handleVolumeRamp);
-      }
-    }
-  }, []);
-
-  // Регистрируем глобальный триггер с новой логикой
+  // Глобальный триггер для запуска эффекта и музыки
   window.__petalStart = useCallback(() => {
     setPetalActive(true);
 
     const audio = audioRef.current;
     if (audio) {
-      // Записываем текущее время воспроизведения как время старта эффекта
-      audio.dataset.startTime = audio.currentTime.toString();
-
-      // Добавляем слушатель для управления громкостью
-      audio.addEventListener("timeupdate", handleVolumeRamp);
-
-      // Запускаем воспроизведение
+      // Просто запускаем воспроизведение без лишних манипуляций
       audio.play().catch(() => {});
     }
-  }, [handleVolumeRamp]); // Не забудьте добавить handleVolumeRamp в зависимости
+  }, []);
 
   return (
     <>
