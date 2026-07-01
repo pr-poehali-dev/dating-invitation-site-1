@@ -35,7 +35,7 @@ function AppInner() {
     (() => {
       const a = new Audio(AUDIO_URL);
       a.loop = true; // Трек будет повторяться автоматически
-      a.volume = 0.1; // Начальная громкость
+      a.volume = 1; // Начальная громкость
       a.preload = "auto";
       return a;
     })(),
