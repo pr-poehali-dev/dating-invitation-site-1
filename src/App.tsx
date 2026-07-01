@@ -11,7 +11,7 @@ import PetalAvalanche from "@/components/PetalAvalanche";
 
 const queryClient = new QueryClient();
 const AUDIO_URL =
-  "https://www.image2url.com/r2/default/files/1782894069167-1a029f6f-b39b-4ce3-b490-9a44cfa63b8d.mp3";
+  "https://www.image2url.com/r2/default/files/1782896924879-fba01f89-c758-4e21-a35c-edd90418ec84.mp3";
 
 export type PetalTrigger = {
   start: () => void;
