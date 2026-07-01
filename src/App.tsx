@@ -49,6 +49,34 @@ function AppInner() {
     window.__petalOnDone?.();
   }, []);
 
+  // --- НАЧАЛО ИЗМЕНЕНИЙ ---
+
+  // Эта функция будет управлять плавным нарастанием громкости
+  const handleVolumeRamp = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const currentTime = audio.currentTime;
+    const startTime = audio.dataset.startTime;
+
+    // Проверяем, было ли записано время начала
+    if (startTime) {
+      const elapsed = currentTime - parseFloat(startTime);
+
+      // Если прошло менее 5 секунд, плавно увеличиваем громкость
+      if (elapsed < 5) {
+        // Линейная интерполяция от 0.1 до 0.5 за 5 секунд
+        const targetVolume = Math.min(0.01 + (0.05 * elapsed) / 8, 0.4);
+        audio.volume = targetVolume;
+      } else {
+        // По истечении 5 секунд устанавливаем громкость на 0.5
+        audio.volume = 0.4;
+        // Отключаем слушатель, чтобы он больше не вызывался
+        audio.removeEventListener("timeupdate", handleVolumeRamp);
+      }
+    }
+  }, []);
+
   // Регистрируем глобальный триггер с новой логикой
   window.__petalStart = useCallback(() => {
     setPetalActive(true);
