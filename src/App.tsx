@@ -39,12 +39,3 @@ function AppInner() {
       return a;
     })(),
   );
-
-  const handleCovered = useCallback(() => {
-    window.__petalOnCovered?.();
-  }, []);
-
-  const handleDone = useCallback(() => {
-    setPetalActive(false);
-    window.__petalOnDone?.();
-  }, []);
