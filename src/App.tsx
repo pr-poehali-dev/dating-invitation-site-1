@@ -11,7 +11,7 @@ import PetalAvalanche from "@/components/PetalAvalanche";
 
 const queryClient = new QueryClient();
 const AUDIO_URL =
-  "https://www.image2url.com/r2/default/files/1782584408118-350c69db-1556-4be9-a0fb-e3c94654f710.mp3";
+  "https://www.image2url.com/r2/default/files/1782894069167-1a029f6f-b39b-4ce3-b490-9a44cfa63b8d.mp3";
 
 export type PetalTrigger = {
   start: () => void;
@@ -30,13 +30,15 @@ declare global {
 
 function AppInner() {
   const [petalActive, setPetalActive] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>((() => {
-    const a = new Audio(AUDIO_URL);
-    a.loop = true;
-    a.volume = 0.1;
-    a.preload = "auto";
-    return a;
-  })());
+  const audioRef = useRef<HTMLAudioElement | null>(
+    (() => {
+      const a = new Audio(AUDIO_URL);
+      a.loop = true;
+      a.volume = 0.1;
+      a.preload = "auto";
+      return a;
+    })(),
+  );
 
   const handleCovered = useCallback(() => {
     window.__petalOnCovered?.();
