@@ -48,15 +48,3 @@ function AppInner() {
     setPetalActive(false);
     window.__petalOnDone?.();
   }, []);
-
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <AppInner />
-    </TooltipProvider>
-  </QueryClientProvider>
-);
-
-export default App;
