@@ -2,8 +2,18 @@ import { useState } from "react";
 import ScatteredPetals from "@/components/ScatteredPetals";
 
 const MONTHS = [
-  "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
-  "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь",
+  "Январь",
+  "Февраль",
+  "Март",
+  "Апрель",
+  "Май",
+  "Июнь",
+  "Июль",
+  "Август",
+  "Сентябрь",
+  "Октябрь",
+  "Ноябрь",
+  "Декабрь",
 ];
 const DAYS_SHORT = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 
@@ -54,15 +64,21 @@ function MiniCalendar({ onSelect }: { onSelect: (date: Date) => void }) {
   return (
     <div className="mini-calendar">
       <div className="cal-header">
-        <button className="cal-nav" onClick={prevMonth}>‹</button>
+        <button className="cal-nav" onClick={prevMonth}>
+          ‹
+        </button>
         <span className="cal-month-label">
           {MONTHS[viewMonth]} {viewYear}
         </span>
-        <button className="cal-nav" onClick={nextMonth}>›</button>
+        <button className="cal-nav" onClick={nextMonth}>
+          ›
+        </button>
       </div>
       <div className="cal-grid">
         {DAYS_SHORT.map((d) => (
-          <span key={d} className="cal-day-name">{d}</span>
+          <span key={d} className="cal-day-name">
+            {d}
+          </span>
         ))}
         {cells.map((day, i) =>
           day === null ? (
@@ -128,7 +144,7 @@ export default function DatePickerScreen({
             className="bubble-btn bubble-yes date-confirm-btn"
             onClick={() => onDone(pickedDate)}
           >
-            Отлично! ✔️
+            Выбрала✔️
           </button>
         )}
       </div>
