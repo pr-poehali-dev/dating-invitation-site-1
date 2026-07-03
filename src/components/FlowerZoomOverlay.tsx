@@ -42,8 +42,7 @@ export default function FlowerZoomOverlay({
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         // Фаза 1: отпрыгиваем назад дальше и дольше
-        root.style.transition =
-          "transform 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55)";
+        root.style.transition = "transform 1.2s cubic-bezier(0.42, 0, 0.58, 1)";
         root.style.transform = "scale(0.6)";
 
         // Фаза 2: логарифмическое погружение — визуально одинаковая скорость
