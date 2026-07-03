@@ -9,7 +9,11 @@ interface Props {
 // Цвет сердцевины лепестка ♥️
 const CORE_COLOR = "#c0435a";
 
-export default function FlowerZoomOverlay({ active, flowerPos, onCovered }: Props) {
+export default function FlowerZoomOverlay({
+  active,
+  flowerPos,
+  onCovered,
+}: Props) {
   const startedRef = useRef(false);
   const [coverOpacity, setCoverOpacity] = useState(0);
   const [coverVisible, setCoverVisible] = useState(false);
@@ -44,7 +48,7 @@ export default function FlowerZoomOverlay({ active, flowerPos, onCovered }: Prop
         // Фаза 2: логарифмическое погружение — визуально одинаковая скорость
         setTimeout(() => {
           const DURATION = 3000; // мс
-          const START_SCALE = 0.78;
+          const START_SCALE = 1;
           const END_SCALE = 300;
           const startTime = performance.now();
 
