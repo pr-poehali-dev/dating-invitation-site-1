@@ -51,10 +51,11 @@ const PLACES = [
   },
   {
     id: 6,
-    name: "🐉Китайский парк Хуамин⛩️",
-    desc: "🐉Китайский парк Хуамин⛩️",
+    name: "🌅Смотровая площадка\nPanorama360🌆",
+    desc: "🌅Смотровая площадка\nPanorama360🌆",
     img: "",
-    videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_162439.mp4",
+    videoUrl:
+      "https://videovssylku.ru/cache/c.videovssylku.ru/2026/07/04/VID_20260704_094307.mp4",
   },
 ];
 export default function Index() {
@@ -185,7 +186,9 @@ export default function Index() {
         if (isFirstHover) {
           isFirstHover = false;
           jumping = true;
-          setTimeout(() => { jumping = false; }, 320);
+          setTimeout(() => {
+            jumping = false;
+          }, 320);
 
           const originLeft = rect.left - noPosRef.current.x;
           const originTop = rect.top - noPosRef.current.y;
@@ -195,7 +198,10 @@ export default function Index() {
           const maxY = window.innerHeight - originTop - rect.height - MARGIN;
 
           // Вплотную слева от карточки по X, ровно по центру карточки по Y
-          const nx = Math.max(minX, Math.min(maxX, minX + (maxX - minX) * 0.22));
+          const nx = Math.max(
+            minX,
+            Math.min(maxX, minX + (maxX - minX) * 0.22),
+          );
           const ny = Math.max(minY, Math.min(maxY, minY + (maxY - minY) * 0.5));
 
           noPosRef.current = { x: nx, y: ny };
@@ -245,7 +251,9 @@ export default function Index() {
       <HeartTransition
         onDone={() => setChosenDate(pendingDate)}
         finalContent={<FinalCard place={chosenPlace} date={pendingDate} />}
-        datepickerContent={<DatePickerScreen place={chosenPlace} onDone={() => {}} />}
+        datepickerContent={
+          <DatePickerScreen place={chosenPlace} onDone={() => {}} />
+        }
       />
     );
   }
