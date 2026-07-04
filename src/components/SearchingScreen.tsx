@@ -17,7 +17,7 @@ export const SEARCH_STEPS = [
     duration: 4950,
   },
   { from: 40, to: 65, label: "Выбираю что-то поинтереснее", duration: 4950 },
-  { from: 65, to: 75, label: "Почти нашёл....", duration: 4950 },
+  { from: 65, to: 75, label: "Нашёл", duration: 4950 },
   {
     from: 75,
     to: 88,
