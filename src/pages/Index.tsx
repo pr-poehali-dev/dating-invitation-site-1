@@ -389,7 +389,7 @@ export default function Index() {
               transition: "transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)",
             }}
           >
-            НЕТ! ❌
+            Нет❌
           </button>
         </div>
       </div>
