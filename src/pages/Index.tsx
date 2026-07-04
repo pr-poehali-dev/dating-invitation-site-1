@@ -55,7 +55,7 @@ const PLACES = [
     desc: "🌅Смотровая площадка\nPanorama360🌆",
     img: "",
     videoUrl:
-      "https://videovssylku.ru/cache/c.videovssylku.ru/2026/07/04/VID_20260704_094307.mp4",
+      "https://videovssylku.ru/cache/d.videovssylku.ru/2026/07/04/VID_20260704_095101.mp4",
   },
 ];
 export default function Index() {
