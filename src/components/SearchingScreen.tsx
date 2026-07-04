@@ -21,11 +21,11 @@ export const SEARCH_STEPS = [
   {
     from: 75,
     to: 88,
-    label: "Быстренько создаю следующую страницу",
+    label: "Создаю следующую страницу...",
     duration: 5000,
   },
   { from: 88, to: 95, label: "Ещё чуть-чуть", duration: 5000 },
-  { from: 95, to: 100, label: "Готово", duration: 5000 },
+  { from: 95, to: 100, label: "Готово✔️ ", duration: 5000 },
 ];
 
 export interface SearchingScreenHandle {
