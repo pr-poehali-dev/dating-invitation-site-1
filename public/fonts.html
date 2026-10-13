@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Варианты шрифтов</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Marck+Script&family=Bad+Script&family=Lobster&family=Pacifico&family=Comfortaa:wght@500;700&family=Neucha&family=Amatic+SC:wght@700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; padding: 32px 16px; background: #fdf0f3; font-family: system-ui, sans-serif; color: #5a2a3a; }
+  h1.page { text-align: center; font-size: 22px; margin: 0 0 24px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+  .card { background: #fff; border-radius: 24px; padding: 20px 22px 24px; box-shadow: 0 6px 24px rgba(232, 99, 122, 0.15); }
+  .num { font-size: 13px; color: #b07b8a; margin-bottom: 4px; }
+  .name { font-size: 15px; font-weight: 600; margin-bottom: 14px; }
+  .q { font-size: 30px; color: #c2405e; text-align: center; margin: 0 0 8px; line-height: 1.2; }
+  .ru { font-size: 22px; text-align: center; color: #7a4a5a; margin: 0 0 16px; }
+  .btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .b { border: none; border-radius: 100px; padding: 8px 20px; font-size: 22px; color: #fff; }
+  .y { background: #f2a7b8; }
+  .m { background: #fff; color: #c2405e; border: 2px solid #f2a7b8; }
+  .n { background: #c3aee8; }
+</style>
+</head>
+<body>
+<h1 class="page">Варианты шрифтов для сайта</h1>
+<div class="grid" id="grid"></div>
+<script>
+  const fonts = [
+    ["Caveat", "Сейчас на сайте: лёгкий рукописный", "'Caveat'", 700],
+    ["Marck Script", "Изящная каллиграфия, как ручкой", "'Marck Script'", 400],
+    ["Bad Script", "Тонкий почерк, очень нежный", "'Bad Script'", 400],
+    ["Lobster", "Яркий, выразительный, «вывесочный»", "'Lobster'", 400],
+    ["Pacifico", "Круглый, весёлый, ретро-настроение", "'Pacifico'", 400],
+    ["Comfortaa", "Мягкий, округлый, современный", "'Comfortaa'", 700],
+    ["Neucha", "Простой, как от руки маркером", "'Neucha'", 400],
+    ["Amatic SC", "Высокий узкий, игривый", "'Amatic SC'", 700],
+  ];
+  const grid = document.getElementById("grid");
+  fonts.forEach(([name, desc, family, w], i) => {
+    const style = `font-family:${family},cursive;font-weight:${w}`;
+    grid.insertAdjacentHTML("beforeend", `
+      <div class="card">
+        <div class="num">Вариант ${i + 1}</div>
+        <div class="name">${name} — ${desc}</div>
+        <p class="q" style="${style}">🌸 Nastya, let me take you on a date 🌸</p>
+        <p class="ru" style="${style}">Кое-что нашёл!) Выбери место 🗺️</p>
+        <div class="btns">
+          <span class="b y" style="${style}">Alright...</span>
+          <span class="b m" style="${style}">I’ll think about it</span>
+          <span class="b n" style="${style}">Definitely not❌</span>
+        </div>
+      </div>`);
+  });
+</script>
+</body>
+</html>
