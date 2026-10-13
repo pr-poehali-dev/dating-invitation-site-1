@@ -87,7 +87,8 @@ const SearchingScreen = forwardRef<SearchingScreenHandle, Props>(
             ♥️
           </span>
           <h1 className="meme-question" style={{ color: "var(--rose-dark)" }}>
-            Минуту, нужно найти места для свидания, не ожидал, что ты скажешь да
+            Just a minute, gotta look up some places for date. i didnt expect
+            you`d agree
           </h1>
           <div className="search-progress-wrap">
             <div className="search-progress-bar">
