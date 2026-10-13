@@ -352,8 +352,8 @@ export default function Index() {
           </p>
         ) : noDodgeCount >= 2 ? (
           <p className="no-hint">
-            Я пытался исправить, чтобы кнопка «Нет» не бегала, но не получилось.
-            Возможно, «Я подумаю» работает?
+            I tried to fix the 'definitely not' button so it wouldn't jump
+            around, but no luck. Maybe 'I'll think about it' would work better?
           </p>
         ) : null}
         <h1 className="meme-question">
