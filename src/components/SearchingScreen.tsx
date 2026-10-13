@@ -13,7 +13,7 @@ export const SEARCH_STEPS = [
   {
     from: 25,
     to: 40,
-    label: "Исключаю странные рестораны в подвале",
+    label: "Сontinuing",
     duration: 4920,
   },
   { from: 40, to: 65, label: "Выбираю что-то поинтереснее", duration: 4910 },
