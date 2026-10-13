@@ -347,13 +347,13 @@ export default function Index() {
         <img src={CAT_IMG} alt="пёс" className="cat-img" />
         {showMaybeHint ? (
           <p className="no-hint">
-            У меня тоже эта кнопка постоянно исчезала при нажатии, так и не
-            понял почему. Может с кнопкой «Да» всё в порядке?
+            That button kept disappearing for me too, no idea why. Is it
+            possible the 'Yes' button is working as intended?
           </p>
         ) : noDodgeCount >= 2 ? (
           <p className="no-hint">
             I tried to fix the 'definitely not' button so it wouldn't jump
-            around, but no luck. Maybe 'I'll think about it' would work better?
+            around, but no luck. Maybe 'I'll think about it' will works?
           </p>
         ) : null}
         <h1 className="meme-question">
