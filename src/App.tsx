@@ -10,8 +10,7 @@ import NotFound from "./pages/NotFound";
 import PetalAvalanche from "@/components/PetalAvalanche";
 
 const queryClient = new QueryClient();
-const AUDIO_URL =
-  "https://www.image2url.com/r2/default/files/1783148536823-5703f195-f313-45d4-8bc1-6be137bb8d0b.mp3";
+const AUDIO_URL = "/music.mp3";
 
 export type PetalTrigger = {
   start: () => void;
@@ -31,15 +30,14 @@ function AppInner() {
   const [petalActive, setPetalActive] = useState(false);
 
   // Создаем аудиотег с нужными параметрами (loop, volume, preload)
-  const audioRef = useRef<HTMLAudioElement | null>(
-    (() => {
-      const a = new Audio(AUDIO_URL);
-      a.loop = true; // Трек будет повторяться автоматически
-      a.volume = 1; // Начальная громкость
-      a.preload = "auto";
-      return a;
-    })(),
-  );
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  if (!audioRef.current) {
+    const a = new Audio(AUDIO_URL);
+    a.loop = true;
+    a.volume = 1;
+    a.preload = "auto";
+    audioRef.current = a;
+  }
 
   const handleCovered = useCallback(() => {
     window.__petalOnCovered?.();
@@ -56,8 +54,16 @@ function AppInner() {
 
     const audio = audioRef.current;
     if (audio) {
-      // Просто запускаем воспроизведение без лишних манипуляций
-      audio.play().catch(() => {});
+      audio.muted = false;
+      audio.play().catch(() => {
+        const retry = () => {
+          audio.play().catch(() => {});
+          document.removeEventListener("pointerdown", retry);
+          document.removeEventListener("touchend", retry);
+        };
+        document.addEventListener("pointerdown", retry);
+        document.addEventListener("touchend", retry);
+      });
     }
   }, []);
 
