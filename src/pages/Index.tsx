@@ -348,7 +348,7 @@ export default function Index() {
         {showMaybeHint ? (
           <p className="no-hint">
             That button kept disappearing for me too, no idea why. Is it
-            possible the 'Alright' button is working as intended?
+            possible the 'Alright' button is working how should it be?
           </p>
         ) : noDodgeCount >= 2 ? (
           <p className="no-hint">
