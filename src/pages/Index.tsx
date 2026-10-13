@@ -353,7 +353,8 @@ export default function Index() {
         ) : noDodgeCount >= 2 ? (
           <p className="no-hint">
             I tried to fix the 'definitely not' button so it wouldn't jump
-            around, but no luck. Maybe 'I'll think about it' will works?
+            around, but i didn’t succeed. Maybe 'I'll think about it' will
+            works?
           </p>
         ) : null}
         <h1 className="meme-question">
