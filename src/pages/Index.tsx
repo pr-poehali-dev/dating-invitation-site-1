@@ -364,7 +364,7 @@ export default function Index() {
             className="bubble-btn bubble-yes"
             onClick={() => window.__petalStart?.()}
           >
-            Да ✔️
+            Alright...
           </button>
           <button
             className="bubble-btn bubble-maybe"
@@ -379,7 +379,7 @@ export default function Index() {
                 : {}
             }
           >
-            Я подумаю 🤔
+            I’ll think about it
           </button>
           <button
             ref={noRef}
@@ -389,7 +389,7 @@ export default function Index() {
               transition: "transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)",
             }}
           >
-            Нет❌
+            Definitely not❌
           </button>
         </div>
       </div>
