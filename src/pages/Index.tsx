@@ -8,8 +8,7 @@ import FlowerZoomOverlay from "@/components/FlowerZoomOverlay";
 import HeartTransition from "@/components/HeartTransition";
 import FinalCard from "@/components/FinalCard";
 
-const CAT_IMG =
-  "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/bucket/64c47ecb-0129-4cfd-b8b5-303bf6157694.png";
+const CAT_IMG = "/hi-kitty.webp";
 
 const PLACES = [
   {
@@ -344,7 +343,7 @@ export default function Index() {
     <div className="meme-page">
       <ScatteredPetals />
       <div className="meme-card animate-in">
-        <img src={CAT_IMG} alt="пёс" className="cat-img" />
+        <img src={CAT_IMG} alt="котик" className="cat-img" />
         {showMaybeHint ? (
           <p className="no-hint">
             That button constantly disappearing for me too, no idea why. Is it
