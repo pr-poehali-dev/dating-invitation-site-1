@@ -347,7 +347,7 @@ export default function Index() {
         <img src={CAT_IMG} alt="пёс" className="cat-img" />
         {showMaybeHint ? (
           <p className="no-hint">
-            That button kept disappearing for me too, no idea why. Is it
+            That button constantly disappearing for me too, no idea why. Is it
             possible the 'Alright' button is working how should it be?
           </p>
         ) : noDodgeCount >= 2 ? (
