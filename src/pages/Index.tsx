@@ -50,13 +50,8 @@ const PLACES = [
   },
   {
     id: 6,
-    name: "🌅Смотровая площадка\nPanorama360🌆
-  const [chosenDate, ChosenDate] = useState<Date | null>
-  чето не работает, проверить в конце
-  ",
-    desc: "🌅Смотровая площадка\nPanorama360🌆
-    const [chosenDate, ChosenDate] = useState<Date | null>
-  чето не работает, проверить в конце",
+    name: "🌅Смотровая площадка\nPanorama360🌆\nсоннет не справляется с этим блоком сделать в конце через клод и константу",
+    desc: "🌅Смотровая площадка\nPanorama360🌆\nсоннет не справляется с этим блоком сделать в конце через клод и константу",
     img: "",
     videoUrl:
       "https://videovssylku.ru/cache/d.videovssylku.ru/2026/07/04/VID_20260704_095101.mp4",
