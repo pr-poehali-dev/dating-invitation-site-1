@@ -8,7 +8,7 @@ import {
 import ScatteredPetals from "@/components/ScatteredPetals";
 
 export const SEARCH_STEPS = [
-  { from: 0, to: 10, label: "Searching....", duration: 6500 },
+  { from: 0, to: 10, label: "Searching....", duration: 8000 },
   {
     from: 10,
     to: 25,
@@ -22,7 +22,7 @@ export const SEARCH_STEPS = [
     duration: 7000,
   },
   { from: 40, to: 65, label: "are u still there?", duration: 6000 },
-  { from: 65, to: 75, label: "Find it!", duration: 5000 },
+  { from: 65, to: 75, label: "Find it!", duration: 4500 },
   {
     from: 75,
     to: 88,
