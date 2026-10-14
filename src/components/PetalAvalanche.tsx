@@ -7,7 +7,7 @@ interface Props {
   onDone?: () => void;
 }
 
-const EMOJIS = ["🐱", "😺", "😻", "🐈", "😸", "😽", "🐱", "😻"];
+const EMOJIS = ["🌸", "🌸", "🌸", "💮", "🌸", "🌸", "💮", "🌸"];
 const COUNT = 1200;
 
 interface Petal {
