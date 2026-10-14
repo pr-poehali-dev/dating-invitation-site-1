@@ -310,7 +310,7 @@ export default function Index() {
       <div className="meme-page places-page">
         <ScatteredPetals />
         <div className="places-card animate-in">
-          <h1 className="places-title">Кое-что нашёл!) Выбери место 🗺️</h1>
+          <h1 className="places-title">Found something!) Choose a place 🗺️</h1>
           <div className="places-grid">
             {PLACES.map((place) => (
               <button
