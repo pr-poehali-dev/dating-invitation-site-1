@@ -13,7 +13,7 @@ const CAT_IMG = "/hi-kitty.webp";
 const PLACES = [
   {
     id: 1,
-    name: "🎻Музыкальный концерт LumiSfera🎹",
+    name: "🎻Музыкальный концерт LumiSfera🎹 ",
     img: "",
     videoUrl:
       "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/24/VID_20260624_1048251d0398a89e205c54.mp4",
@@ -50,7 +50,10 @@ const PLACES = [
   },
   {
     id: 6,
-    name: "🌅Смотровая площадка\nPanorama360🌆",
+    name: "🌅Смотровая площадка\nPanorama360🌆
+  \\\const [chosenDate, ChosenDate] = useState<Date | null>
+  чето не работает, проверить в конце
+  ",
     desc: "🌅Смотровая площадка\nPanorama360🌆",
     img: "",
     videoUrl:
