@@ -357,9 +357,7 @@ export default function Index() {
             works?
           </p>
         ) : null}
-        <h1 className="meme-question">
-          🌸 Nastya, let me take you on a date 🌸
-        </h1>
+        <h1 className="meme-question">Wanna go out with me, Nastya?</h1>
         <div className="meme-buttons">
           <button
             className="bubble-btn bubble-yes"
