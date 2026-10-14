@@ -9,20 +9,20 @@ import ScatteredPetals from "@/components/ScatteredPetals";
 
 export const SEARCH_STEPS = [
   { from: 0, to: 10, label: "Searching....", duration: 5400 },
-  { from: 10, to: 25, label: "Got a bit distracted by work)", duration: 4910 },
+  { from: 10, to: 25, label: "Got a bit distracted by work", duration: 6500 },
   {
     from: 25,
     to: 40,
     label: "Сontinuing",
-    duration: 4920,
+    duration: 6500,
   },
-  { from: 40, to: 65, label: "are u still there?", duration: 4910 },
-  { from: 65, to: 75, label: "Find it!", duration: 4910 },
+  { from: 40, to: 65, label: "are u still there?", duration: 6000 },
+  { from: 65, to: 75, label: "Find it!", duration: 5000 },
   {
     from: 75,
     to: 88,
     label: "btw, what do you think of dianthus?",
-    duration: 4910,
+    duration: 7000,
   },
   {
     from: 88,
