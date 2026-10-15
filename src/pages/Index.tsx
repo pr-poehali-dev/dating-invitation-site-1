@@ -8,7 +8,7 @@ import FlowerZoomOverlay from "@/components/FlowerZoomOverlay";
 import HeartTransition from "@/components/HeartTransition";
 import FinalCard from "@/components/FinalCard";
 
-const CAT_IMG = "/cat-clean.webp";
+const CAT_IMG = "/cat-detail.webp";
 
 const PLACES = [
   {
