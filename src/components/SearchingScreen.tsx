@@ -94,7 +94,7 @@ const SearchingScreen = forwardRef<SearchingScreenHandle, Props>(
         <ScatteredPetals />
         <div className="meme-card animate-in">
           <span ref={flowerRef} className="dive-flower">
-            ♥️
+            🌸
           </span>
           <h1 className="meme-question" style={{ color: "var(--rose-dark)" }}>
             Just a minute, gotta look up some places for date. i didnt expect
