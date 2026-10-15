@@ -237,6 +237,7 @@ body {
 
 .petals-frozen .dive-flower {
   animation-play-state: paused;
+  filter: none;
 }
 
 /* ===== Freeze petals on transition ===== */

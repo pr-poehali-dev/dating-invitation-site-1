@@ -26,6 +26,7 @@ export default function FlowerZoomOverlay({
       root.style.transition = "none";
       root.style.transform = "";
       root.style.transformOrigin = "";
+      root.style.willChange = "";
       return;
     }
 
@@ -35,6 +36,7 @@ export default function FlowerZoomOverlay({
     const { x, y } = flowerPos;
 
     root.style.transition = "none";
+    root.style.willChange = "transform";
     root.style.transformOrigin = `${x}px ${y}px`;
     root.style.transform = "scale(1)";
 
@@ -46,9 +48,10 @@ export default function FlowerZoomOverlay({
 
         // Фаза 2: логарифмическое погружение — визуально одинаковая скорость
         setTimeout(() => {
-          const DURATION = 2700; // мс
+          const DURATION = 2000;
           const START_SCALE = 0.6;
-          const END_SCALE = 300;
+          const END_SCALE = 60;
+          let coverStarted = false;
           const startTime = performance.now();
 
           const rafRef = { id: 0 };
@@ -60,20 +63,23 @@ export default function FlowerZoomOverlay({
             root!.style.transition = "none";
             root!.style.transform = `scale(${scale})`;
 
-            if (t < 1) {
-              rafRef.id = requestAnimationFrame(tick);
-            } else {
-              // Фаза 3: красный экран появляется
+            if (!coverStarted && t >= 0.8) {
+              coverStarted = true;
               setCoverVisible(true);
               requestAnimationFrame(() => {
                 requestAnimationFrame(() => setCoverOpacity(1));
               });
+            }
 
+            if (t < 1) {
+              rafRef.id = requestAnimationFrame(tick);
+            } else {
               // Фаза 4: сбрасываем зум и меняем страницу пока экран красный
               setTimeout(() => {
                 root!.style.transition = "none";
                 root!.style.transform = "";
                 root!.style.transformOrigin = "";
+                root!.style.willChange = "";
                 onCovered?.(); // <- страница 3 появляется под красным экраном
               }, 300);
 
@@ -102,7 +108,7 @@ export default function FlowerZoomOverlay({
         background: CORE_COLOR,
         opacity: coverOpacity,
         transition:
-          coverOpacity === 0 ? "opacity 2s ease" : "opacity 0.3s ease",
+          coverOpacity === 0 ? "opacity 2s ease" : "opacity 0.4s ease",
         pointerEvents: "none",
       }}
     />
