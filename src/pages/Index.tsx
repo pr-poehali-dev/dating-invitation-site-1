@@ -13,31 +13,34 @@ const CAT_IMG = "/hi-kitty.webp";
 const PLACES = [
   {
     id: 1,
-    name: "🎻Music Concert LumiSfera🎹 ",
+    name: "",
+    desc: "🎻Music Concert LumiSfera🎹"
     img: "",
-    videoUrl: "",
+    videoUrl:
+      "",
   },
   {
     id: 2,
-    name: "🌅Viewing platform\nPanorama360🌆",
+    name: "",
     desc: "🌅Viewing platform\nPanorama360🌆",
     img: "",
-    videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_162443.mp4",
+    videoUrl: "",
   },
   {
     id: 3,
-    name: "🍽️Phobo🌶️",
+    name: "",
     desc: "🍽️Phobo🌶️",
     img: "",
-    videoUrl: "",
+    videoUrl:
+      "",
   },
   {
     id: 4,
-    name: "🌳Fili Park🏞️",
+    name: "",
     desc: "🌳Fili Park🏞️",
     img: "",
     videoUrl: "",
-  },
+  }
 ];
 export default function Index() {
   const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
