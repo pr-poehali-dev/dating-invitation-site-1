@@ -10,7 +10,7 @@ import NotFound from "./pages/NotFound";
 import PetalAvalanche from "@/components/PetalAvalanche";
 
 const queryClient = new QueryClient();
-const AUDIO_URL = "/track.mp3";
+const AUDIO_URL = "/track-v2.mp3";
 
 export type PetalTrigger = {
   start: () => void;
