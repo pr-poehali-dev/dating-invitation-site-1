@@ -26,7 +26,7 @@ export const SEARCH_STEPS = [
   {
     from: 75,
     to: 88,
-    label: "btw, how do you like these dianthuses?🌸",
+    label: "btw, how do you like these dianthuses?🌷",
     duration: 7500,
   },
   {
