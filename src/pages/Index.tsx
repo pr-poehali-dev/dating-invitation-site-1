@@ -8,7 +8,7 @@ import FlowerZoomOverlay from "@/components/FlowerZoomOverlay";
 import HeartTransition from "@/components/HeartTransition";
 import FinalCard from "@/components/FinalCard";
 
-const CAT_IMG = "/cat-photo.webp";
+const CAT_IMG = "/hi-kitty.webp";
 
 const PLACES = [
   {
@@ -356,7 +356,7 @@ export default function Index() {
             works?
           </p>
         ) : null}
-        <h1 className="meme-question">Hi, Nastya, wanna go on date with me?</h1>
+        <h1 className="meme-question">Nastya, wanna go on date with me?</h1>
         <div className="meme-buttons">
           <button
             className="bubble-btn bubble-yes"
