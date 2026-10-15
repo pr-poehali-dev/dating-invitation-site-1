@@ -21,7 +21,7 @@ export const SEARCH_STEPS = [
     label: "Сontinuing",
     duration: 6300,
   },
-  { from: 40, to: 65, label: "are u still there?", duration: 7000 },
+  { from: 40, to: 65, label: "are u still there?", duration: 6700 },
   { from: 65, to: 75, label: "Find it!", duration: 4000 },
   {
     from: 75,
