@@ -8,7 +8,7 @@ import FlowerZoomOverlay from "@/components/FlowerZoomOverlay";
 import HeartTransition from "@/components/HeartTransition";
 import FinalCard from "@/components/FinalCard";
 
-const CAT_IMG = "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/files/dacab737-9853-4f0e-97e5-0e8da9f40b8f.jpg";
+const CAT_IMG = "/cat-photo.webp";
 
 const PLACES = [
   {
