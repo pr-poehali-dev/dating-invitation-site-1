@@ -596,3 +596,18 @@ iframe.place-img {
     font-size: 1rem;
   }
 }
+
+/* ===== Погружение в цветок: облегчаем отрисовку ===== */
+#root.zooming *,
+#root.zooming *::before,
+#root.zooming *::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+#root.deep-zoom .petals-scatter,
+#root.deep-zoom .meme-question,
+#root.deep-zoom .search-progress-wrap {
+  visibility: hidden;
+}

@@ -26,7 +26,7 @@ export default function FlowerZoomOverlay({
       root.style.transition = "none";
       root.style.transform = "";
       root.style.transformOrigin = "";
-      root.style.willChange = "";
+      root.classList.remove("zooming", "deep-zoom");
       return;
     }
 
@@ -36,7 +36,7 @@ export default function FlowerZoomOverlay({
     const { x, y } = flowerPos;
 
     root.style.transition = "none";
-    root.style.willChange = "transform";
+    root.classList.add("zooming");
     root.style.transformOrigin = `${x}px ${y}px`;
     root.style.transform = "scale(1)";
 
@@ -48,10 +48,11 @@ export default function FlowerZoomOverlay({
 
         // Фаза 2: логарифмическое погружение — визуально одинаковая скорость
         setTimeout(() => {
-          const DURATION = 2000;
+          const DURATION = 2700;
           const START_SCALE = 0.6;
-          const END_SCALE = 60;
+          const END_SCALE = 300;
           let coverStarted = false;
+          let deep = false;
           const startTime = performance.now();
 
           const rafRef = { id: 0 };
@@ -63,7 +64,12 @@ export default function FlowerZoomOverlay({
             root!.style.transition = "none";
             root!.style.transform = `scale(${scale})`;
 
-            if (!coverStarted && t >= 0.8) {
+            if (!deep && scale > 12) {
+              deep = true;
+              root!.classList.add("deep-zoom");
+            }
+
+            if (!coverStarted && t >= 0.85) {
               coverStarted = true;
               setCoverVisible(true);
               requestAnimationFrame(() => {
@@ -79,7 +85,7 @@ export default function FlowerZoomOverlay({
                 root!.style.transition = "none";
                 root!.style.transform = "";
                 root!.style.transformOrigin = "";
-                root!.style.willChange = "";
+                root!.classList.remove("zooming", "deep-zoom");
                 onCovered?.(); // <- страница 3 появляется под красным экраном
               }, 300);
 
