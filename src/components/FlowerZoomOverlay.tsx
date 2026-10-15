@@ -92,8 +92,8 @@ export default function FlowerZoomOverlay({
               // Фаза 5: красный медленно тает — страница 3 проявляется
               setTimeout(() => {
                 setCoverOpacity(0);
-                setTimeout(() => setCoverVisible(false), 2000);
-              }, 500);
+                setTimeout(() => setCoverVisible(false), 3600);
+              }, 800);
             }
           }
 
@@ -114,7 +114,9 @@ export default function FlowerZoomOverlay({
         background: CORE_COLOR,
         opacity: coverOpacity,
         transition:
-          coverOpacity === 0 ? "opacity 2s ease" : "opacity 0.4s ease",
+          coverOpacity === 0
+            ? "opacity 3.5s cubic-bezier(0.45, 0, 0.25, 1)"
+            : "opacity 0.4s ease",
         pointerEvents: "none",
       }}
     />
