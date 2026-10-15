@@ -13,48 +13,30 @@ const CAT_IMG = "/hi-kitty.webp";
 const PLACES = [
   {
     id: 1,
-    name: "🎻Музыкальный концерт LumiSfera🎹 ",
+    name: "🎻Music Concert LumiSfera🎹 ",
     img: "",
-    videoUrl:
-      "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/24/VID_20260624_1048251d0398a89e205c54.mp4",
+    videoUrl: "",
   },
   {
     id: 2,
-    name: "🎥Частный кинотеатр SecretCinema🎬",
-    desc: "🎥Частный кинотеатр SecretCinema🎬",
+    name: "🌅Viewing platform\nPanorama360🌆",
+    desc: "🌅Viewing platform\nPanorama360🌆",
     img: "",
     videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_162443.mp4",
   },
   {
     id: 3,
-    name: "💕Свидание на 61 этаже\nМосква Сити 🌇",
-    desc: "💕Свидание на 67 этаже Москва Сити🌇",
+    name: "🍽️Phobo🌶️",
+    desc: "🍽️Phobo🌶️",
     img: "",
-    videoUrl:
-      "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/24/video_09910850-d8e6-44d8-8695-a1fa61d49c78.mp4",
+    videoUrl: "",
   },
   {
     id: 4,
-    name: "🌊Поездка на катере вдвоём🚤",
-    desc: "🌊Поездка на катере вдвоём🚤",
+    name: "",
+    desc: "",
     img: "",
-    videoUrl: "https://a.videovssylku.ru/2026/06/19/VID_20260619_162720.mp4",
-  },
-  {
-    id: 5,
-    name: "🍽️Ресторан Osteria Mario🛎️",
-    desc: "🍽️Ресторан Osteria Mario🛎️",
-    img: "",
-    videoUrl:
-      "https://fs.oblakoteka.ru/c.videovssylku.ru/2026/06/23/VID_20260619_153156252b734add41c5f3.mp4",
-  },
-  {
-    id: 6,
-    name: "🌅Смотровая площадка\nPanorama360🌆\nсоннет не справляется с этим блоком сделать в конце через клод и константу",
-    desc: "🌅Смотровая площадка\nPanorama360🌆\nсоннет не справляется с этим блоком сделать в конце через клод и константу",
-    img: "",
-    videoUrl:
-      "https://videovssylku.ru/cache/d.videovssylku.ru/2026/07/04/VID_20260704_095101.mp4",
+    videoUrl: "",
   },
 ];
 export default function Index() {
