@@ -6,8 +6,7 @@ interface Props {
   onCovered?: () => void;
 }
 
-// Цвет сердцевины лепестка ♥️
-const CORE_COLOR = "#c0435a";
+const CORE_COLOR = "#f4a6c4";
 
 export default function FlowerZoomOverlay({
   active,

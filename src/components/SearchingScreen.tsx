@@ -58,7 +58,7 @@ const SearchingScreen = forwardRef<SearchingScreenHandle, Props>(
       getFlowerPos: () => {
         const r = flowerRef.current?.getBoundingClientRect();
         return r
-          ? { x: r.left + r.width / 2, y: r.top + r.height / 2 }
+          ? { x: r.left + r.width / 2, y: r.top + r.height * 0.22 }
           : { x: window.innerWidth / 2, y: window.innerHeight / 2 };
       },
     }));
