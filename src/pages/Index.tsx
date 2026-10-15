@@ -33,8 +33,8 @@ const PLACES = [
   },
   {
     id: 4,
-    name: "",
-    desc: "",
+    name: "🌳Fili Park🏞️",
+    desc: "🌳Fili Park🏞️",
     img: "",
     videoUrl: "",
   },
