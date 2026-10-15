@@ -362,7 +362,7 @@ export default function Index() {
             className="bubble-btn bubble-yes"
             onClick={() => window.__petalStart?.()}
           >
-            Alright...
+            Alright
           </button>
           <button
             className="bubble-btn bubble-maybe"
