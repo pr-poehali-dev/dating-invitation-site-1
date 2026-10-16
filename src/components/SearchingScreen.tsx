@@ -35,7 +35,7 @@ export const SEARCH_STEPS = [
     label: "Just a little bit more, almost done",
     duration: 5000,
   },
-  { from: 95, to: 100, label: "That`s it!", duration: 4600 },
+  { from: 95, to: 100, label: "That`s it!", duration: 4000 },
 ];
 
 export interface SearchingScreenHandle {
