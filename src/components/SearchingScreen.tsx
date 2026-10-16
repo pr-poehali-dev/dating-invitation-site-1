@@ -22,7 +22,7 @@ export const SEARCH_STEPS = [
     duration: 6300,
   },
   { from: 40, to: 65, label: "are u still there?", duration: 6500 },
-  { from: 65, to: 75, label: "Find it!", duration: 4000 },
+  { from: 65, to: 75, label: "Find it!", duration: 4350 },
   {
     from: 75,
     to: 88,
