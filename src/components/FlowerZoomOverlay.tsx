@@ -48,7 +48,7 @@ export default function FlowerZoomOverlay({
 
         // Фаза 2: логарифмическое погружение — визуально одинаковая скорость
         setTimeout(() => {
-          const DURATION = 2700;
+          const DURATION = 2200;
           const START_SCALE = 0.6;
           const END_SCALE = 300;
           let coverStarted = false;
