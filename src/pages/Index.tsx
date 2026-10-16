@@ -39,14 +39,6 @@ const PLACES = [
     img: "",
     videoUrl: "/fili-park.mp4",
   },
-  {
-    id: 5,
-    name: "Smthing different💬",
-    desc: "Smthing different💬",
-    img: "",
-    videoUrl:
-      "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/bucket/781e2f27-f44d-4df6-9b55-0c2ea40139a0.mp4",
-  },
 ];
 
 export default function Index() {
