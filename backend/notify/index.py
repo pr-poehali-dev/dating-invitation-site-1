@@ -29,7 +29,7 @@ def handler(event: dict, context) -> dict:
     to_email = 'sandar.k128@mail.ru'
 
     msg = MIMEMultipart('alternative')
-    msg['Subject'] = '💕 Лиза выбрала место и дату!'
+    msg['Subject'] = 'Настя выбрала место и дату!'
     msg['From'] = from_email
     msg['To'] = to_email
 

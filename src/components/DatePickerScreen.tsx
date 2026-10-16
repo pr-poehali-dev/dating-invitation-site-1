@@ -2,20 +2,20 @@ import { useState } from "react";
 import ScatteredPetals from "@/components/ScatteredPetals";
 
 const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  "Январь",
+  "Февраль",
+  "Март",
+  "Апрель",
+  "Май",
+  "Июнь",
+  "Июль",
+  "Август",
+  "Сентябрь",
+  "Октябрь",
+  "Ноябрь",
+  "Декабрь",
 ];
-const DAYS_SHORT = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+const DAYS_SHORT = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 
 function MiniCalendar({ onSelect }: { onSelect: (date: Date) => void }) {
   const today = new Date();
@@ -109,7 +109,7 @@ export default function DatePickerScreen({
   const [pickedDate, setPickedDate] = useState<Date | null>(null);
 
   const formatDate = (d: Date) =>
-    d.toLocaleDateString("en-US", {
+    d.toLocaleDateString("ru-RU", {
       day: "numeric",
       month: "long",
       year: "numeric",
@@ -144,7 +144,7 @@ export default function DatePickerScreen({
             className="bubble-btn bubble-yes date-confirm-btn"
             onClick={() => onDone(pickedDate)}
           >
-            Выбрала✔️
+            Chose✔️
           </button>
         )}
       </div>
