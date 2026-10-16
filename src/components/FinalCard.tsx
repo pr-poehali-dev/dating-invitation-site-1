@@ -35,7 +35,7 @@ export default function FinalCard({ place, date }: Props) {
         }}
       >
         <h1 className="places-title" style={{ color: "var(--rose-dark)" }}>
-          See u 😉
+          See u
         </h1>
         {place.videoUrl ? (
           <video
