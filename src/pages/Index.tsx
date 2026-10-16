@@ -40,7 +40,7 @@ const PLACES = [
     videoUrl: "",
   }, 
   {
-      id: 4,
+      id: 5,
     name: "Smthing different💬",
     desc: "Smthing different💬",
     img: "",
