@@ -19,7 +19,10 @@ export default function FinalCard({ place, date }: Props) {
   });
 
   return (
-    <div className="meme-page places-page" style={{ position: "absolute", inset: 0 }}>
+    <div
+      className="meme-page places-page"
+      style={{ position: "absolute", inset: 0 }}
+    >
       <ScatteredPetals />
       <div
         className="places-card"
@@ -32,7 +35,7 @@ export default function FinalCard({ place, date }: Props) {
         }}
       >
         <h1 className="places-title" style={{ color: "var(--rose-dark)" }}>
-          Буду ждать 😉
+          See u 😉
         </h1>
         {place.videoUrl ? (
           <video
@@ -48,7 +51,12 @@ export default function FinalCard({ place, date }: Props) {
           <img
             src={place.img}
             alt={place.name}
-            style={{ width: "100%", borderRadius: "1.4rem", maxHeight: 400, objectFit: "cover" }}
+            style={{
+              width: "100%",
+              borderRadius: "1.4rem",
+              maxHeight: 400,
+              objectFit: "cover",
+            }}
           />
         ) : null}
         <p
