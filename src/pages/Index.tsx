@@ -27,8 +27,8 @@ const PLACES = [
   },
   {
     id: 3,
-    name: "🍽️Phobo🌶️",
-    desc: "🍽️Phobo🌶️",
+    name: "🚤Moscow boat trip🌊",
+    desc: "🚤Moscow boat trip🌊",
     img: "",
     videoUrl: "",
   },
