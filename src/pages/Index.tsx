@@ -37,16 +37,17 @@ const PLACES = [
     name: "🌳Fili Park🏞️",
     desc: "🌳Fili Park🏞️",
     img: "",
-    videoUrl: "",
-  }, 
+    videoUrl:
+      "https://cdn.poehali.dev/projects/cfc5af78-3f02-4c6d-a9b7-cad2708837ac/bucket/781e2f27-f44d-4df6-9b55-0c2ea40139a0.mp4",
+  },
   {
-      id: 5,
+    id: 5,
     name: "Smthing different💬",
     desc: "Smthing different💬",
     img: "",
     videoUrl: "",
   },
-  
+];
 
 export default function Index() {
   const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
