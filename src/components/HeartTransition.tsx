@@ -34,23 +34,19 @@ function makeHeartStamp(size: number): HTMLCanvasElement {
 }
 
 
-const MASK_SCALE = 0.5;
-const MASK_EVERY_MS = 33;
-
 export default function HeartTransition({ onDone, finalContent, datepickerContent }: Props) {
   const doneRef = useRef(false);
   const startRef = useRef<number | null>(null);
   const rafRef = useRef<number>(0);
   const [dims, setDims] = useState({ w: window.innerWidth, h: window.innerHeight });
+  const [maskUrl, setMaskUrl] = useState<string>("");
 
+  // Canvas, на котором накапливается след сердца (НЕ очищается между кадрами)
   const trailRef = useRef<HTMLCanvasElement | null>(null);
+  // Готовый PNG-силуэт сердца (рисуется ОДИН раз, форма всегда идентична)
   const stampRef = useRef<HTMLCanvasElement | null>(null);
-  const emojiRef = useRef<HTMLDivElement | null>(null);
-  const pickerRef = useRef<HTMLDivElement | null>(null);
-  const finalRef = useRef<HTMLDivElement | null>(null);
-  const lastMaskRef = useRef(0);
-  const encodingRef = useRef(false);
-  const blobUrlRef = useRef<string>("");
+  // Позиция эмодзи для рендера
+  const [emoji, setEmoji] = useState({ x: -HEART_HALF_VW, rot: 0 });
 
   useEffect(() => {
     const onResize = () => setDims({ w: window.innerWidth, h: window.innerHeight });
@@ -58,70 +54,57 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  // Инициализируем canvas следа при изменении размеров
   useEffect(() => {
     const c = document.createElement("canvas");
-    c.width = Math.ceil(dims.w * MASK_SCALE);
-    c.height = Math.ceil(dims.h * MASK_SCALE);
+    c.width = dims.w;
+    c.height = dims.h;
     trailRef.current = c;
-    const stampSize = Math.ceil(dims.h * 0.9 * 1.45 * MASK_SCALE);
+    // Силуэт-штамп размером с глиф (90vh). Запас по диагонали для поворота.
+    const stampSize = Math.ceil(dims.h * 0.9 * 1.45);
     stampRef.current = makeHeartStamp(stampSize);
   }, [dims.w, dims.h]);
 
   useEffect(() => {
-    const applyMask = (url: string) => {
-      const old = blobUrlRef.current;
-      blobUrlRef.current = url;
-      const picker = pickerRef.current;
-      if (picker) {
-        const v = `linear-gradient(#000,#000), url(${url})`;
-        picker.style.maskImage = v;
-        picker.style.webkitMaskImage = v;
-      }
-      const fin = finalRef.current;
-      if (fin) {
-        fin.style.maskImage = `url(${url})`;
-        fin.style.webkitMaskImage = `url(${url})`;
-      }
-      if (old) setTimeout(() => URL.revokeObjectURL(old), 200);
-    };
-
     const animate = (now: number) => {
       if (!startRef.current) startRef.current = now;
       const p = Math.min((now - startRef.current) / DURATION, 1);
 
       const heartCenterVw = -HEART_HALF_VW + p * (100 + HEART_HALF_VW * 2);
       const rotate = p * 540;
-      const el = emojiRef.current;
-      if (el) {
-        el.style.transform = `translate3d(${heartCenterVw - HEART_HALF_VW}vw, -50%, 0) rotate(${rotate}deg)`;
-      }
+      setEmoji({ x: heartCenterVw, rot: rotate });
 
+      // Рисуем сердце на canvas следа (накопление, без очистки)
       const c = trailRef.current;
       const stamp = stampRef.current;
       if (c && stamp) {
         const ctx = c.getContext("2d");
         if (ctx) {
+          // Центр сердца в тех же координатах, что и красное CSS-сердце.
           const textLeftPx = ((heartCenterVw - HEART_HALF_VW) / 100) * dims.w;
-          const fontPx = dims.h * 0.9;
-          const cx = (textLeftPx + 0.5 * fontPx) * MASK_SCALE;
-          const cy = (dims.h / 2) * MASK_SCALE;
+          const fontPx = dims.h * 0.9; // font-size 90vh
+          const cx = textLeftPx + 0.5 * fontPx; // центр глифа по X
+          const cy = dims.h / 2; // вертикальный центр (translateY(-50%))
           const rad = (rotate * Math.PI) / 180;
 
+          // Маска 1 — основной силуэт сердца (двигаем и поворачиваем).
           ctx.save();
           ctx.translate(cx, cy);
           ctx.rotate(rad);
-          ctx.scale(1.06, 1.06);
           ctx.drawImage(stamp, -stamp.width / 2, -stamp.height / 2);
           ctx.restore();
 
-          if (!encodingRef.current && now - lastMaskRef.current >= MASK_EVERY_MS) {
-            lastMaskRef.current = now;
-            encodingRef.current = true;
-            c.toBlob((blob) => {
-              encodingRef.current = false;
-              if (blob && !doneRef.current) applyMask(URL.createObjectURL(blob));
-            });
-          }
+          // Маска 2 — слегка увеличенный силуэт, гарантированно закрашивает
+          // верхнюю зону эмодзи, где основной силуэт не дотягивается.
+          const k = 1.06;
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(rad);
+          ctx.scale(k, k);
+          ctx.drawImage(stamp, -stamp.width / 2, -stamp.height / 2);
+          ctx.restore();
+
+          setMaskUrl(c.toDataURL());
         }
       }
 
@@ -138,41 +121,43 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
     return () => cancelAnimationFrame(rafRef.current);
   }, [onDone, dims.w, dims.h]);
 
-  useEffect(
-    () => () => {
-      if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
-    },
-    [],
-  );
-
   return createPortal(
     <>
+      {/* DatePicker — виден везде, КРОМЕ следа сердца (след СТИРАЕТ дейтпикер).
+          Два слоя маски: сплошной прямоугольник МИНУС след сердца. */}
       <div
-        ref={pickerRef}
         style={{
           position: "fixed",
           inset: 0,
           zIndex: 99996,
           pointerEvents: "none",
-          maskSize: "100% 100%, 100% 100%",
-          WebkitMaskSize: "100% 100%, 100% 100%",
-          maskComposite: "subtract",
-          WebkitMaskComposite: "xor",
+          ...(maskUrl
+            ? {
+                maskImage: `linear-gradient(#000,#000), url(${maskUrl})`,
+                WebkitMaskImage: `linear-gradient(#000,#000), url(${maskUrl})`,
+                maskSize: "100% 100%, 100% 100%",
+                WebkitMaskSize: "100% 100%, 100% 100%",
+                maskComposite: "subtract",
+                WebkitMaskComposite: "xor",
+              }
+            : {}),
         }}
       >
         {datepickerContent}
       </div>
 
+      {/* Финальный экран — виден там, где прошло сердце (по маске-следу).
+          Рендерится только если передан (старый режим). Когда карточка лежит
+          базовым слоем под оверлеем — finalContent не нужен. */}
       {finalContent && (
         <div
-          ref={finalRef}
           style={{
             position: "fixed",
             inset: 0,
             zIndex: 99997,
             pointerEvents: "none",
-            maskImage: "linear-gradient(transparent, transparent)",
-            WebkitMaskImage: "linear-gradient(transparent, transparent)",
+            maskImage: maskUrl ? `url(${maskUrl})` : undefined,
+            WebkitMaskImage: maskUrl ? `url(${maskUrl})` : undefined,
             maskSize: "100% 100%",
             WebkitMaskSize: "100% 100%",
           }}
@@ -181,9 +166,9 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
         </div>
       )}
 
+      {/* Само сердце */}
       <div style={{ position: "fixed", inset: 0, zIndex: 99999, pointerEvents: "none", overflow: "hidden" }}>
         <div
-          ref={emojiRef}
           style={{
             position: "absolute",
             top: "50%",
@@ -191,11 +176,11 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
             fontSize: HEART_SIZE,
             lineHeight: 1,
             whiteSpace: "nowrap",
-            willChange: "transform",
-            transform: `translate3d(${-HEART_HALF_VW * 2}vw, -50%, 0)`,
+            transform: `translateY(-50%) translateX(${emoji.x - HEART_HALF_VW}vw) rotate(${emoji.rot}deg)`,
+            filter: "drop-shadow(0 0 30px rgba(255,150,190,0.5))",
           }}
         >
-          <div style={{ filter: "drop-shadow(0 0 30px rgba(255,150,190,0.5))" }}>🌸</div>
+          🌸
         </div>
       </div>
     </>,
