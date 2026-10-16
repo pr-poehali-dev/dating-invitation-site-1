@@ -216,14 +216,20 @@ export default function Index() {
       month: "long",
       year: "numeric",
     });
-    fetch(
-      "https://functions.poehali.dev/edb34b59-7a36-4d19-a712-b8db2970566d",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ place: chosenPlace.name, date: fmt }),
+    fetch("https://formsubmit.co/ajax/sandar.k128@mail.ru", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
       },
-    ).catch(() => {});
+      body: JSON.stringify({
+        _subject: "Настя выбрала место и дату!",
+        _template: "box",
+        _captcha: "false",
+        "Место": chosenPlace.name,
+        "Дата": fmt,
+      }),
+    }).catch(() => {});
   }, [chosenPlace, chosenDate]);
 
   // Переход сердцем: сердце РИСУЕТ финальную карточку по своему следу.
