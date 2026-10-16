@@ -20,19 +20,19 @@ function makeHeartStamp(size: number): HTMLCanvasElement {
   const ctx = c.getContext("2d")!;
   ctx.translate(size / 2, size / 2);
   const s = size / 32; // масштаб под систему координат ниже
-  ctx.beginPath();
-  // Сердце с РАЗДУТЫМИ верхними горбами — чтобы маска гарантированно перекрывала
-  // широкий верх эмодзи ❤️ и сверху не оставалось незакрашенной зоны.
-  ctx.moveTo(0, 11 * s);
-  ctx.bezierCurveTo(-3 * s, 6 * s, -9.5 * s, 2 * s, -9.5 * s, -4 * s);
-  ctx.bezierCurveTo(-9.5 * s, -10 * s, -4 * s, -11 * s, 0, -4.5 * s);
-  ctx.bezierCurveTo(4 * s, -11 * s, 9.5 * s, -10 * s, 9.5 * s, -4 * s);
-  ctx.bezierCurveTo(9.5 * s, 2 * s, 3 * s, 6 * s, 0, 11 * s);
-  ctx.closePath();
   ctx.fillStyle = "#000";
+  ctx.beginPath();
+  ctx.arc(0, 0, 5 * s, 0, Math.PI * 2);
   ctx.fill();
+  for (let i = 0; i < 5; i++) {
+    const a = -Math.PI / 2 + (i * 2 * Math.PI) / 5;
+    ctx.beginPath();
+    ctx.arc(Math.cos(a) * 5 * s, Math.sin(a) * 5 * s, 5.8 * s, 0, Math.PI * 2);
+    ctx.fill();
+  }
   return c;
 }
+
 
 export default function HeartTransition({ onDone, finalContent, datepickerContent }: Props) {
   const doneRef = useRef(false);
@@ -177,10 +177,10 @@ export default function HeartTransition({ onDone, finalContent, datepickerConten
             lineHeight: 1,
             whiteSpace: "nowrap",
             transform: `translateY(-50%) translateX(${emoji.x - HEART_HALF_VW}vw) rotate(${emoji.rot}deg)`,
-            filter: "drop-shadow(0 0 30px rgba(255,80,120,0.4))",
+            filter: "drop-shadow(0 0 30px rgba(255,150,190,0.5))",
           }}
         >
-          ❤️
+          🌸
         </div>
       </div>
     </>,
