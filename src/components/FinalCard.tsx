@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function FinalCard({ place, date }: Props) {
-  const fmt = date.toLocaleDateString("ru-RU", {
+  const fmt = date.toLocaleDateString("en-US", {
     day: "numeric",
     month: "long",
     year: "numeric",
