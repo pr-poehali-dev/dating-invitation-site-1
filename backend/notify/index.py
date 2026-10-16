@@ -35,7 +35,7 @@ def handler(event: dict, context) -> dict:
 
     html = f"""
     <div style="font-family: Georgia, serif; max-width: 500px; margin: 0 auto; padding: 30px;">
-        <h1 style="color: #c0435a; text-align: center;">💕 Лиза согласилась!</h1>
+        <h1 style="color: #c0435a; text-align: center;">💕 Настя согласилась!</h1>
         <div style="background: #fff5f7; border-radius: 16px; padding: 24px; margin-top: 20px;">
             <p style="font-size: 18px; margin-bottom: 12px;">📍 <strong>Место:</strong> {place}</p>
             <p style="font-size: 18px;">📅 <strong>Дата:</strong> {date}</p>
