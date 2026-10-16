@@ -124,14 +124,14 @@ export default function DatePickerScreen({
     <div className="meme-page places-page">
       <ScatteredPetals />
       <div className="places-card animate-in">
-        <h1 className="places-title">Выбери день 🗓️</h1>
+        <h1 className="places-title">Choose a day 🗓️</h1>
 
         <button className="date-field" onClick={() => setShowCal((v) => !v)}>
           {pickedDate ? (
             <span className="date-field-filled">{formatDate(pickedDate)}</span>
           ) : (
             <span className="date-field-placeholder">
-              Нажми, чтобы выбрать дату
+              Click to select a date
             </span>
           )}
           <span className="date-field-icon">📅</span>
