@@ -144,7 +144,7 @@ export default function DatePickerScreen({
             className="bubble-btn bubble-yes date-confirm-btn"
             onClick={() => onDone(pickedDate)}
           >
-            Chose✔️
+            Done✔️
           </button>
         )}
       </div>
