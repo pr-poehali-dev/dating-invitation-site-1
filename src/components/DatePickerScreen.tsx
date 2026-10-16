@@ -2,20 +2,20 @@ import { useState } from "react";
 import ScatteredPetals from "@/components/ScatteredPetals";
 
 const MONTHS = [
-  "Январь",
-  "Февраль",
-  "Март",
-  "Апрель",
-  "Май",
-  "Июнь",
-  "Июль",
-  "Август",
-  "Сентябрь",
-  "Октябрь",
-  "Ноябрь",
-  "Декабрь",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
-const DAYS_SHORT = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+const DAYS_SHORT = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 
 function MiniCalendar({ onSelect }: { onSelect: (date: Date) => void }) {
   const today = new Date();
@@ -109,7 +109,7 @@ export default function DatePickerScreen({
   const [pickedDate, setPickedDate] = useState<Date | null>(null);
 
   const formatDate = (d: Date) =>
-    d.toLocaleDateString("ru-RU", {
+    d.toLocaleDateString("en-US", {
       day: "numeric",
       month: "long",
       year: "numeric",
