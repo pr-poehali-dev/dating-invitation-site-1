@@ -30,7 +30,7 @@ const PLACES = [
     name: "🚤Moscow boat trip🌊",
     desc: "🚤Moscow boat trip🌊",
     img: "",
-    videoUrl: "",
+    videoUrl: "/moscow-boat.mp4",
   },
   {
     id: 4,
