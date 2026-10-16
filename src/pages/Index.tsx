@@ -4,7 +4,7 @@ import DatePickerScreen from "@/components/DatePickerScreen";
 import SearchingScreen, {
   SearchingScreenHandle,
 } from "@/components/SearchingScreen";
-import playPinkVeil from "@/lib/pinkVeil";
+import FlowerZoomOverlay from "@/components/FlowerZoomOverlay";
 import HeartTransition from "@/components/HeartTransition";
 import FinalCard from "@/components/FinalCard";
 
@@ -45,6 +45,9 @@ export default function Index() {
   const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
   const [searching, setSearching] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
+  const [flowerPos, setFlowerPos] = useState<{ x: number; y: number } | null>(
+    null,
+  );
   const searchPageRef = useRef<SearchingScreenHandle>(null);
   const [chosenPlace, setChosenPlace] = useState<(typeof PLACES)[0] | null>(
     null,
@@ -264,15 +267,21 @@ export default function Index() {
         <SearchingScreen
           ref={searchPageRef}
           onDone={() => {
-            if (transitioning) return;
+            const pos = searchPageRef.current?.getFlowerPos() ?? null;
+            setFlowerPos(pos);
             setTransitioning(true);
-            playPinkVeil(() => {
-              setSearching(false);
-              setTransitioning(false);
-              setAnswered("yes");
-            });
           }}
           transitioning={transitioning}
+        />
+        <FlowerZoomOverlay
+          active={!!flowerPos}
+          flowerPos={flowerPos}
+          onCovered={() => {
+            setSearching(false);
+            setTransitioning(false);
+            setFlowerPos(null);
+            setAnswered("yes");
+          }}
         />
       </>
     );
