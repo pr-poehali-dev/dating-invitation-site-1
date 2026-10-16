@@ -37,7 +37,7 @@ const PLACES = [
     name: "🌳Fili Park🏞️",
     desc: "🌳Fili Park🏞️",
     img: "",
-    videoUrl: "",
+    videoUrl: "/fili-park.mp4",
   },
   {
     id: 5,
