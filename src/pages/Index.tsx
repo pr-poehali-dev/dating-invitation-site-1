@@ -16,7 +16,7 @@ const PLACES = [
     name: "🎻Music Concert LumiSfera🎹",
     desc: "🎻Music Concert LumiSfera🎹",
     img: "",
-    videoUrl: "",
+    videoUrl: "/lumisfera.mp4",
   },
   {
     id: 2,
