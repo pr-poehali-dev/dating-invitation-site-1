@@ -38,8 +38,16 @@ const PLACES = [
     desc: "🌳Fili Park🏞️",
     img: "",
     videoUrl: "",
+  }, 
+  {
+      id: 4,
+    name: "Smthing different💬",
+    desc: "Smthing different💬",
+    img: "",
+    videoUrl: "",
   },
-];
+  
+
 export default function Index() {
   const [answered, setAnswered] = useState<"yes" | "maybe" | null>(null);
   const [searching, setSearching] = useState(false);
