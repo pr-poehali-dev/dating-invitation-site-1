@@ -23,7 +23,7 @@ const PLACES = [
     name: "🌅Viewing platform\nPanorama360🌆",
     desc: "🌅Viewing platform\nPanorama360🌆",
     img: "",
-    videoUrl: "",
+    videoUrl: "/panorama360.mp4",
   },
   {
     id: 3,
