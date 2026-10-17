@@ -8,7 +8,6 @@ import FlowerZoomOverlay from "@/components/FlowerZoomOverlay";
 import HeartTransition from "@/components/HeartTransition";
 import FinalCard from "@/components/FinalCard";
 import { reachGoal } from "@/lib/metrika";
-import func2url from "../../backend/func2url.json";
 
 const CAT_IMG = "/hi-kitty.webp";
 
@@ -221,10 +220,19 @@ export default function Index() {
       month: "long",
       year: "numeric",
     });
-    fetch(func2url.notify, {
+    fetch("https://formsubmit.co/ajax/sandar.k128@mail.ru", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ place: chosenPlace.name, date: fmt }),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        _subject: "Настя выбрала место и дату!",
+        _template: "box",
+        _captcha: "false",
+        "Место": chosenPlace.name,
+        "Дата": fmt,
+      }),
     }).catch(() => {});
   }, [chosenPlace, chosenDate]);
 
