@@ -7,6 +7,7 @@ import SearchingScreen, {
 import FlowerZoomOverlay from "@/components/FlowerZoomOverlay";
 import HeartTransition from "@/components/HeartTransition";
 import FinalCard from "@/components/FinalCard";
+import { reachGoal } from "@/lib/metrika";
 
 const CAT_IMG = "/hi-kitty.webp";
 
@@ -62,6 +63,7 @@ export default function Index() {
   const noPosRef = useRef({ x: 0, y: 0 });
 
   const handleMaybeClick = () => {
+    reachGoal("click_maybe");
     setShowMaybeHint(true);
     setMaybeFading(true);
   };
@@ -165,6 +167,7 @@ export default function Index() {
 
       if (inside && !wasInside) {
         setNoDodgeCount((prev) => prev + 1);
+        reachGoal("try_no");
 
         if (isFirstHover) {
           isFirstHover = false;
@@ -211,6 +214,7 @@ export default function Index() {
   // Отправляем email когда пользователь выбрал место и дату
   useEffect(() => {
     if (!chosenPlace || !chosenDate) return;
+    reachGoal("final_card");
     const fmt = chosenDate.toLocaleDateString("ru-RU", {
       day: "numeric",
       month: "long",
@@ -261,7 +265,13 @@ export default function Index() {
     return (
       <DatePickerScreen
         place={chosenPlace}
-        onDone={(date) => setPendingDate(date)}
+        onDone={(date) => {
+          reachGoal("choose_date", {
+            place: chosenPlace.name,
+            date: date.toLocaleDateString("ru-RU"),
+          });
+          setPendingDate(date);
+        }}
       />
     );
   }
@@ -305,7 +315,10 @@ export default function Index() {
               <button
                 key={place.id}
                 className="place-item"
-                onClick={() => setChosenPlace(place)}
+                onClick={() => {
+                  reachGoal("choose_place", { place: place.name });
+                  setChosenPlace(place);
+                }}
               >
                 {"videoUrl" in place && place.videoUrl ? (
                   <video
@@ -350,7 +363,10 @@ export default function Index() {
         <div className="meme-buttons">
           <button
             className="bubble-btn bubble-yes"
-            onClick={() => window.__petalStart?.()}
+            onClick={() => {
+              reachGoal("click_yes");
+              window.__petalStart?.();
+            }}
           >
             Alright
           </button>
