@@ -1,57 +1,61 @@
 import json
-import smtplib
 import os
-# v2
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+import urllib.request
+import urllib.error
+
+CORS = {'Access-Control-Allow-Origin': '*'}
+
+
+def send_telegram(token: str, chat_id: str, text: str) -> dict:
+    req = urllib.request.Request(
+        f'https://api.telegram.org/bot{token}/sendMessage',
+        data=json.dumps({'chat_id': chat_id, 'text': text, 'parse_mode': 'HTML'}).encode(),
+        headers={'Content-Type': 'application/json'},
+        method='POST',
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=4) as r:
+            return json.loads(r.read())
+    except urllib.error.HTTPError as e:
+        return json.loads(e.read() or b'{}')
 
 
 def handler(event: dict, context) -> dict:
-    """Отправляет email с выбором пользователя (место и дата)"""
+    """Присылает в Telegram уведомление о том, какое место и дату выбрала Настя"""
     if event.get('httpMethod') == 'OPTIONS':
         return {
             'statusCode': 200,
             'headers': {
-                'Access-Control-Allow-Origin': '*',
+                **CORS,
                 'Access-Control-Allow-Methods': 'POST, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type',
                 'Access-Control-Max-Age': '86400',
             },
-            'body': ''
+            'body': '',
         }
 
-    body = json.loads(event.get('body', '{}'))
-    place = body.get('place', '—')
-    date = body.get('date', '—')
+    body = json.loads(event.get('body') or '{}')
+    place = str(body.get('place', '—'))[:300]
+    date = str(body.get('date', '—'))[:100]
 
-    smtp_password = os.environ['SMTP_PASSWORD']
-    from_email = 'sandar.k128@mail.ru'
-    to_email = 'sandar.k128@mail.ru'
+    token = os.environ.get('TELEGRAM_BOT_TOKEN', '')
+    chat_id = os.environ.get('TELEGRAM_CHAT_ID', '')
+    if not token or not chat_id:
+        print('Telegram secrets are not configured')
+        return {'statusCode': 200, 'headers': CORS, 'body': json.dumps({'ok': False, 'error': 'not_configured'})}
 
-    msg = MIMEMultipart('alternative')
-    msg['Subject'] = 'Настя выбрала место и дату!'
-    msg['From'] = from_email
-    msg['To'] = to_email
-
-    html = f"""
-    <div style="font-family: Georgia, serif; max-width: 500px; margin: 0 auto; padding: 30px;">
-        <h1 style="color: #c0435a; text-align: center;">💕 Настя согласилась!</h1>
-        <div style="background: #fff5f7; border-radius: 16px; padding: 24px; margin-top: 20px;">
-            <p style="font-size: 18px; margin-bottom: 12px;">📍 <strong>Место:</strong> {place}</p>
-            <p style="font-size: 18px;">📅 <strong>Дата:</strong> {date}</p>
-        </div>
-        <p style="text-align: center; color: #b07080; margin-top: 20px; font-size: 14px;">🌸 Ждём не дождёмся! 🌸</p>
-    </div>
-    """
-
-    msg.attach(MIMEText(html, 'html'))
-
-    with smtplib.SMTP_SSL('smtp.mail.ru', 465) as server:
-        server.login(from_email, smtp_password)
-        server.sendmail(from_email, to_email, msg.as_string())
+    text = (
+        '💕 <b>Настя согласилась!</b>\n\n'
+        f'📍 <b>Место:</b> {place}\n'
+        f'📅 <b>Дата:</b> {date}\n\n'
+        '🌸 Ждём не дождёмся! 🌸'
+    )
+    result = send_telegram(token, chat_id, text)
+    if not result.get('ok'):
+        print('Telegram error:', result.get('description'))
 
     return {
         'statusCode': 200,
-        'headers': {'Access-Control-Allow-Origin': '*'},
-        'body': json.dumps({'ok': True})
+        'headers': CORS,
+        'body': json.dumps({'ok': bool(result.get('ok')), 'error': result.get('description')}),
     }
